@@ -8,7 +8,7 @@
 
 using namespace std;
 
-vector<map<string, int>> menuCombination(8);
+vector<map<string, int>> menuCombination(9);
 
 void Swap(string& s, int a, int b) {
     char c = s[a];
@@ -19,11 +19,17 @@ void Swap(string& s, int a, int b) {
 void CombinationOrder(string order, string makedComb, int index, set<string>& combinatedMenu) {
     if (index > order.length()) return;
 
-    sort(makedComb.begin(), makedComb.end());
+    if (makedComb.length() >= 2) {
+        sort(makedComb.begin(), makedComb.end());
+        auto iter = combinatedMenu.find(makedComb);
 
-    if (makedComb.length() >= 2 && combinatedMenu.find(makedComb) == combinatedMenu.end()) {
-        combinatedMenu.insert(makedComb);
-        ++menuCombination[makedComb.length() - 2][makedComb];
+        if (iter == combinatedMenu.end()) {
+            combinatedMenu.insert(makedComb);
+            ++menuCombination[makedComb.length() - 2][makedComb];
+        }
+        else if (iter != combinatedMenu.end()) {
+            return;
+        }
     }
 
     for (int i = index; i < order.length(); ++i) {
@@ -39,6 +45,7 @@ vector<string> solution(vector<string> orders, vector<int> course) {
     vector<string> answer;
     for (int i = 0; i < orders.size(); ++i) {
         set<string> s;
+        sort(orders[i].begin(), orders[i].end());
         CombinationOrder(orders[i], "", 0, s);
     }
 
@@ -56,6 +63,7 @@ vector<string> solution(vector<string> orders, vector<int> course) {
                 pocket.push_back(p.first);
             }
         }
+
         answer.insert(answer.end(), pocket.begin(), pocket.end());
     }
     sort(answer.begin(), answer.end());
@@ -63,6 +71,6 @@ vector<string> solution(vector<string> orders, vector<int> course) {
 }
 
 int main() {
-    vector<string> orders = { "ABCFG", "AC", "CDE", "ACDE", "BCFG", "ACDEH" };
+    vector<string> orders = { "ABCFG", "AC", "CDE", "ACDE", "BCFG", "ACDEH", "ABCFG", "AC", "CDE", "ACDE", "BCFG", "ACDEH", "ABCFG", "AC", "CDE", "ACDE", "BCFG", "ACDEH","ABCFG", "AC", "CDE", "ACDE", "BCFG", "ACDEH","ABCFG", "AC", "CDE", "ACDE", "BCFG", "ACDEH","ABCFG", "AC", "CDE", "ACDE", "BCFG", "ACDEH","ABCFG", "AC", "CDE", "ACDE", "BCFG", "ACDEH"  };
     solution(orders, vector<int>{2, 3, 4});
 }
