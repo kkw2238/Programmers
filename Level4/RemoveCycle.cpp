@@ -127,12 +127,15 @@ public:
 	vector<Leaf> leaves;
 };
 
+#include <set>
 
 int solution(int n, vector<vector<int>> edges) {
 	Graph graph(n, edges);
 	Tree tree(n);
 
 	tree.GenerationTree(graph);
+
+	int sum = 0;
 
 	return tree.FindCanMakeSpanningTree();
 }

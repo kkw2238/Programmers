@@ -1,0 +1,4 @@
+﻿  test.cpp
+LINK : warning LNK4075: '/INCREMENTAL'이(가) '/PROFILE' 사양으로 인해 무시됩니다.
+test.obj : warning LNK4075: '/EDITANDCONTINUE'이(가) '/OPT:REF' 사양으로 인해 무시됩니다.
+  Programmer.vcxproj -> C:\Users\kkw22\source\repos\Programmer\x64\Debug\Programmer.exe

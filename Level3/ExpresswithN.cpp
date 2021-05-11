@@ -1,107 +1,103 @@
-#include <iostream>
-
 #include <string>
 #include <vector>
+#include <queue>
+#include <functional>
+
+#define COUNT_N(x) (x % 5 + x / 5) + 1
 
 using namespace std;
 
-vector<unsigned int> usedNumberCount;
-const unsigned int MAXIMUM_NUM = 32000;
+const unsigned int MAXIMUM_NUM = 32000 * 9;
+const int MAXIMUM_COUNT = 9;
 
-void Initailize(int N) {
-    usedNumberCount.resize(MAXIMUM_NUM + 2, 9);
-    int index = 1;
+vector<int> defaultNumbers;
+vector<int> usedNumberCount(MAXIMUM_NUM, MAXIMUM_COUNT);
 
-    for (int i = 1; i * N <= MAXIMUM_NUM; i = (i * 10) + 1)
-        usedNumberCount[i * N] = index++;
-    
+const bool EnableNextStep(const int destIndex, const int nowCount, const int addCount)
+{
+    if (destIndex >= MAXIMUM_NUM || destIndex <= 0)
+    {
+        return false;
+    }
+    else if (nowCount + addCount >= MAXIMUM_COUNT)
+    {
+        return false;
+    }
+
+    return usedNumberCount[destIndex] > nowCount + addCount;
 }
 
 int solution(int N, int number) {
-    Initailize(N);
+    usedNumberCount = vector<int>(MAXIMUM_NUM, MAXIMUM_COUNT);
+    queue<pair<int, int>> nextNumbers;
+    vector<function<int(const int a, const int b)>> functions{
+        [](const int a, const int b) { return a + b; },
+        [](const int a, const int b) { return a - b; },
+        [](const int a, const int b) { return a * b; },
+        [](const int a, const int b) { return a / b; }
+    };
 
-    for (unsigned int i = N; i <= MAXIMUM_NUM; ++i) {
-        unsigned int nowCount = usedNumberCount[i];
+    int answer = MAXIMUM_COUNT;
 
-            cout << i << '\n';
-        if (nowCount > 8)  continue;
+    defaultNumbers = vector<int>{ N, N * 11, N * 111, N * 1111, N * 11111, 1, 11, 111, 1111, 11111 };
 
-        unsigned int newCount = nowCount + 1;
+    for (int i = 0; i < defaultNumbers.size(); ++i)
+    {
+        usedNumberCount[defaultNumbers[i]] = COUNT_N(i);
+        nextNumbers.push(pair(defaultNumbers[i], COUNT_N(i)));
+    }
 
-        for (unsigned int index = 1; index <= MAXIMUM_NUM; index = (index * 10) + 1) {
-            if (i + (N * index) <= MAXIMUM_NUM && usedNumberCount[i + (N * index)] > newCount)
-                usedNumberCount[i + (N * index)] = newCount;
+    while (!nextNumbers.empty())
+    {
+        auto [nowNumber, count] = nextNumbers.front();
+        nextNumbers.pop();
 
-            if (i * (N * index) <= MAXIMUM_NUM && usedNumberCount[i * (N * index)] > newCount)
-                usedNumberCount[i * (N * index)] = newCount;
+        if (count > usedNumberCount[nowNumber])
+        {
+            continue;
+        }
+        else if (nowNumber == number)
+        {
+            if (answer > count)
+            {
+                answer = count;
+            }
 
-            if (i / (N * index) > 0 && usedNumberCount[i / (N * index)] > newCount)
-                usedNumberCount[i / (N * index)] = newCount;
-            
-            if (i + index <= MAXIMUM_NUM && usedNumberCount[i + index] > newCount)
-                usedNumberCount[i + index] = newCount + 1;
-            if (i * index <= MAXIMUM_NUM && usedNumberCount[i * index] > newCount)
-                usedNumberCount[i * index] = newCount + 1;
+            continue;
+        }
 
-            if (i / index > 0 && usedNumberCount[i / index] > newCount)
-                usedNumberCount[i / index] = newCount + 1;
-
-            ++newCount;
+        for (int i = 0; i < defaultNumbers.size(); ++i)
+        {
+            for (auto f : functions)
+            {
+                int nextIndex = f(nowNumber, defaultNumbers[i]);
+                if (EnableNextStep(nextIndex, count, COUNT_N(i)))
+                {
+                    nextNumbers.push(pair(nextIndex, count + COUNT_N(i)));
+                    usedNumberCount[nextIndex] = count + COUNT_N(i);
+                }
+            }
         }
     }
 
-    return usedNumberCount[number] > 8 ? -1 : usedNumberCount[number];
-}
-
-/*
-int solution(int N, int number) {
-    Initailize(N);
-
-    for (int i = N; i <= MAXIMUM_NUM; ++i) {
-        int nowCount = usedNumberCount[i];
-        if (nowCount > 8)  continue;
-
-        int newCount = nowCount + 1;
-
-        for (int index = 1; index <= MAXIMUM_NUM; index = (index * 10) + 1) {
-            if (i + (N * index) <= MAXIMUM_NUM)
-                usedNumberCount[i + (N * index)] = newCount;
-            if (i * (N * index) <= MAXIMUM_NUM)
-                usedNumberCount[i * (N * index)] = newCount;
-
-            if (i / (N * index) > 0)
-                usedNumberCount[i / (N * index)] = newCount;
-            if (i - (N * index) > 0)
-                usedNumberCount[i - (N * index)] = newCount;
-
-            if (i + index <= MAXIMUM_NUM)
-                usedNumberCount[i + index] = newCount + 1;
-            if (i * index <= MAXIMUM_NUM)
-                usedNumberCount[i * index] = newCount + 1;
-
-            if (i / index > 0)
-                usedNumberCount[i / index] = newCount + 1;
-            if (i - index > 0)
-                usedNumberCount[i - index] = newCount + 1;
-
-            ++newCount;
-        }
+    if (answer == MAXIMUM_COUNT)
+    {
+        return -1;
     }
-
-    return usedNumberCount[number] > 8 ? -1 : usedNumberCount[number];
+    else 
+    {
+        return answer;
+    }
 }
 
-
-
-*/
-
+#include <iostream>
 void main() {
-    int N = 5;
-    int number = 12;
+    //int N = 2;
+    //int number = 11;
 
-    for (int i = 1; i <= MAXIMUM_NUM; ++i) {
-        for (int j = 1; j <= 9; ++j) {
-            cout <<" ( " << i << ", " << j << " ) " << " = " << solution(7, 1) << '\n';
+    for (int N = 1; N <= 9; ++N) {
+        for (int number = 1; number <= 32000; ++number) {
+            cout << "N : " << N << " Number : " << number << " : " << solution(N, number) << '\n';
         }
     }
 }
