@@ -1,26 +1,63 @@
-#include <string>
 #include <vector>
 #include <algorithm>
-#include "Util.h"
+#include <queue>
+#include <list>
 
 using namespace std;
 
 int solution(int distance, vector<int> rocks, int n) {
-    int answer = 0;
-    rocks.push_back(0);
-    rocks.push_back(distance);
-
+    rocks.emplace_back(0);
+    rocks.emplace_back(distance);
     sort(rocks.begin(), rocks.end());
-    vector<pair<int, int>> distances(rocks.size() - 1);
-    for (int i = 1; i < rocks.size(); ++i) {
-        distances[i - 1] = pair<int, int>(i, rocks[i] - rocks[i - 1]);
+
+    list<pair<int, int>> distanceBeforeNext;
+    
+    for (int i = 0; i < rocks.size(); ++i)
+    {
+        if (i == 0)
+        {
+            distanceBeforeNext.emplace_back(pair(rocks[i], rocks[i + 1] * 2));
+        }
+        else if (i == rocks.size() - 1)
+        {
+            distanceBeforeNext.emplace_back(pair(rocks[i], (distance - rocks[i - 1]) * 2));
+        }
+        else
+        {
+            distanceBeforeNext.emplace_back(pair(rocks[i], rocks[i + 1] - rocks[i - 1]));
+        }
     }
 
-    sort(distances.begin(), distances.end(), [](const pair<int, int>& a, const pair<int, int>& b) {
-        return a.second > b.second;
-    });
+    for (int i = 0; i < n; ++i)
+    {
+        auto eraseIter = min_element(distanceBeforeNext.begin(), distanceBeforeNext.end(), [](pair<int, int>& a, pair<int, int>& b) {
+            return a.second < b.second;
+        });
 
-    return answer;
+        int dist = std::distance(distanceBeforeNext.begin(), eraseIter);
+
+        if (dist == 0)
+        {
+            (*distanceBeforeNext.begin()).second = (*(++eraseIter)).second * 2;
+            distanceBeforeNext.erase(eraseIter);
+        }
+        else if(dist == distanceBeforeNext.size() - 1)
+        {
+            auto endIter = distanceBeforeNext.end();
+            --endIter;
+            --eraseIter;
+
+            (*endIter).second = (*eraseIter).second * 2;
+            distanceBeforeNext.erase(eraseIter);
+        }
+        else
+        {
+
+        }
+    }
+    return (*min_element(distanceBeforeNext.begin(), distanceBeforeNext.end(), [](pair<int, int>& a, pair<int, int>& b) {
+        return a.second > b.second;
+    })).second;
 }
 
 #include <iostream>
