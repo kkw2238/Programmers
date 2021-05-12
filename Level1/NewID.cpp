@@ -1,22 +1,5 @@
 /* https://programmers.co.kr/learn/courses/30/lessons/72410 */
 
-/*
-	¾ÆÀÌµğÀÇ ±æÀÌ´Â 3ÀÚ ÀÌ»ó 15ÀÚ ÀÌÇÏ¿©¾ß ÇÕ´Ï´Ù.
-	¾ÆÀÌµğ´Â ¾ËÆÄºª ¼Ò¹®ÀÚ, ¼ıÀÚ, »©±â(-), ¹ØÁÙ(_), ¸¶Ä§Ç¥(.) ¹®ÀÚ¸¸ »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù.
-	´Ü, ¸¶Ä§Ç¥(.)´Â Ã³À½°ú ³¡¿¡ »ç¿ëÇÒ ¼ö ¾øÀ¸¸ç ¶ÇÇÑ ¿¬¼ÓÀ¸·Î »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.
-*/
-
-/*
-	1´Ü°è new_idÀÇ ¸ğµç ´ë¹®ÀÚ¸¦ ´ëÀÀµÇ´Â ¼Ò¹®ÀÚ·Î Ä¡È¯ÇÕ´Ï´Ù.
-	2´Ü°è new_id¿¡¼­ ¾ËÆÄºª ¼Ò¹®ÀÚ, ¼ıÀÚ, »©±â(-), ¹ØÁÙ(_), ¸¶Ä§Ç¥(.)¸¦ Á¦¿ÜÇÑ ¸ğµç ¹®ÀÚ¸¦ Á¦°ÅÇÕ´Ï´Ù.
-	3´Ü°è new_id¿¡¼­ ¸¶Ä§Ç¥(.)°¡ 2¹ø ÀÌ»ó ¿¬¼ÓµÈ ºÎºĞÀ» ÇÏ³ªÀÇ ¸¶Ä§Ç¥(.)·Î Ä¡È¯ÇÕ´Ï´Ù.
-	4´Ü°è new_id¿¡¼­ ¸¶Ä§Ç¥(.)°¡ Ã³À½ÀÌ³ª ³¡¿¡ À§Ä¡ÇÑ´Ù¸é Á¦°ÅÇÕ´Ï´Ù.
-	5´Ü°è new_id°¡ ºó ¹®ÀÚ¿­ÀÌ¶ó¸é, new_id¿¡ "a"¸¦ ´ëÀÔÇÕ´Ï´Ù.
-	6´Ü°è new_idÀÇ ±æÀÌ°¡ 16ÀÚ ÀÌ»óÀÌ¸é, new_idÀÇ Ã¹ 15°³ÀÇ ¹®ÀÚ¸¦ Á¦¿ÜÇÑ ³ª¸ÓÁö ¹®ÀÚµéÀ» ¸ğµÎ Á¦°ÅÇÕ´Ï´Ù.
-		 ¸¸¾à Á¦°Å ÈÄ ¸¶Ä§Ç¥(.)°¡ new_idÀÇ ³¡¿¡ À§Ä¡ÇÑ´Ù¸é ³¡¿¡ À§Ä¡ÇÑ ¸¶Ä§Ç¥(.) ¹®ÀÚ¸¦ Á¦°ÅÇÕ´Ï´Ù.
-	7´Ü°è new_idÀÇ ±æÀÌ°¡ 2ÀÚ ÀÌÇÏ¶ó¸é, new_idÀÇ ¸¶Áö¸· ¹®ÀÚ¸¦ new_idÀÇ ±æÀÌ°¡ 3ÀÌ µÉ ¶§±îÁö ¹İº¹ÇØ¼­ ³¡¿¡ ºÙÀÔ´Ï´Ù.
-*/
-
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -26,21 +9,33 @@ using namespace std;
 const int MAX_SIZE = 15;
 const int MIN_SIZE = 3;
 
+// a ~ z / 0 ~ 9 / - _ .ë¥¼ ì œì™¸í•œ ë¬¸ìì—´ íŒë‹¨
 const bool IsWrongChar(const char c) {
-	if (c >= 'a' && c <= 'z') return false;
-	else if (c >= '0' && c <= '9') return false;
-	else if (c == '-' || c == '_' || c == '.') return false;
+	if (c >= 'a' && c <= 'z') 
+	{
+		return false;
+	}
+	else if (c >= '0' && c <= '9') 
+	{
+		return false;
+	}
+	else if (c == '-' || c == '_' || c == '.') 
+	{
+		return false;
+	}
 
 	return true;
 }
 
 void CH1(string& new_id) {
+	// ëª¨ë“  ëŒ€ë¬¸ìë¥¼ ì†Œë¬¸ìë¡œ ì¹˜í™˜
 	std::transform(new_id.begin(), new_id.end(), new_id.begin(), tolower);
 }
 
 void CH2(string& new_id) {
+
 	auto iter = find_if(new_id.begin(), new_id.end(), IsWrongChar);
-	
+	// ì˜ëª»ëœ ë¬¸ìì—´ì„ ì œê±°
 	while (iter != new_id.end()) {
 		new_id.erase(iter);
 		iter = find_if(iter, new_id.end(), IsWrongChar);
@@ -50,33 +45,49 @@ void CH2(string& new_id) {
 void CH3(string& new_id) {
 	int index = 0;
 	while (index > -1) {
+		// ".."ì˜ ìœ„ì¹˜ íƒìƒ‰
 		index = new_id.find("..", index);
-		if (index > -1) {
+		if (index > -1) 
+		{
+			// ... ì˜ ê²½ìš° ì²« ë‹¨ê³„ë¥¼ ê±°ì³ ..ë¡œ ë³€í™˜ í›„ ë‹¤ìŒ ì°¨ë¡€ì— .ë¡œ ë³€í™˜
 			new_id.replace(new_id.begin() + index, new_id.begin() + index + 2, ".");
 		}
 	}
 }
 
 void CH4(string& new_id) {
-	if (new_id[0] == '.') new_id.erase(new_id.begin());
-	if (new_id[new_id.length() - 1] == '.') new_id.erase(new_id.end() - 1);
+	if (new_id[0] == '.') 
+	{
+		// ë¬¸ìì—´ì˜ ì‹œì‘ì´ '.'ì¼ ê²½ìš° ì‚­ì œ
+		new_id.erase(new_id.begin());
+	}
+	if (new_id[new_id.length() - 1] == '.') 
+	{
+		// ë¬¸ìì—´ì˜ ëì´ '.'ì¸ ê²½ìš° ì‚­ì œ
+		new_id.erase(new_id.end() - 1);
+	}
 }
 
 void CH5(string& new_id) {
-	if (new_id.empty()) {
+	if (new_id.empty()) 
+	{
+		// ë¹ˆ ë¬¸ìì—´ì¼ ê²½ìš° "a" ì¶”ê°€
 		new_id = "a";
 	}
 }
 
 void CH6(string& new_id) {
+	// ë¬¸ìì—´ì´ 16ì ì´ìƒì¸ ê²½ìš° ë’· ë¶€ë¶„ì„ ì œê±°
 	if (new_id.length() > MAX_SIZE) {
+		
 		new_id.erase(new_id.begin() + MAX_SIZE, new_id.end());
 	}
 
-	CH3(new_id);
+	CH4(new_id);
 }
 
 void CH7(string& new_id) {
+	// ë¬¸ìì—´ì˜ ê¸¸ì´ê°€ 2ì´í•˜ì¸ ê²½ìš° ë§ˆì§€ë§‰ ë¬¸ìë¥¼ ì¶”ê°€
 	if (new_id.length() < MIN_SIZE) {
 		for (int i = 0; i < MIN_SIZE - new_id.length();) {
 			new_id.push_back(new_id[new_id.length() - 1]);
@@ -93,11 +104,4 @@ string solution(string new_id) {
 	CH6(new_id);
 	CH7(new_id);
 	return new_id;
-}
-
-#include <iostream>
-
-int main() {
-	string new_id = "=.=";
-	cout << solution(new_id);
 }

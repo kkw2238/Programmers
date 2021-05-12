@@ -16,11 +16,3 @@ string solution(int n) {
     answer = notation[n % NOTATION_LENGTH] + answer;
     return answer;
 }
-
-#include <iostream>
-int main() {
-    int n = 10;
-    
-    for(int i = 0; i < 500000000; ++i)
-        cout << i << " : " << solution(i) << '\n';
-}
