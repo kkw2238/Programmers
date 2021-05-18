@@ -1,3 +1,7 @@
+/*
+    https://programmers.co.kr/learn/courses/30/lessons/76501
+*/
+
 #include <string>
 #include <vector>
 
@@ -8,7 +12,14 @@ int solution(vector<int> absolutes, vector<bool> signs) {
 
     for (int i = 0; i < absolutes.size(); ++i)
     {
-        answer += signs[i] ? absolutes[i] : -absolutes[i];
+        if (signs[i])
+        {
+            answer += absolutes[i];
+        }
+        else
+        {
+            answer -= absolutes[i];
+        }
     }
 
     return answer;

@@ -1,4 +1,6 @@
-/* https://programmers.co.kr/learn/courses/30/lessons/72410 */
+/* 
+	https://programmers.co.kr/learn/courses/30/lessons/72410 
+*/
 
 #include <string>
 #include <vector>
@@ -9,23 +11,15 @@ using namespace std;
 const int MAX_SIZE = 15;
 const int MIN_SIZE = 3;
 
+const bool IsAbleSpecialCharacter(const char c) {
+	return c == '-' || c == '_' || c == '.';
+}
+
 // a ~ z / 0 ~ 9 / - _ .를 제외한 문자열 판단
 const bool IsWrongChar(const char c) {
-	if (c >= 'a' && c <= 'z') 
-	{
-		return false;
-	}
-	else if (c >= '0' && c <= '9') 
-	{
-		return false;
-	}
-	else if (c == '-' || c == '_' || c == '.') 
-	{
-		return false;
-	}
-
-	return true;
+	return !(isalpha(c) || isdigit(c) || IsAbleSpecialCharacter(c));
 }
+
 
 void CH1(string& new_id) {
 	// 모든 대문자를 소문자로 치환
@@ -33,7 +27,6 @@ void CH1(string& new_id) {
 }
 
 void CH2(string& new_id) {
-
 	auto iter = find_if(new_id.begin(), new_id.end(), IsWrongChar);
 	// 잘못된 문자열을 제거
 	while (iter != new_id.end()) {
@@ -43,28 +36,23 @@ void CH2(string& new_id) {
 }
 
 void CH3(string& new_id) {
-	int index = 0;
-	while (index > -1) {
-		// ".."의 위치 탐색
-		index = new_id.find("..", index);
-		if (index > -1) 
-		{
-			// ... 의 경우 첫 단계를 거쳐 ..로 변환 후 다음 차례에 .로 변환
-			new_id.replace(new_id.begin() + index, new_id.begin() + index + 2, ".");
-		}
-	}
+	// '.'이 연속으로 오는 경우 연속적으로 나오는 '.'을 제거
+	auto iter = unique(new_id.begin(), new_id.end(), [](const char a, const char b) { 
+		return a == '.' && b == '.'; 
+	});
+	new_id.erase(iter, new_id.end());
 }
 
 void CH4(string& new_id) {
-	if (new_id[0] == '.') 
+	if (new_id.front() == '.') 
 	{
 		// 문자열의 시작이 '.'일 경우 삭제
 		new_id.erase(new_id.begin());
 	}
-	if (new_id[new_id.length() - 1] == '.') 
+	if (new_id.back() == '.') 
 	{
 		// 문자열의 끝이 '.'인 경우 삭제
-		new_id.erase(new_id.end() - 1);
+		new_id.pop_back();
 	}
 }
 

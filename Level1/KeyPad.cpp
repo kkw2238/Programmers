@@ -1,5 +1,100 @@
-/* https://programmers.co.kr/learn/courses/30/lessons/67256 */
+/* 
+    https://programmers.co.kr/learn/courses/30/lessons/67256 
+*/
 
+#include <string>
+#include <vector>
+
+using namespace std;
+
+enum { R_HAND_INDEX, L_HAND_INDEX };
+const int ZERO_POS = 11;
+const int ROW_COUNT = 3;
+
+vector<int> hands_Position{ 12, 10 };
+
+const int Abs(const int n)
+{
+    if (n < 0)
+    {
+        return -n;
+    }
+
+    return n;
+}
+
+int Distance(int nowPos, const int nextPos)
+{
+    // 해당 숫자가 왼손 영역인 경우 ( 1, 4, 7 )
+    if (nowPos % ROW_COUNT == 1)
+    {
+        // 계산을 쉽게 하기 위해 오른손 영역으로 변환한다.
+        nowPos += 2;
+    }
+
+    int dist = Abs(nowPos - nextPos);
+    // 최종거리 = x거리 + y거리 => y거리 = dist / ROW_COUNT, x거리 = dist % ROW_COUNT
+    return dist / ROW_COUNT + dist % ROW_COUNT;
+}
+
+int GetNearlyHandIndex(int nextNumber, const string& hand)
+{
+    if (nextNumber % ROW_COUNT == 2)
+    {
+        int distance_by_Lhand = Distance(hands_Position[L_HAND_INDEX], nextNumber);
+        int distnace_by_Rhand = Distance(hands_Position[R_HAND_INDEX], nextNumber);
+
+        // 오른손이 더 가까울경우
+        if (distance_by_Lhand > distnace_by_Rhand)
+        {
+            return R_HAND_INDEX;
+        }
+        // 왼손이 더 가까울 경우
+        else if (distance_by_Lhand < distnace_by_Rhand)
+        {
+            return L_HAND_INDEX;
+        }
+        else
+        {
+            // 핸드의 첫 글자가 'r'인경우 => 오른손인 경우
+            if (hand[0] == 'r')
+            {
+                return R_HAND_INDEX;
+            }
+            else
+            {
+                return L_HAND_INDEX;
+            }
+        }
+    }
+
+    return nextNumber % ROW_COUNT;
+}
+
+string solution(vector<int> numbers, string hand) {
+    const vector<char> HAND_CHARACTER{ 'R', 'L' };
+    string answer = "";
+
+    for (int number : numbers)
+    {
+        // 숫자가 0인 경우 실제 0의 포지션인 11로 변환
+        if (number == 0)
+        {
+            number = ZERO_POS;
+        }
+
+        // 해당 포지션에서 가장 가까운 손 Index를 얻어온다.
+        int handIndex = GetNearlyHandIndex(number, hand);
+        answer += HAND_CHARACTER[handIndex];
+        // 해당 손의 위치를 이동
+        hands_Position[handIndex] = number;
+    }
+
+    return answer;
+}
+
+
+/* 이전 코드
 #include <string>
 #include <vector>
 
@@ -61,3 +156,4 @@ string solution(vector<int> numbers, string hand) {
 int main() {
     solution(vector<int>{1, 3, 4, 5, 8, 2, 1, 4, 5, 9, 5}, "right");
 }
+*/

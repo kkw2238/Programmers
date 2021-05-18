@@ -15,5 +15,6 @@ vector<int> solution(vector<int> arr) {
 	{
 		return vector{ -1 };
 	}
+
 	return arr;
 }
