@@ -8,17 +8,19 @@
 using namespace std;
 
 int solution(vector<int> citations) {
-    int answer = 0;
-    sort(citations.begin(), citations.end());
+    int maximum = citations.size();
+    
+    sort(citations.begin(), citations.end(), greater());
 
-    for (int i = citations.size() - 1; i >= 0; --i)
+    for (int index = 0; index < maximum; ++index)
     {
-        int h = citations[i - 1];
-        if (h <= citations.size() - i)
+        int h = citations[index];
+        
+        if (h <= index)
         {
-            return i;
+            return index + 1;
         }
     }
 
-    return answer;
+    return maximum;
 }
