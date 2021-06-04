@@ -1,47 +1,29 @@
 /*
 	https://programmers.co.kr/learn/courses/30/lessons/77885?language=cpp
 */
-
-#include <string>
 #include <vector>
 #include <bitset>
+#include <string>
 
 using namespace std;
 
-const int BIT_MAXIMUM_LENGTH = 51;
 const int DIFFERENCE_MAXIMUM_COUNT = 2;
-
-int GetBitCount(long long number)
-{
-    int count = 0;
-
-    while (number > 0)
-    {
-        if (number & 1)
-        {
-            ++count;
-        }
-
-        number = number >> 1;
-    }
-
-    return count;
-}
+const int MAXIMUM_BIT_COUNT = 52;
 
 long long FindNextNumber(const long long& number)
 {
-    for (long long ll = number + 1; ; ++ll)
+    if (number % 2 == 0)
     {
-        bitset<BIT_MAXIMUM_LENGTH> andOperatedNumber(number & ll);
-        bitset<BIT_MAXIMUM_LENGTH> orOperatedNumber(number | ll);
-
-        int differenceBitCount = GetBitCount(number | ll) - GetBitCount(number & ll);
-
-        if (differenceBitCount > 0 && differenceBitCount <= DIFFERENCE_MAXIMUM_COUNT)
-        {
-            return ll;
-        }
+        return number + 1;
     }
+
+    bitset<MAXIMUM_BIT_COUNT> bs(number);
+    string str = bs.to_string();
+    size_t index = str.rfind("01");
+    
+    str.replace(str.begin() + index, str.begin() + index + 2, "10");
+
+    return stoll(str, 0, 2);
 }
 
 vector<long long> solution(vector<long long> numbers) {
