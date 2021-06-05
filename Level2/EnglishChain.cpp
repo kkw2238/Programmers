@@ -9,26 +9,57 @@
 using namespace std;
 
 vector<int> solution(int n, vector<string> words) {
-	vector<int> answer;
-	set<string> chain;
+    set<string> alreadyWords;
+    string beforeString = words.front();
 
-	int count = 1;
+    alreadyWords.insert(beforeString);
 
-	string* beforeWord = nullptr;
+    for (int i = 1; i < words.size(); ++i)
+    {
+        if ((alreadyWords.find(words[i]) != alreadyWords.end())
+            || (beforeString.back() != words[i].front()))
+        {
+            return vector{ i % n + 1, i / n + 1 };
+        }
 
-	for (string& s : words) {
-		if (beforeWord != nullptr) {
-			if (*(*beforeWord).rbegin() != s[0] || chain.find(s) != chain.end())
-				break;
-		}
-		chain.insert(s);
-		beforeWord = &s;
-		++count;
-	}
+        if (beforeString.back() == words[i].front())
+        {
+            beforeString = words[i];
+            alreadyWords.insert(words[i]);
+        }
+    }
 
-	if (count > words.size())
-		return vector<int>(2, 0);
-
-	answer = { count % n == 0 ? n : count % n, (count - 1 + n) / n };
-	return answer;
+    return vector{ 0, 0 };
 }
+
+// 예전 코드
+//#include <string>
+//#include <vector>
+//#include <set>
+//
+//using namespace std;
+//
+//vector<int> solution(int n, vector<string> words) {
+//	vector<int> answer;
+//	set<string> chain;
+//
+//	int count = 1;
+//
+//	string* beforeWord = nullptr;
+//
+//	for (string& s : words) {
+//		if (beforeWord != nullptr) {
+//			if (*(*beforeWord).rbegin() != s[0] || chain.find(s) != chain.end())
+//				break;
+//		}
+//		chain.insert(s);
+//		beforeWord = &s;
+//		++count;
+//	}
+//
+//	if (count > words.size())
+//		return vector<int>(2, 0);
+//
+//	answer = { count % n == 0 ? n : count % n, (count - 1 + n) / n };
+//	return answer;
+//}

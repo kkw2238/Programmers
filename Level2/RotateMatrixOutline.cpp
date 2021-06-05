@@ -84,13 +84,3 @@ vector<int> solution(int rows, int columns, vector<vector<int>> queries) {
     
     return answer;
 }
-
-int main()
-{
-    int rows = 3;
-    int columns = 3;
-    vector<vector<int>> queries{ {1, 1, 2, 2}, {1, 2, 2, 3} ,{2, 1, 3, 2},{2, 2, 3, 3} };
-
-    solution(rows, columns, queries);
-}
-
