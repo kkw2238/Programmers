@@ -59,11 +59,6 @@ int solution(string s) {
     return answer;
 }
 
-int main()
-{
-    solution("}]()[{");
-}
-
 // 예전 코드
 //#include <string>
 //#include <vector>
