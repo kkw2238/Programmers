@@ -4,93 +4,20 @@
 
 #include <string>
 #include <vector>
-#include <map>
-#include <sstream>
-#include <algorithm>
+#include <istream>
 
 using namespace std;
 
-const char ALL = '-';
-const int SCROE_INDEX = 4;
+class DataManager {
 
-class Trie
-{
-public:
-    void Initialize(const vector<string>& info, int index)
-    {
-        const char front = info[index].front();
-
-        if (index != SCROE_INDEX)
-        {
-            nextTier[front].Initialize(info, index + 1);
-            nextTier[ALL].Initialize(info, index + 1);
-        }
-        else
-        {
-            scores.push_back(stoi(info[index]));
-        }
-
-        initialized = true;
-    }
-
-    Trie operator[](const char c)
-    {
-        return nextTier[c];
-    }
-
-    const int GetOverScoreCount(int n)
-    {
-        return count_if(scores.begin(), scores.end(), [&n](const int score) {
-            return score >= n;
-        });
-    }
-
-public:
-    vector<int> scores;
-    map<char, Trie> nextTier;
-    bool initialized = false;
 };
 
-int GetCount(Trie& trie, const vector<string>& str)
-{
-    return trie[str[0].front()][str[1].front()][str[2].front()][str[3].front()].GetOverScoreCount(stoi(str[SCROE_INDEX]));
-}
-
-vector<string> Split(string info, const string& demi)
-{
-    vector<string> result;
-
-    while (!info.empty())
-    {
-        int index = info.find(demi);
-
-        if (index == string::npos)
-        {
-            break;
-        }
-
-        result.emplace_back(info.substr(0, index));
-
-        string substr = info.substr(index + demi.length());
-        info = substr;
-    }
-
-    result.emplace_back(info);
-    return result;
-}
-
-vector<int> solution(vector<string> info, vector<string> query) {
+vector<int> solution(vector<string> infos, vector<string> query) {
     vector<int> answer;
-    Trie trie;
-
-    for (string& s : info)
+    
+    for (const string& info : infos)
     {
-        trie.Initialize(Split(s, " "), 0);
-    }
 
-    for (string& q : query)
-    {
-        answer.emplace_back(GetCount(trie, Split(q, "and")));
     }
 
     return answer;
