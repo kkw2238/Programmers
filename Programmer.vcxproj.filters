@@ -111,5 +111,8 @@
     <ClCompile Include="Level2\Tuple.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Level2\TargetNumber.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
