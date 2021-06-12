@@ -47,10 +47,3 @@ int solution(string dirs) {
 
     return answer / 2;
 }
-
-
-
-int main() {
-    string dirs = "LULLLLLLU";
-    cout << solution(dirs);
-}

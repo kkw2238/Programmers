@@ -68,11 +68,3 @@ vector<long long> solution(long long k, vector<long long> room_numbers)
 
 	return result;
 }
-
-int main()
-{
-	long long k = 10;
-	vector<long long> room_number{ 1, 3, 2, 1, 3, 1 };
-
-	solution(k, room_number);
-}

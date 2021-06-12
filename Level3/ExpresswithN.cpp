@@ -89,15 +89,3 @@ int solution(int N, int number) {
         return answer;
     }
 }
-
-#include <iostream>
-void main() {
-    //int N = 2;
-    //int number = 11;
-
-    for (int N = 1; N <= 9; ++N) {
-        for (int number = 1; number <= 32000; ++number) {
-            cout << "N : " << N << " Number : " << number << " : " << solution(N, number) << '\n';
-        }
-    }
-}
