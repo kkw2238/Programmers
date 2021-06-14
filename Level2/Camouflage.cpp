@@ -23,35 +23,8 @@ int solution(vector<vector<string>> clothes) {
 
 	for (auto [category, clothesInCategory] : clothesCategory)
 	{
-		answer *= clothesInCategory.size();
+		answer *= clothesInCategory.size() + 1;
 	}
 
-	if (clothesCategory.size() > 1)
-	{
-		answer += clothes.size();
-	}
-
-	return answer;
+	return answer - 1;
 }
-
-/* 예전 코드
-#include <string>
-#include <vector>
-#include <map>
-
-using namespace std;
-
-int solution(vector<vector<string>> clothes) {
-	const int CATEGORY = 1, CLOTH = 0;
-	int cases = 1;
-
-	map<string, vector<string>> clotheCategory;
-	vector<int> clothInCategoryCounts;
-	vector<string> category;
-
-	for (vector<string>& cloth : clothes)  clotheCategory[cloth[CATEGORY]].emplace_back(cloth[CLOTH]);
-	for (pair<string, vector<string>> categoryAndClothes : clotheCategory) 	cases *= (categoryAndClothes.second.size() + 1);
-
-	return cases - 1;
-}
-*/

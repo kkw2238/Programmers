@@ -2,6 +2,68 @@
 	https://programmers.co.kr/learn/courses/30/lessons/12978
 */
 
+#include <vector>
+
+using namespace std;
+
+const int intMax = 500000;
+enum { START, DEST, COST };
+
+vector<vector<int>> map;
+vector<pair<bool, int>> visited;
+
+void LinkVillage(const vector<int>& road)
+{
+	const int start = road[START];
+	const int dest = road[DEST];
+
+	if (road[COST] < map[start][dest])
+	{
+		map[start][dest] = road[COST];
+		map[dest][start] = road[COST];
+	}
+}
+
+void DFS(int start, int cost, const int limit)
+{
+	visited[start] = pair(true, cost);
+
+	for (int i = 1; i < map[START].size(); ++i)
+	{
+		int totalCost = map[start][i] + cost;
+
+		if (totalCost <= limit && totalCost < visited[i].second)
+		{
+			DFS(i, totalCost, limit);
+		}
+	}
+}
+
+int solution(int N, vector<vector<int>> roads, int K) {
+	map = vector<vector<int>>(N + 1, vector<int>(N + 1, intMax));
+	visited = vector<pair<bool, int>>(N + 1, pair(false, intMax));
+
+	int answer = 0;
+	
+	for (const vector<int>& road : roads)
+	{
+		LinkVillage(road);
+	}
+
+	DFS(1, 0, K);
+
+	for (int i = 1; i < visited.size(); ++i)
+	{
+		if (visited[i].first == true)
+		{
+			++answer;
+		}
+	}
+
+	return answer;
+}
+
+/*
 #include <map>
 #include <vector>
 #include <queue>
@@ -84,3 +146,4 @@ int solution(int N, vector<vector<int> > road, int K) {
 
 	return count(visited.begin(), visited.end(), true);
 }
+*/

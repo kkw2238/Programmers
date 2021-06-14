@@ -4,6 +4,43 @@
 
 #include <string>
 #include <vector>
+#include <set>
+#include <sstream>
+#include <algorithm>
+
+using namespace std;
+
+vector<int> solution(string s) {
+	set<int> answer;
+
+	erase_if(s, [](const char c) {
+		return c == '{' || c == '}';
+	});
+
+	istringstream is(s);
+	
+	while (!is.eof())
+	{
+		char tmp;
+		int num;
+
+		is >> num >> tmp;
+
+		answer.insert(num);
+	}
+
+	return vector(answer.begin(), answer.end());
+}
+
+int main()
+{
+	solution("{{2},{2,1},{2,1,3},{2,1,3,4}}");
+}
+
+
+/* 예전 코드
+#include <string>
+#include <vector>
 #include <unordered_set>
 
 #include <algorithm>
@@ -63,3 +100,4 @@ vector<int> solution(string s) {
 
 	return answer;
 }
+*/
