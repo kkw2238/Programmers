@@ -4,39 +4,69 @@
 
 #include <string>
 #include <vector>
-#include <set>
 #include <sstream>
+#include <map>
 #include <algorithm>
 
 using namespace std;
 
-vector<int> solution(string s) {
-	set<int> answer;
+vector<vector<int>> DistributeSubset(string& s)
+{
+	vector<vector<int>> subsets;
+	vector<int> subset;
+	int num;
 
-	erase_if(s, [](const char c) {
-		return c == '{' || c == '}';
-	});
+	s = s.substr(1, s.length() - 1);
 
 	istringstream is(s);
-	
-	while (!is.eof())
+
+	while (!is.fail())
 	{
-		char tmp;
-		int num;
+		switch (is.get())
+		{
+		case '{':
+		case ',':
+			break;
 
-		is >> num >> tmp;
+		case '}':
+			subsets.emplace_back(subset);
+			is.get();
+			subset.clear();
+			break;
 
-		answer.insert(num);
+		default:
+			is.unget();
+			is >> num;
+			subset.push_back(num);
+		}
 	}
 
-	return vector(answer.begin(), answer.end());
+	return subsets;
 }
 
-int main()
-{
-	solution("{{2},{2,1},{2,1,3},{2,1,3,4}}");
-}
+vector<int> solution(string s) {
+	vector<int> result;
+	vector<vector<int>> subsets = DistributeSubset(s);
+	map<int, bool> alreadyInserted;
 
+	sort(subsets.begin(), subsets.end(), [](const vector<int>& a, const vector<int>& b) {
+		return a.size() < b.size();
+	});
+
+	for (const vector<int>& vi : subsets)
+	{
+		for (const int num : vi)
+		{
+			if (!alreadyInserted[num])
+			{
+				result.emplace_back(num);
+				alreadyInserted[num] = true;
+			}
+		}
+	}
+
+	return result;
+}
 
 /* 예전 코드
 #include <string>
