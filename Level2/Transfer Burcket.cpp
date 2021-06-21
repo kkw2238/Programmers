@@ -7,6 +7,53 @@
 
 using namespace std;
 
+string DistributeUV(string& p)
+{
+	string U = "";
+
+	pair<int, int> burcketCount = pair(0, 0);
+
+	for (const char c : p)
+	{
+		if (c == '(')
+		{
+			++burcketCount.first;
+		}
+		else
+		{
+			++burcketCount.second;
+		}
+
+		U.push_back(c);
+
+		if (burcketCount.first == burcketCount.second)
+		{
+			return U;
+		}
+	}
+
+	return U;
+}
+
+string solution(string p) {
+	string answer = "";
+	
+	if (p.empty())
+	{
+		return p;
+	}
+
+
+
+	return answer;
+}
+
+/*
+#include <string>
+#include <vector>
+
+using namespace std;
+
 const char RB = ')', LB = '(';
 
 int FinduIndex(const string& str) {
@@ -64,3 +111,4 @@ string solution(string p) {
 
 	return answer;
 }
+*/
