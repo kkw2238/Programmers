@@ -20,11 +20,6 @@ int solution(string s)
     return s.empty();
 }
 
-int main()
-{
-    solution("baabaa");
-}
-
 //#include <string>
 //#include <stack>
 //using namespace std;
