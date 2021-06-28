@@ -6,33 +6,21 @@
 
 using namespace std;
 
-double Euclidean(int a, int b)
-{
-	int min_Num = min(a, b);
-	int max_Num = max(a, b);
+long long solution(int w, int h) {
+	double answer = 0.0;
+	double div = (double)(h) / (double)(w);
 
-	while (max_Num % min_Num != 0)
+	for (double d = 0.0; d < (double)w; d += 1.0)
 	{
-		max_Num = max_Num % min_Num;
-		swap(max_Num, min_Num);
+		answer += ceill((d + 1.0) * div) - floorl(d * div);
 	}
 
-	return min_Num;
-}
-
-long long solution(int w, int h) {
-    double div = h / (double)w;
-	const double GDC = Euclidean(w, h);
-	
-	div* GDC;
-
-
-    return (double)w * (double)h;
+	return (long long)w * (long long)h - answer;
 }
 
 int main()
 {
-    solution(8, 12);
+    solution(2, 98);
 }
 
 //#include <cmath>
