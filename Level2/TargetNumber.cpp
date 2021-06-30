@@ -6,6 +6,26 @@
 
 using namespace std;
 
+int FindTarget(const vector<int>& numbers, const int nowSum, const int target, const int nowIndex)
+{
+	if (nowIndex == numbers.size())
+	{
+		return nowSum == target;
+	}
+
+	return FindTarget(numbers, nowSum + numbers[nowIndex], target, nowIndex + 1) +
+		FindTarget(numbers, nowSum - numbers[nowIndex], target, nowIndex + 1);
+}
+
+int solution(vector<int> numbers, int target) {
+	return FindTarget(numbers, 0, target, 0);
+}
+
+/* 예전 코드
+#include <vector>
+
+using namespace std;
+
 int DFS(const vector<int>& numbers, const int sum, const int target, const int index) {
 	int result = 0;
 
@@ -24,3 +44,4 @@ int DFS(const vector<int>& numbers, const int sum, const int target, const int i
 int solution(vector<int> numbers, int target) {
 	return DFS(numbers, 0, target, 0);
 }
+*/

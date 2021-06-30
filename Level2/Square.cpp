@@ -22,11 +22,3 @@ int solution(vector<vector<int>> board)
 
     return answer * answer;
 }
-
-int main() {
-    vector<vector<int>> board = { 
-		{0,0,1,1},
-		{1,1,1,1}
-    };
-    cout << solution(board);
-}

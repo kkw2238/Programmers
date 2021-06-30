@@ -89,11 +89,6 @@ int solution(vector<vector<int>> maps)
     return footPrint[map_Height - 1][map_Width - 1];
 }
 
-int main()
-{
-    solution({{1, 0, 1, 1, 1}, {1, 0, 1, 0, 1}, {1, 0, 1, 1, 1}, {1, 1, 1, 0, 1}, {0, 0, 0, 0, 1}} );
-}
-
 //#include <vector>
 //#include <queue>
 //using namespace std;

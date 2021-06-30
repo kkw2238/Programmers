@@ -7,20 +7,20 @@
 using namespace std;
 
 long long solution(int w, int h) {
-	double answer = 0.0;
+	if (w < h)
+	{
+		swap(w, h);
+	}
+
+	long double answer = 0.0;
 	double div = (double)(h) / (double)(w);
 
-	for (double d = 0.0; d < (double)w; d += 1.0)
+	for (double d = 1; d <= (double)w; ++d)
 	{
-		answer += ceill((d + 1.0) * div) - floorl(d * div);
+		answer += ceill(d * div) - floorl((d - 1) * div);
 	}
 
 	return (long long)w * (long long)h - answer;
-}
-
-int main()
-{
-    solution(2, 98);
 }
 
 //#include <cmath>

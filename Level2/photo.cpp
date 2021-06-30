@@ -47,11 +47,3 @@ int solution(int n, vector<string> data) {
 
     return answer;
 }
-
-int main()
-{
-    int n = 0;
-    vector<string> s;
-
-    solution(n, s);
-}
