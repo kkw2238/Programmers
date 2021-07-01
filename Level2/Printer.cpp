@@ -45,6 +45,7 @@ int solution(vector<int> priorities, int location) {
     return answer;
 }
 
+
 // 예전 코드
 //#include <string>
 //#include <vector>
