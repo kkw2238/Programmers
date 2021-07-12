@@ -59,15 +59,3 @@ int solution(int n, vector<vector<int>> costs) {
 
     return answer;
 }
-
-
-#include <iostream>
-int main()
-{
-    int n = 4;
-    vector<vector<int>> costs = { {0, 1, 5} ,{1, 2, 3},{2, 3, 3},{3, 1, 2},{3, 0, 4} };
-
-    cout << solution(n, costs);
-}
-// T T T T
-//0 1 2 3   / 9

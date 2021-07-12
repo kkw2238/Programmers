@@ -161,6 +161,7 @@
     <ClCompile Include="Level2\N.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Level2\Open Chatting.cpp" />
     <ClCompile Include="Level2\Order By Filename.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
