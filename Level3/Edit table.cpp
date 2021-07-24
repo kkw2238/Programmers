@@ -1,7 +1,6 @@
 /*
     https://programmers.co.kr/learn/courses/30/lessons/81303
 */
-
 #include <string>
 #include <vector>
 #include <list>
@@ -11,50 +10,48 @@
 using namespace std;
 
 string solution(int n, int k, vector<string> cmds) {
-    list<int> characters;
+    vector<int> characters;
     stack<pair<int, int>> record;
-    
+
     string answer(n, 'O');
-    int index = k;
 
     for (int i = 0; i < n; ++i)
     {
         characters.emplace_back(i);
     }
 
+    int nowPos = k;
+  
     for (const string& cmd : cmds)
     {
-        auto tmpIter = characters.begin();
-        int offset = 0;
+        int offset = 1;
+        int nowNum = characters[nowPos];
 
         switch (cmd[0])
         {
         case 'U':
             offset = stoi(cmd.substr(2));
-            index -= offset;
-
+            nowPos -= offset;
             break;
 
         case 'D':
             offset = stoi(cmd.substr(2));
-            index += offset;
-
+            nowPos += offset;
             break;
 
         case 'C':
-            advance(tmpIter, index);
-            record.emplace(index, *tmpIter);
-            
-            if (characters.size() > 1)
+            answer[nowNum] = 'X';
+            characters.erase(characters.begin() + nowPos);
+
+            if (characters.size() == nowPos)
             {
-                if (index == characters.size() - 1)
-                {
-                    --index;
-                }
+                record.emplace(nowPos--, nowNum);
             }
-            
-            answer[*tmpIter] = 'X';
-            characters.erase(tmpIter);
+            else
+            {
+                record.emplace(nowPos, nowNum);
+            }
+
             break;
 
         case 'Z':
@@ -62,12 +59,11 @@ string solution(int n, int k, vector<string> cmds) {
             record.pop();
 
             answer[lastestRecord.second] = 'O';
-            advance(tmpIter, lastestRecord.first);
-            characters.insert(tmpIter, lastestRecord.second);
+            characters.insert(characters.begin() + lastestRecord.first, lastestRecord.second);
 
-            if (lastestRecord.first < index)
+            if (lastestRecord.first <= nowPos)
             {
-                ++index;
+                ++nowPos;
             }
 
             break;
@@ -92,7 +88,7 @@ using namespace std;
 
 string solution(int n, int k, vector<string> cmds) {
     list<int> characters;
-    stack<pair<int, int>> record;
+    stack<pair<list<int>::iterator, int>> record;
 
     string answer(n, 'O');
 
@@ -101,13 +97,14 @@ string solution(int n, int k, vector<string> cmds) {
         characters.emplace_back(i);
     }
 
-    auto nowPos = characters.begin();
+    list<int>::iterator nowPos = characters.begin();
     advance(nowPos, k);
 
     for (const string& cmd : cmds)
     {
         auto tmpIter = nowPos;
         int offset = 0;
+        int nowNum = *nowPos;
 
         switch (cmd[0])
         {
@@ -124,32 +121,32 @@ string solution(int n, int k, vector<string> cmds) {
             break;
 
         case 'C':
-            if (characters.size() > 1)
+            if (nowPos == --(characters.end()))
             {
-                if (nowPos == --(characters.end()))
-                {
-                    advance(nowPos, -1);
-                }
-                else
-                {
-                    advance(nowPos, 1);
-                }
+                offset = -1;
+                --nowPos;
+            }
+            else
+            {
+                offset = 1;
+                ++nowPos;
             }
 
-            answer[*tmpIter] = 'X';
-            record.emplace(distance(characters.begin(), tmpIter), *tmpIter);
+            answer[nowNum] = 'X';
             characters.erase(tmpIter);
+
+            advance(nowPos, -offset);
+            record.emplace(nowPos, nowNum);
+            advance(nowPos, offset);
 
             break;
 
         case 'Z':
             pair lastestRecord = record.top();
-            auto begin = characters.begin();
             record.pop();
 
             answer[lastestRecord.second] = 'O';
-            advance(begin, lastestRecord.first);
-            characters.insert(begin, lastestRecord.second);
+            characters.insert(lastestRecord.first, lastestRecord.second);
 
             break;
         }
