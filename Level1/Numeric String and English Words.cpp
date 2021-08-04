@@ -28,7 +28,7 @@ int solution(string s) {
 
         while (pos != string::npos)
         {
-            s.replace(pos, pos + leng, translate.second);
+            s.replace(pos, leng, translate.second);
             pos = s.find(translate.first);
         }
     }

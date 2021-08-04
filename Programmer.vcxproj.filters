@@ -126,5 +126,17 @@
     <ClCompile Include="Level2\Open Chatting.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Level1\Numeric String and English Words.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ing\tmp.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Level3\Edit table.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Level1\Calculate the shortfall.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
