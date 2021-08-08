@@ -10,21 +10,24 @@ using namespace std;
 enum RotateAngle { ROTATE0, ROTATE90, ROTATE180, ROTATE270 };
 enum { HOME, BUMP };
 
-vector<vector<pair<int, int>>> bumps;
-vector<pair<int, int>> homes;
-vector<vector<int>> locks;
+const int ANGLE_COUNT = 4;
+
+vector<vector<pair<int, int>>> bumps = vector<vector<pair<int, int>>>(ANGLE_COUNT);
+vector<pair<int, int>> homes = vector<pair<int, int>>();
 int M, N;
 
 pair<int, int> RotatePoint(int& y, int& x)
 {
+	y = M - y;
 	swap(x, y);
-	x = M - x;
 
 	return pair(y, x);
 }
 
 void InitializeKey(const vector<vector<int>>& key)
 {
+	M = key.size() - 1;
+
 	for (int y = 0; y <= M; ++y)
 	{
 		for (int x = 0; x <= M; ++x)
@@ -42,6 +45,8 @@ void InitializeKey(const vector<vector<int>>& key)
 
 void InitializeLock(const vector<vector<int>>& lock)
 {
+	N = lock.size() - 1;
+
 	for (int y = 0; y <= N; ++y)
 	{
 		for (int x = 0; x <= N; ++x)
@@ -54,29 +59,27 @@ void InitializeLock(const vector<vector<int>>& lock)
 	}
 }
 
-const bool IsInsideLock(const int x)
+const bool IsLockArea(const pair<int, int>& point)
 {
-	return x >= 0 && x <= N;
+	return (point.second >= 0 && point.second <= N) && (point.first >= 0 && point.first <= N);
 }
 
-bool CombineKey(const RotateAngle angle, const int xOffset, const int yOffset)
+bool CombineKey(const vector<vector<int>>& lock, const RotateAngle angle, const int xOffset, const int yOffset)
 {
 	for (int index = 0; index < bumps[angle].size(); ++index)
 	{
-		const pair<int, int> point = bumps[angle][index];
+		const pair<int, int> point = pair(bumps[angle][index].first - yOffset, bumps[angle][index].second - xOffset);
 
-		if (IsInsideLock(point.first - yOffset) &&
-			IsInsideLock(point.second - xOffset) &&
-			locks[point.first - yOffset][point.second - xOffset] == BUMP)
+		if (IsLockArea(point) && lock[point.first][point.second] == BUMP)
 		{
 			return false;
 		}
 	}
 
-	for (int index = 0; index < homes.size(); ++index)
+	for (const pair<int, int>& home : homes)
 	{
-		auto findIter = find_if(bumps[angle].begin(), bumps[angle].end(), [=](const pair<int, int>& p) {
-			return p.first == homes[index].first + yOffset && p.second == homes[index].second + xOffset;
+		auto findIter = find_if(bumps[angle].begin(), bumps[angle].end(), [&](const pair<int, int>& p) {
+			return (p.first == home.first + yOffset) && (p.second == home.second + xOffset);
 		});
 
 		if (findIter == bumps[angle].end())
@@ -88,18 +91,21 @@ bool CombineKey(const RotateAngle angle, const int xOffset, const int yOffset)
 	return true;
 }
 
-bool FindCombineKey()
+bool FindCombineKey(const vector<vector<int>>& lock)
 {
 	for (const pair<int, int>& home : homes)
 	{
 		for (int angle = ROTATE0; angle <= ROTATE270; ++angle)
 		{
-			int xOffset = bumps[angle][0].second - home.second;
-			int yOffset = bumps[angle][0].first - home.first;
-
-			if (CombineKey((RotateAngle)angle, xOffset, yOffset) == true)
+			for (int index = 0; index < bumps[angle].size(); ++index) 
 			{
-				return true;
+				int xOffset = bumps[angle][index].second - home.second;
+				int yOffset = bumps[angle][index].first - home.first;
+
+				if (CombineKey(lock, (RotateAngle)angle, xOffset, yOffset) == true)
+				{
+					return true;
+				}
 			}
 		}
 	}
@@ -109,14 +115,6 @@ bool FindCombineKey()
 
 bool solution(vector<vector<int>> key, vector<vector<int>> lock)
 {
-	bumps = vector<vector<pair<int, int>>>(4);
-	homes = vector<pair<int, int>>();
-	locks = vector<vector<int>>();
-
-	locks = lock;
-	M = key.size() - 1;
-	N = lock.size() - 1;
-	
 	InitializeKey(key);
 	InitializeLock(lock);
 
@@ -125,13 +123,13 @@ bool solution(vector<vector<int>> key, vector<vector<int>> lock)
 		return true;
 	}
 
-	return FindCombineKey();
+	return FindCombineKey(lock);
 }
 
 int main()
 {
-	vector<vector<int>> key{ {0, 0, 1 }, {0, 0, 0}, {0, 0, 0} };
-	vector<vector<int>> lock{ {1, 0, 1}, { 1, 1, 1 }, {1, 1, 1} };
+	vector<vector<int>> key{ {1, 1, 1 }, {1, 1, 1}, {1,1, 1} };
+	vector<vector<int>> lock{ {0, 0, 0}, { 0, 0, 0 }, {0, 0, 1} };
 
 	solution(key, lock);
 }
