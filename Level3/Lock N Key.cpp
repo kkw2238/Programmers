@@ -1,7 +1,6 @@
 /*
 	https://programmers.co.kr/learn/courses/30/lessons/60059
 */
-#include <string>
 #include <vector>
 #include <algorithm>
 
@@ -10,18 +9,21 @@ using namespace std;
 enum RotateAngle { ROTATE0, ROTATE90, ROTATE180, ROTATE270 };
 enum { HOME, BUMP };
 
+using Point = pair<int, int>;
+
 const int ANGLE_COUNT = 4;
 
-vector<vector<pair<int, int>>> bumps = vector<vector<pair<int, int>>>(ANGLE_COUNT);
-vector<pair<int, int>> homes = vector<pair<int, int>>();
+vector<vector<Point>> key_Bumps = vector<vector<Point>>(ANGLE_COUNT); // 열쇠 돌기 index
+vector<Point> lock_Homes = vector<Point>(); // 자물쇠 홈 index
 int M, N;
 
+// 90도 회전한 후의 위치를 반환하는 함수
 pair<int, int> RotatePoint(int& y, int& x)
 {
 	y = M - y;
 	swap(x, y);
 
-	return pair(y, x);
+	return Point(y, x);
 }
 
 void InitializeKey(const vector<vector<int>>& key)
@@ -34,10 +36,10 @@ void InitializeKey(const vector<vector<int>>& key)
 		{
 			if (key[y][x] == BUMP)
 			{
-				bumps[ROTATE90].emplace_back(RotatePoint(y, x));
-				bumps[ROTATE180].emplace_back(RotatePoint(y, x));
-				bumps[ROTATE270].emplace_back(RotatePoint(y, x));
-				bumps[ROTATE0].emplace_back(RotatePoint(y, x));
+				key_Bumps[ROTATE90].emplace_back(RotatePoint(y, x));
+				key_Bumps[ROTATE180].emplace_back(RotatePoint(y, x));
+				key_Bumps[ROTATE270].emplace_back(RotatePoint(y, x));
+				key_Bumps[ROTATE0].emplace_back(RotatePoint(y, x));
 			}
 		}
 	}
@@ -53,22 +55,22 @@ void InitializeLock(const vector<vector<int>>& lock)
 		{
 			if (lock[y][x] == HOME)
 			{
-				homes.emplace_back(y, x);
+				lock_Homes.emplace_back(y, x);
 			}
 		}
 	}
 }
 
-const bool IsLockArea(const pair<int, int>& point)
+const bool IsLockArea(const Point& point)
 {
 	return (point.second >= 0 && point.second <= N) && (point.first >= 0 && point.first <= N);
 }
 
 bool CombineKey(const vector<vector<int>>& lock, const RotateAngle angle, const int xOffset, const int yOffset)
 {
-	for (int index = 0; index < bumps[angle].size(); ++index)
+	for (int index = 0; index < key_Bumps[angle].size(); ++index)
 	{
-		const pair<int, int> point = pair(bumps[angle][index].first - yOffset, bumps[angle][index].second - xOffset);
+		const Point point = Point(key_Bumps[angle][index].first - yOffset, key_Bumps[angle][index].second - xOffset);
 
 		if (IsLockArea(point) && lock[point.first][point.second] == BUMP)
 		{
@@ -76,13 +78,13 @@ bool CombineKey(const vector<vector<int>>& lock, const RotateAngle angle, const 
 		}
 	}
 
-	for (const pair<int, int>& home : homes)
+	for (const pair<int, int>& home : lock_Homes)
 	{
-		auto findIter = find_if(bumps[angle].begin(), bumps[angle].end(), [&](const pair<int, int>& p) {
+		auto findIter = find_if(key_Bumps[angle].begin(), key_Bumps[angle].end(), [&](const Point& p) {
 			return (p.first == home.first + yOffset) && (p.second == home.second + xOffset);
 		});
 
-		if (findIter == bumps[angle].end())
+		if (findIter == key_Bumps[angle].end())
 		{
 			return false;
 		}
@@ -93,14 +95,14 @@ bool CombineKey(const vector<vector<int>>& lock, const RotateAngle angle, const 
 
 bool FindCombineKey(const vector<vector<int>>& lock)
 {
-	for (const pair<int, int>& home : homes)
+	for (const Point& home : lock_Homes)
 	{
 		for (int angle = ROTATE0; angle <= ROTATE270; ++angle)
 		{
-			for (int index = 0; index < bumps[angle].size(); ++index) 
+			for (int index = 0; index < key_Bumps[angle].size(); ++index) 
 			{
-				int xOffset = bumps[angle][index].second - home.second;
-				int yOffset = bumps[angle][index].first - home.first;
+				int xOffset = key_Bumps[angle][index].second - home.second;
+				int yOffset = key_Bumps[angle][index].first - home.first;
 
 				if (CombineKey(lock, (RotateAngle)angle, xOffset, yOffset) == true)
 				{
@@ -118,7 +120,7 @@ bool solution(vector<vector<int>> key, vector<vector<int>> lock)
 	InitializeKey(key);
 	InitializeLock(lock);
 
-	if (homes.size() == 0)
+	if (lock_Homes.size() == 0)
 	{
 		return true;
 	}
