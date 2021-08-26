@@ -31,13 +31,3 @@ vector<int> solution(int n, long long k) {
 
     return answer;
 }
-/*
-    n = 20
-*/
-
-int main()  
-{
-    int n = 6;
-    long long k = 719;
-    solution(n, k);
-}
