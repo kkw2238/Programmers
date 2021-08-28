@@ -1,30 +1,55 @@
+//
+//int solution(vector<int> stones, int k) {
+//    int friendsCount = stones.size();
+//    int tmpFriendsCount = 0;
+//
+//    for (int i = 0; i <= stones.size() - k; ++i)
+//    {
+//        tmpFriendsCount = *max_element(stones.begin() + i, stones.begin() + i + k);
+//        if (tmpFriendsCount < friendsCount)
+//        {
+//            friendsCount = tmpFriendsCount;
+//        }
+//    }
+//
+//    return friendsCount;
+//}
+
 #include <vector>
-#include <algorithm>
+#include <map>
 
 using namespace std;
 
-int solution(vector<int> stones, int k) {
-    int friendsCount = stones.size();
-    int tmpFriendsCount = 0;
+const int MAXIMUM = 200000001;
 
-    for (int i = 0; i < stones.size() - k; ++i)
+int solution(vector<int> stones, int k) {
+    map<int, int> stepping_counts;
+    int count = 0;
+    int answer = MAXIMUM;
+
+    for (int i = stones.size() - 1; i >= -1; --i)
     {
-        tmpFriendsCount = *max_element(stones.begin() + i, stones.begin() + i + k);
-        if (tmpFriendsCount < friendsCount)
+        if (++count > k)
         {
-            friendsCount = tmpFriendsCount;
+            int maximum_count = (*stepping_counts.rbegin()).first;
+            if (answer > maximum_count)
+            {
+                answer = maximum_count;
+            }
+
+            --stepping_counts[stones[i + k]];
+
+            if (stepping_counts[stones[i + k]] <= 0)
+            {
+                stepping_counts.erase(stones[i + k]);
+            }
+        }
+
+        if (i >= 0) 
+        {
+            ++stepping_counts[stones[i]];
         }
     }
 
-    return friendsCount;
-}
-
-#include <iostream>
-
-int main()
-{
-    vector<int> stones = { 2, 4, 5, 3, 2, 1, 4, 2, 5, 1 };
-    int k = 10;
-
-    cout << solution(stones, k) << '\n';
+    return answer;
 }
