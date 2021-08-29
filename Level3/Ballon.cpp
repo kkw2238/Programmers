@@ -1,31 +1,58 @@
-#include <string>
+/*
+	https://programmers.co.kr/learn/courses/30/lessons/68646
+*/
+
 #include <vector>
-#include <set>
 
 using namespace std;
 
-/*
-	앞에서 부터 2개씩 비교, 
+const int MAXIMUM = 1000000001;
 
-	1, 2
-
-*/
-
-vector<vector<int>> tmpa;
-
-int solution(vector<int> a) {
-	set<int> numbers;
-	tmpa = vector<vector<int>>(a.size(), vector<int>());
-	int answer = 0;
-
-	for (int i = 0; i < a.size() / 2; ++i)
+int GetBallonCount(const int ballonNum, int& smallestNum)
+{
+	if (ballonNum < smallestNum)
 	{
-
+		smallestNum = ballonNum;
+		return 0;
 	}
 
-	return answer;
+	return 1;
 }
 
-int main() {
+const bool IsLive(const pair<int, int>& side_count)
+{
+	if (side_count.first == -1 || side_count.second == -1)
+	{
+		return false;
+	}
 
+	return side_count.first == 0 || side_count.second == 0;
+}
+
+int solution(vector<int> a) {
+	int answer = 0;
+	int left_Smallest_Ballon = MAXIMUM;
+	int right_Smallest_Ballon = MAXIMUM;
+
+	vector<pair<int, int>> side_SmallCount(a.size(), pair(-1, -1));
+
+	for (int i = 0; i < a.size(); ++i)
+	{
+		int leftIndex = i;
+		int rightIndex = a.size() - 1 - i;
+
+		side_SmallCount[leftIndex].first = GetBallonCount(a[leftIndex], left_Smallest_Ballon);
+		side_SmallCount[rightIndex].second = GetBallonCount(a[rightIndex], right_Smallest_Ballon);
+		
+		if (IsLive(side_SmallCount[leftIndex]))
+		{
+			++answer;
+		}
+		if ((leftIndex != rightIndex) && IsLive(side_SmallCount[rightIndex]))
+		{
+			++answer;
+		}
+	}
+	
+	return answer;
 }
