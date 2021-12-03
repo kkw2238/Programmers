@@ -1,50 +1,58 @@
+/*
+    https://programmers.co.kr/learn/courses/30/lessons/86971
+*/
+
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
-struct Node
-{
-    vector<Node> children;
-    bool isParent = false;
-    int childCount = 0;
-    int parentIndex = -1;
+enum { To, From };
+
+struct Node {
+    vector<int> linkedNodeIndex;
+    int childcount = 0;
 };
 
-int ReGenerationChildCount(Node* nowNode)
+int RegenerateTree(vector<Node>& node, int index, int beforeIndex)
 {
-    for (Node& child : nowNode->children)
+    if (node[index].linkedNodeIndex.size() == 1)
     {
-        nowNode->childCount += ReGenerationChildCount(&child);
+        return 1;
     }
 
-    nowNode->childCount += nowNode->children.size();
-    return nowNode->childCount;
+    for (int nextIndex : node[index].linkedNodeIndex)
+    {
+        if (nextIndex != beforeIndex) 
+        {
+            node[index].childcount += RegenerateTree(node, nextIndex, index);
+        }
+    }
+
+    return node[index].childcount;
 }
 
 int solution(int n, vector<vector<int>> wires) {
+    int answer = n;
     vector<Node> tree(n);
-    Node* root = nullptr;
-
-    root = &tree[wires[0][0] - 1];
-    root->isParent = true;
 
     for (vector<int>& wire : wires)
     {
-        if (tree[wire[0]].isParent == false && tree[wire[1]].isParent == true)
-        {
-            swap(wire[0], wire[1]);
-        }
-        tree[wire[0]].children.push_back(tree[wire[1]]);
-        tree[wire[1]].parentIndex = wire[0];
-        tree[wire[0]].isParent = true;
+        tree[wire[To] - 1].linkedNodeIndex.push_back(wire[From] - 1);
+        tree[wire[From] - 1].linkedNodeIndex.push_back(wire[To] - 1);
     }
 
-    int total = ReGenerationChildCount(root);
+    int total = RegenerateTree(tree, 0, -1);
+    if (total != n)
+    {
+        return total;
+    }
 
-    return total;
-}
+    for (int i = 1; i < n; ++i)
+    {
+        int gap = tree[0].childcount - tree[i].childcount * 2;
+        answer = min(gap < 0 ? -gap : gap, tree[i].childcount);
+    }
 
-int main()
-{
-    solution(9, {{1, 3}, {2, 3}, {3, 4}, {4, 5}, {4, 6}, {4, 7}, {7, 8}, {7, 9}} );
+    return answer;
 }
