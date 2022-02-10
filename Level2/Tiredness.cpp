@@ -37,10 +37,10 @@ int TryToDungeons(int tiredness, int count, vector<vector<int>>& dungeons, vecto
 
 int solution(int k, vector<vector<int>> dungeons) {
     vector<bool> alreadyTryDungends(dungeons.size(), false);
+    
     sort(dungeons.begin(), dungeons.end(), [](auto& a, auto& b) {
         return a[NEED] > b[NEED];
     });
 
     return TryToDungeons(k, 0, dungeons, alreadyTryDungends);
 }
-
