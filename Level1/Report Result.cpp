@@ -43,6 +43,5 @@ vector<int> solution(vector<string> id_list, vector<string> report, int k) {
         answer[i] = successReport[id_list[i]];
     }
 
-
     return answer;
 }
