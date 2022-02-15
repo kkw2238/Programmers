@@ -6,50 +6,111 @@
 
 using namespace std;
 
-/*
-    열 번호가 감소하는 방향으로 dx칸 이동하는 쿼리 (query(0, dx))
-    열 번호가 증가하는 방향으로 dx칸 이동하는 쿼리 (query(1, dx))
-    행 번호가 감소하는 방향으로 dx칸 이동하는 쿼리 (query(2, dx))
-    행 번호가 증가하는 방향으로 dx칸 이동하는 쿼리 (query(3, dx))
-
-    1. 쿼리를 계산하면서 최종 이동거리를 계산
-    => 시작지점이 0,0이고 <- 부터 나온경우 오른쪽으로 더 이동하는 경우와 비슷하게
-        특정 경우 결과 값이 달라질 수 있음
-        <- <- <- -> -> -> 0,0 -> 0,3 0,6 -> 0,6
-
-2. 상하좌우로 최대로 이동한 거리를 기억
-    => 해당 거리보다 짧은 위치에서 시작할 경우 벽에 붙어서 최종 이동거리 판단
-    => ex) <- <- <- -> -> -> 1,0 -> 0,0 -> 0,3 0,5 -> 0,6 -> 0,6
-
-3. 2. 방법은 우선순위에 따라 처리해야하는 것이 달라짐
-    -> 4개씩 분할 ?
-
-ex) 	0 ~ 255 / 256 ~ 512 나눠서 4개씩 분할하여 계산
-        => 255, 255를 최종 이동거리만큼 이동 시킨 후 최종 위치 -255, 255에 원하는 위치가 있는지 판단.
-        => 있을 경우 해당 영역을 /4로 한번 더 분할
-        => 없을 경우 skip
-        => 계속 분할
-*/
-
 enum { LEFT, RIGHT, UP, DOWN};
+enum { X_MIN, X_MAX, Y_MIN, Y_MAX, X_FINALLY, Y_FINALLY};
 
-long long solution(int n, int m, int x, int y, vector<vector<int>> queries) {
-    long long answer = -1;
+vector<long long> startAtZero;
+vector<long long> startAtMN;
 
+vector<long long> DistributeQueries(vector<vector<int>>& queries, int m, int n)
+{
+    vector<long long> startAtZero{ 0, 0};
+    vector<long long> startAtMN{ m - 1, n - 1};
+
+    vector<long long> result(6, 0);
     for (vector<int>& query : queries)
     {
         switch (query[0])
         {
         case LEFT:
+            startAtZero[0] = max(startAtZero[0] - query[1], (long long)0);
+            startAtMN[0] = max(startAtMN[0] - query[1], (long long)0);
             break;
+
         case RIGHT:
+            startAtZero[0] = min(startAtZero[0] + query[1], (long long)m - 1);
+            startAtMN[0] = min(startAtMN[0] + query[1], (long long)m - 1);
             break;
+
         case UP:
+            startAtZero[1] = max(startAtZero[1] - query[1], (long long)0);
+            startAtMN[1] = max(startAtMN[1] - query[1], (long long)0);
             break;
+
         case DOWN:
+            startAtZero[1] = min(startAtZero[1] + query[1], (long long)n - 1);
+            startAtMN[1] = min(startAtMN[1] + query[1], (long long)n - 1);
             break;
+        }
+
+        if (query[0] <= RIGHT)
+        {
+            result[X_FINALLY] += query[1];
+            if (result[X_FINALLY] < result[X_MIN])
+            {
+                result[X_MIN] = X_FINALLY;
+            }
+            else if (result[X_FINALLY] > result[X_MAX])
+            {
+                result[X_MAX] = X_FINALLY;
+            }
+        }
+        else
+        {
+            result[Y_FINALLY] += query[1];
+            if (result[Y_FINALLY] < result[Y_MIN])
+            {
+                result[Y_MIN] = Y_FINALLY;
+            }
+            else if (result[Y_FINALLY] > result[Y_MAX])
+            {
+                result[Y_MAX] = Y_FINALLY;
+            }
         }
     }
 
+    return result;
+}
+
+long long solution(int n, int m, int x, int y, vector<vector<int>> queries) {
+    long long answer = 0;
+
+    vector<long long> distributedQueries = DistributeQueries(queries, m, n);
+    long long requestX = x - distributedQueries[X_FINALLY];
+    long long requestY = y - distributedQueries[Y_FINALLY];
+
+    long long totalBlocks = n * m;
+    
+    if (startAtZero[1] == y)
+    {
+        if (startAtZero[0] == x)
+        {
+            answer += distributedQueries[X_MIN] * distributedQueries[Y_MIN];
+        }
+        if (requestX > startAtZero[0] && requestX < startAtMN[0])
+        {
+            answer += -distributedQueries[Y_MIN];
+        }
+        if (startAtMN[0] == x)
+        {
+            answer += (m - distributedQueries[X_MAX]) * distributedQueries[Y_MIN];
+        }
+    }
+    if (startAtZero[1] < requestY && startAtMN[1] > requestY)
+    {
+        if (startAtZero[0] == x)
+        {
+            answer += distributedQueries[X_MIN] * distributedQueries[Y_MIN];
+        }
+        if (requestX > startAtZero[0] && requestX < startAtMN[0])
+        {
+            answer += -distributedQueries[Y_MIN];
+        }
+        if (startAtMN[0] == x)
+        {
+            answer += (m - distributedQueries[X_MAX]) * distributedQueries[Y_MIN];
+        }
+    }
+    
     return answer;
 }
