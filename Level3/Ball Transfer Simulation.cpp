@@ -3,6 +3,7 @@
 */
 
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -14,8 +15,8 @@ vector<long long> startAtMN;
 
 vector<long long> DistributeQueries(vector<vector<int>>& queries, int m, int n)
 {
-    vector<long long> startAtZero{ 0, 0};
-    vector<long long> startAtMN{ m - 1, n - 1};
+    startAtZero = vector<long long>{ 0, 0 };
+    startAtMN = vector<long long>{ m - 1, n - 1};
 
     vector<long long> result(6, 0);
     for (vector<int>& query : queries)
@@ -81,36 +82,58 @@ long long solution(int n, int m, int x, int y, vector<vector<int>> queries) {
 
     long long totalBlocks = n * m;
     
-    if (startAtZero[1] == y)
+    if (startAtZero[1] == y) 
     {
         if (startAtZero[0] == x)
         {
-            answer += distributedQueries[X_MIN] * distributedQueries[Y_MIN];
+            answer += (startAtZero[0] + 1) * (startAtZero[1] + 1);
         }
         if (requestX > startAtZero[0] && requestX < startAtMN[0])
         {
-            answer += -distributedQueries[Y_MIN];
+            answer += startAtZero[1];
         }
         if (startAtMN[0] == x)
         {
-            answer += (m - distributedQueries[X_MAX]) * distributedQueries[Y_MIN];
-        }
-    }
-    if (startAtZero[1] < requestY && startAtMN[1] > requestY)
-    {
-        if (startAtZero[0] == x)
-        {
-            answer += distributedQueries[X_MIN] * distributedQueries[Y_MIN];
-        }
-        if (requestX > startAtZero[0] && requestX < startAtMN[0])
-        {
-            answer += -distributedQueries[Y_MIN];
-        }
-        if (startAtMN[0] == x)
-        {
-            answer += (m - distributedQueries[X_MAX]) * distributedQueries[Y_MIN];
+            answer += (startAtMN[0] + 1) * (startAtZero[1] + 1);
         }
     }
     
-    return answer;
+    if (requestY > startAtZero[1] && requestY < startAtMN[1])
+    {
+        if (startAtZero[0] == x)
+        {
+            answer += startAtZero[0];
+        }
+        if (requestX > startAtZero[0] && requestX < startAtMN[0])
+        {
+            ++answer;
+        }
+        if (startAtMN[0] == x)
+        {
+            answer += startAtMN[0];
+        }
+    }
+
+    if (startAtMN[1] == y)
+    {
+        if (startAtZero[0] == x)
+        {
+            answer += (startAtZero[0] + 1) * (startAtMN[1] + 1);
+        }
+        if (requestX > startAtZero[0] && requestX < startAtMN[0])
+        {
+            answer += startAtMN[1];
+        }
+        if (startAtMN[0] == x)
+        {
+            answer += (startAtMN[0] + 1) * (startAtMN[1] + 1);
+        }
+    }
+
+    return answer > totalBlocks ? totalBlocks : answer;
+}
+
+int main()
+{
+    solution(2, 5, 0, 1, { {3, 1},{2, 2},{1, 1},{2, 3},{0, 1},{2, 1} });
 }
