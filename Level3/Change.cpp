@@ -2,40 +2,41 @@
 	https://programmers.co.kr/learn/courses/30/lessons/12907
 */
 
-#include <string>
 #include <vector>
-#include <map>
 #include <algorithm>
 
 using namespace std;
-
-const int DENOMINATOR = 1000000007;
-
-#include <iostream>
 
 int solution(int n, vector<int> money) {
     vector<int> combinationCountAtMoney(n + 1);
     sort(money.begin(), money.end());
 
-    for (int i : money)
-    {
-        combinationCountAtMoney[i] = 1;
-    }
-
     for (int m = money[0]; m <= n; ++m)
     {
-        int memCombination = 0;
-        for (int i = 0; i < money.size(); ++i)
+        if (m % money[0] == 0)
         {
-            if (m - money[i] < 0 || m == money[i])
+            ++combinationCountAtMoney[m];
+        }
+    }
+
+    for (int i = 1; i < money.size(); ++i)
+    {
+        for (int m = money[i]; m <= n; ++m)
+        {
+            if (m - money[i] < 0)
             {
-                continue;
+                break;
             }
 
-            memCombination += combinationCountAtMoney[m - money[i]];
+            if (money[i] == m)
+            {
+                ++combinationCountAtMoney[m];
+            }
+            else if(combinationCountAtMoney[m - money[i]] > 0)
+            {
+                combinationCountAtMoney[m] += combinationCountAtMoney[m - money[i]];
+            }
         }
-
-        combinationCountAtMoney[m] += memCombination;
     }
 
     return combinationCountAtMoney[n];
@@ -44,7 +45,7 @@ int solution(int n, vector<int> money) {
 /*
     1 = 1
     2 = 1 + 1 / 2
-    3 = 1 + 1 + 1 / 1 + 2 / 2 + 1
+    3 = 1 + 1 + 1 / 1 + 2
     4 = 1 + 1 + 1 / 1 + 1 + 2 / 2 + 2 / 
     5 = 1 + 1 + 1 + 1 + 1 / 1 + 1 + 1 + 2 / 1 + 2 + 1/ 2 + 1 + 1 / 2 + 2 + 1 / 2 + 1 + 2 / 1 + 2 + 2 / 5
 
