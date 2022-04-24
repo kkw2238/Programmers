@@ -73,8 +73,6 @@ int FindItem(int characterXPosition, int characterYPosition)
 
     while (true)
     {
-        cout << moveCount << " : " << nowPosition.first << ", " << nowPosition.second << '\n';
-
         nowPosition = FindMoveAblePosition(nowPosition.first, nowPosition.second);
         ++moveCount;
 
@@ -107,12 +105,10 @@ int solution(vector<vector<int>> rectangle, int characterX, int characterY, int 
     return findFirst < findSecond ? findFirst : findSecond;
 }
 
-
 int main()
 {
     solution({ {1, 1, 7, 4},{3, 2, 5, 5},{4, 3, 6, 9},{2, 6, 8, 8} }, 1, 3, 7, 8);
 }
-
 
 void DrawMap()
 {
