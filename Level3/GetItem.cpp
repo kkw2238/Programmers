@@ -2,9 +2,9 @@
 	https://programmers.co.kr/learn/courses/30/lessons/87694?language=cpp
 */
 
-#include <vector>
-
 #include <iostream>
+
+#include <vector>
 
 using namespace std;
 
