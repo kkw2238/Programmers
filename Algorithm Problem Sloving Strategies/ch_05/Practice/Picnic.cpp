@@ -1,69 +1,135 @@
 #include <vector>
 #include <iostream>
+#include <set>
 
 using namespace std;
 
+//set<vector<int>> makedFriendsPair;
+//
+//void makeCombination(int index, vector<int> makedPair, vector<bool> existed)
+//{
+//	makedPair.push_back(index);
+//	existed[index] = true;
+//
+//	if (makedPair.size() == existed.size())
+//	{
+//		makedFriendsPair.insert(makedPair);
+//		return;
+//	}
+//
+//	for (int i = 0; i < existed.size(); ++i)
+//	{
+//		if (index == i || existed[i])
+//		{
+//			continue;
+//		}
+//
+//		makeCombination(i, makedPair, existed);
+//	}
+//}
+//
+//void Run(int studentCount, int pairCount, vector<int> pairs)
+//{
+//	makedFriendsPair.clear();
+//	vector<vector<bool>> ablePair(studentCount, vector<bool>(studentCount));
+//	int ableCount = 0;
+//
+//	for (int i = 0; i < pairCount; ++i)
+//	{
+//		int now = min(pairs[i * 2], pairs[i * 2 + 1]);
+//		int pairFriend = max(pairs[i * 2], pairs[i * 2 + 1]);
+//
+//		ablePair[now][pairFriend] = true;
+//	}
+//
+//	for (int i = 0; i < studentCount; ++i)
+//	{
+//		makeCombination(i, vector<int>(), vector<bool>(studentCount));
+//	}
+//
+//	set<set<pair<int, int>>>ssp;
+//	for (vector<int> combination : makedFriendsPair)
+//	{
+//		set<pair<int, int>> sp;
+//
+//		int count = 0;
+//		for (int i = 0; i < combination.size() / 2; ++i)
+//		{
+//			if (!ablePair[combination[i * 2]][combination[i * 2 + 1]])
+//			{
+//				break;
+//			}
+//
+//			sp.insert(make_pair(combination[i * 2], combination[i * 2 + 1]));
+//			++count;
+//		}
+//
+//		if (count == combination.size() / 2)
+//		{
+//			++ableCount;
+//			ssp.insert(sp);
+//		}
+//	}
+//
+//	cout << ssp.size() << '\n';
+//}
 
-const bool isAllPair(const vector<bool>& alreadyExistFriend)
+const int MAX_STUDENTCOUNT = 10;
+bool areFriends[MAX_STUDENTCOUNT][MAX_STUDENTCOUNT];
+int gstudentCount = 0;
+
+int makePairs(bool alreadyExist[10])
 {
-	for (bool existFriend : alreadyExistFriend)
+	int result = 0;
+	int firstFriends = -1;
+
+	for (int i = 0; i < gstudentCount; ++i)
 	{
-		if (!existFriend)
+		if (!alreadyExist[i])
 		{
-			return false;
+			firstFriends = i;
+			break;
 		}
 	}
 
-	return true;
-}
-
-int findAllPairPicnic(const vector<vector<bool>>& ablePair, int nowFriend, vector<bool> alreadyExist)
-{
-	int ablePairCount = 0;
-
-	if (nowFriend == alreadyExist.size())
+	if (firstFriends == -1)
 	{
-		return (int)isAllPair(alreadyExist);
+		return 1;
 	}
 
-	for (int p : ablePair[nowFriend])
+	for (int i = firstFriends + 1; i < gstudentCount; ++i)
 	{
-		if (ablePair[nowFriend][p] && !alreadyExist[nowFriend] && !alreadyExist[p])
+		if (!alreadyExist[i] && areFriends[firstFriends][i])
 		{
-			alreadyExist[nowFriend] = true;
-			alreadyExist[p] = true;
-
-			ablePairCount += findAllPairPicnic(ablePair, nowFriend + 1, alreadyExist);
-
-			alreadyExist[nowFriend] = false;
-			alreadyExist[p] = false;
+			alreadyExist[i] = true;
+			alreadyExist[firstFriends] = true;
+			result += makePairs(alreadyExist);
+			alreadyExist[i] = false;
+			alreadyExist[firstFriends] = false;
 		}
 	}
 
-	return ablePairCount;
+	return result;
 }
 
-void Run(int studentCount, int pairCount, const vector<int> pairs)
+void Run(int studentCount, int pairCount, vector<int> pairs)
 {
-	vector<vector<bool>> ablePair = vector<vector<bool>>(studentCount, vector<bool>(studentCount, false));
-
+	gstudentCount = studentCount;
 	for (int i = 0; i < pairCount; ++i)
 	{
-		int nowFriend = min(pairs[2 * i], pairs[2 * i + 1]);
-		int pairFriend = max(pairs[2 * i], pairs[2 * i + 1]);
+		int now = min(pairs[i * 2], pairs[i * 2 + 1]);
+		int pairFriend = max(pairs[i * 2], pairs[i * 2 + 1]);
 
-		ablePair[nowFriend][pairFriend] = 1;
+		areFriends[now][pairFriend] = true;
 	}
 
-	vector<bool> alreadyExistFriend(studentCount);
-
-	cout << findAllPairPicnic(ablePair, 0, alreadyExistFriend) << '\n';
+	bool alreadyExist[10] = { false, false, false, false, false, false, false, false, false, false };
+	cout << makePairs(alreadyExist) <<'\n';
 }
-
 
 int main()
 {
-	//Run(2, 1,  { 0, 1 });
+	Run(2, 1,  { 0, 1 });
 	Run(4, 6,  { 0, 1, 1, 2, 2, 3, 3, 0, 0, 2, 1, 3 });
 	Run(6, 10, { 0, 1, 0, 2, 1, 2, 1, 3, 1, 4, 2, 3, 2, 4, 3, 4, 3, 5, 4, 5 });
 
