@@ -103,7 +103,9 @@ int makePairs(bool alreadyExist[10])
 		{
 			alreadyExist[i] = true;
 			alreadyExist[firstFriends] = true;
+			
 			result += makePairs(alreadyExist);
+			
 			alreadyExist[i] = false;
 			alreadyExist[firstFriends] = false;
 		}
@@ -126,20 +128,3 @@ void Run(int studentCount, int pairCount, vector<int> pairs)
 	bool alreadyExist[10] = { false, false, false, false, false, false, false, false, false, false };
 	cout << makePairs(alreadyExist) <<'\n';
 }
-
-int main()
-{
-	Run(2, 1,  { 0, 1 });
-	Run(4, 6,  { 0, 1, 1, 2, 2, 3, 3, 0, 0, 2, 1, 3 });
-	Run(6, 10, { 0, 1, 0, 2, 1, 2, 1, 3, 1, 4, 2, 3, 2, 4, 3, 4, 3, 5, 4, 5 });
-
-}
-
-/*
-	0 : 1 2 3
-	1 : 2 3
-	2 : 3
-
-	0, 1 /    0, 2    / 0, 3 
-	2, 3 /    1, 3    / 1, 2 
-*/
