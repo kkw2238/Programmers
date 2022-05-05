@@ -147,7 +147,7 @@
     <ClCompile Include="ing\Mobis.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Level1\Recommend a profession.cpp">
+    <ClCompile Include="Level3\Sequence.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{2CF75AC9-8B35-4759-88CC-6D909A9D8976}</ProjectGuid>
+    <ProjectGuid>{3C4EB929-877E-44E1-8C01-B235FC092D74}</ProjectGuid>
     <RootNamespace>Programmer</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -153,7 +153,6 @@
     <ClCompile Include="Level1\Numeric String and English Words.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="Level1\Recommend a profession.cpp" />
     <ClCompile Include="Level2\124.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -248,6 +247,7 @@
     <ClCompile Include="Level3\Racing.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Level3\Sequence.cpp" />
     <ClCompile Include="Level3\Station.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>

@@ -44,8 +44,3 @@ string solution(vector<string> table, vector<string> languages, vector<int> pref
 
     return answer;
 }
-
-int main()
-{
-    solution({ "SI JAVA JAVASCRIPT SQL PYTHON C#", "CONTENTS JAVASCRIPT JAVA PYTHON SQL C++", "HARDWARE C C++ PYTHON JAVA JAVASCRIPT", "PORTAL JAVA JAVASCRIPT PYTHON KOTLIN PHP", "GAME C++ C# JAVASCRIPT C JAVA" }, { "PYTHON", "C++", "SQL" }, { 7, 5, 5 });
-}
