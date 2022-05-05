@@ -7,8 +7,11 @@
 using namespace std;
 
 enum { TYPE, START_Y, START_X, END_Y, END_X, DAMAGE};
+enum { HEAL, DEAL };
 
 int destroyed_buildingCount = 0;
+
+#pragma region 예전코드
 
 #include <iostream>
 
@@ -18,7 +21,7 @@ void DrawBoard(vector<vector<int>>& board)
     {
         for (int x = 0; x < board[y].size(); ++x)
         {
-            cout << board[y][x] << ' ';
+            cout << board[y][x] << '\t';
         }
 
         cout << '\n';
@@ -65,7 +68,7 @@ void DamageBuilding(const vector<int>& skillRange, vector<vector<int>>& board)
     }
 }
 
-int solution(vector<vector<int>> board, vector<vector<int>> skill) {
+int before_solution(vector<vector<int>> board, vector<vector<int>> skill) {
     for (const vector<int>& skillRange : skill)
     {
         if (skillRange[TYPE] == 1)
@@ -81,6 +84,79 @@ int solution(vector<vector<int>> board, vector<vector<int>> skill) {
     }
 
     return board.size() * board[0].size() - destroyed_buildingCount;
+}
+
+#pragma endregion
+//
+//#include <vector>
+//
+//using namespace std;
+//
+//enum { TYPE, START_Y, START_X, END_Y, END_X, DAMAGE };
+//enum { HEAL, DEAL };
+
+void usedSkill(const vector<int>& skillRange, vector<vector<int>>& accumulateDamage)
+{
+    int damage = skillRange[DAMAGE];
+    if (skillRange[TYPE] == DEAL)
+    {
+        damage = -damage;
+    }
+
+    accumulateDamage[skillRange[START_Y]][skillRange[START_X]] += damage;
+    accumulateDamage[skillRange[END_Y] + 1][skillRange[END_X] + 1] += damage;
+    accumulateDamage[skillRange[START_Y]][skillRange[END_X] + 1] -= damage;
+    accumulateDamage[skillRange[END_Y] + 1][skillRange[START_X]] -= damage;
+}
+
+void frefixSum(vector<vector<int>>& accumulateDamage)
+{
+    for (int y = 0; y < accumulateDamage.size(); ++y)
+    {
+        for (int x = 1; x < accumulateDamage[y].size(); ++x)
+        {
+            accumulateDamage[y][x] += accumulateDamage[y][x - 1]; 
+        }
+    }
+
+    for (int x = 0; x < accumulateDamage[0].size(); ++x)
+    {
+        for (int y = 1; y < accumulateDamage.size(); ++y)
+        {
+            accumulateDamage[y][x] += accumulateDamage[y - 1][x];
+        }
+    }
+}
+
+int solution(vector<vector<int>> board, vector<vector<int>> skill) {
+    int result = 0;
+
+    vector<vector<int>> accumulateDamage(board.size() + 1, vector<int>(board[0].size() + 1, 0));
+
+    for (const vector<int>& skillRange : skill)
+    {
+        usedSkill(skillRange, accumulateDamage);
+    }
+    DrawBoard(accumulateDamage);
+
+    frefixSum(accumulateDamage);
+
+    DrawBoard(accumulateDamage);
+
+    for (int y = 0; y < board.size(); ++y)
+    {
+        for (int x = 0; x < board[y].size(); ++x)
+        {
+            board[y][x] += accumulateDamage[y][x];
+            if (board[y][x] <= 0)
+            {
+                ++result;
+            }
+        }
+    }
+   
+    DrawBoard(board);
+    return result;
 }
 
 int main()
