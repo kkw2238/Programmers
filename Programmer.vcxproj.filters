@@ -150,5 +150,17 @@
     <ClCompile Include="Level3\Sequence.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Kakao\2022Kakao Intern\2022KakaoIntern-01.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Kakao\2022Kakao Intern\2022KakaoIntern-02.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Kakao\2022Kakao Intern\2022KakaoIntern-05.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Kakao\2022Kakao Intern\2022KakaoIntern-04.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

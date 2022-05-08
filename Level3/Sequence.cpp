@@ -179,104 +179,134 @@
 //	return answer * 2;
 //}
 
+
+
+//int totalCount = 0;
+//
+//int makeSequence(const vector<int>& vi, int idx, const vector<int>& indices, int beforeIndex)
+//{
+//	set<pair<int, int>> makeSequences;
+//	int beginIndex = -1;
+//	
+//	int result = 0;
+//
+//	if (vi.size() == 1)
+//	{
+//		return 0;
+//	}
+//	
+//	for (int i = idx; i < indices.size(); ++i)
+//	{
+//		int sequenceSize = makeSequences.size();
+//		result = sequenceSize;
+//
+//		if (result > totalCount)
+//		{
+//			totalCount = result;
+//		}
+//		if ((indices.size() - i + result) < totalCount)
+//		{
+//			return result;
+//		}
+//
+//		int nowIndex = indices[i];
+//
+//		if (nowIndex > 0 && vi[nowIndex - 1] != vi[nowIndex] && (nowIndex - 1) != beforeIndex)
+//		{
+//			makeSequences.insert(pair(vi[nowIndex - 1], vi[nowIndex]));
+//			beforeIndex = nowIndex;
+//		}
+//		else if (nowIndex < (vi.size() - 1) && vi[nowIndex] != vi[nowIndex + 1])
+//		{
+//			makeSequences.insert(pair(vi[nowIndex], vi[nowIndex + 1]));
+//			beforeIndex = nowIndex + 1;
+//		}
+//	}
+//
+//	return result;
+//}
+//
+//int solution(vector<int> a) {
+//	int result = 0;
+//
+//	map<int, vector<int>> eleIndex;
+//
+//	for (int i = 0; i < a.size(); ++i)
+//	{
+//		eleIndex[a[i]].push_back(i);
+//	}
+//
+//	vector<pair<int, vector<int>>> vpiv( eleIndex.begin(), eleIndex.end() );
+//	sort(vpiv.begin(), vpiv.end(), [](const pair<int, vector<int>>& l, const pair<int, vector<int>>& r) {
+//		return l.second.size() > r.second.size();
+//	});
+//
+//	for (const auto& indices : vpiv) {
+//		if ((indices.second.size() * 2) < result)
+//		{
+//			break;
+//		}
+//		totalCount = 0;
+//		result = max(result, makeSequence(a, 0, indices.second, -1) * 2);
+//	}
+//
+//	return result;
+//}
+
 #include <vector>
 #include <set>
 #include <map>
 #include <algorithm>
 
 using namespace std;
-//
-//int totalCount = 0;
-//
-//int makeSequence(const vector<int>& vi, int idx, const vector<int>& indices, set<pair<int, int>>& makedSequences, int beforeIndex)
-//{
-//	set<pair<int, int>> makeSequences;
-//	int beginIndex = -1;
-//	const int sequenceSize = makedSequences.size();
-//	int result = sequenceSize;
-//
-//	if (vi.size() == 1)
-//	{
-//		return 0;
-//	}
-//	if (indices.size() - idx < totalCount)
-//	{
-//		return result;
-//	}
-//
-//	for (int i = idx; i < indices.size(); ++i)
-//	{
-//		int nowIndex = indices[i];
-//
-//		if (nowIndex > 0 && vi[nowIndex - 1] != vi[nowIndex] && (nowIndex - 1) != beforeIndex)
-//		{
-//			makedSequences.insert(pair(vi[nowIndex - 1], vi[nowIndex]));
-//			if (sequenceSize != makedSequences.size())
-//			{
-//				result = max(result, makeSequence(vi, i + 1, indices, makedSequences, nowIndex));
-//				makedSequences.erase(pair(vi[nowIndex - 1], vi[nowIndex]));
-//			}
-//		}
-//		else if (nowIndex < (vi.size() - 1) && vi[nowIndex] != vi[nowIndex + 1])
-//		{
-//			makedSequences.insert(pair(vi[nowIndex], vi[nowIndex + 1]));
-//			if (sequenceSize != makedSequences.size())
-//			{
-//				result = max(result, makeSequence(vi, i + 1, indices, makedSequences, nowIndex + 1));
-//				makedSequences.erase(pair(vi[nowIndex], vi[nowIndex + 1]));
-//			}
-//		}
-//	}
-//
-//	if (result > totalCount)
-//	{
-//		totalCount = result;
-//	}
-//	return result;
-//}
-//
+
 int totalCount = 0;
 
-int makeSequence(const vector<int>& vi, int idx, const vector<int>& indices, int beforeIndex)
-{
+int makeSequence(const vector<int>& vi, int idx, const vector<int>& indices, set<pair<int, int>>& makedSequences, int beforeIndex)
+{ 
+
 	set<pair<int, int>> makeSequences;
 	int beginIndex = -1;
-	
-	int result = 0;
+	const int sequenceSize = makedSequences.size();
+	int result = sequenceSize;
 
 	if (vi.size() == 1)
 	{
 		return 0;
 	}
-	
+	if (indices.size() - idx < totalCount)
+	{
+		return result;
+	}
+
 	for (int i = idx; i < indices.size(); ++i)
 	{
-		int sequenceSize = makeSequences.size();
-		result = sequenceSize;
-
-		if (result > totalCount)
-		{
-			totalCount = result;
-		}
-		if ((indices.size() - i + result) < totalCount)
-		{
-			return result;
-		}
-
 		int nowIndex = indices[i];
 
 		if (nowIndex > 0 && vi[nowIndex - 1] != vi[nowIndex] && (nowIndex - 1) != beforeIndex)
 		{
-			makeSequences.insert(pair(vi[nowIndex - 1], vi[nowIndex]));
-			beforeIndex = nowIndex;
+			makedSequences.insert(pair(vi[nowIndex - 1], vi[nowIndex]));
+			if (sequenceSize != makedSequences.size())
+			{
+				result = max(result, makeSequence(vi, i + 1, indices, makedSequences, nowIndex));
+				makedSequences.erase(pair(vi[nowIndex - 1], vi[nowIndex]));
+			}
 		}
 		else if (nowIndex < (vi.size() - 1) && vi[nowIndex] != vi[nowIndex + 1])
 		{
-			makeSequences.insert(pair(vi[nowIndex], vi[nowIndex + 1]));
-			beforeIndex = nowIndex + 1;
+			makedSequences.insert(pair(vi[nowIndex], vi[nowIndex + 1]));
+			if (sequenceSize != makedSequences.size())
+			{
+				result = max(result, makeSequence(vi, i + 1, indices, makedSequences, nowIndex + 1));
+				makedSequences.erase(pair(vi[nowIndex], vi[nowIndex + 1]));
+			}
 		}
 	}
 
+	if (result > totalCount)
+	{
+		totalCount = result;
+	}
 	return result;
 }
 
@@ -290,10 +320,10 @@ int solution(vector<int> a) {
 		eleIndex[a[i]].push_back(i);
 	}
 
-	vector<pair<int, vector<int>>> vpiv( eleIndex.begin(), eleIndex.end() );
+	vector<pair<int, vector<int>>> vpiv(eleIndex.begin(), eleIndex.end());
 	sort(vpiv.begin(), vpiv.end(), [](const pair<int, vector<int>>& l, const pair<int, vector<int>>& r) {
 		return l.second.size() > r.second.size();
-	});
+		});
 
 	for (const auto& indices : vpiv) {
 		if ((indices.second.size() * 2) < result)
@@ -301,11 +331,12 @@ int solution(vector<int> a) {
 			break;
 		}
 		totalCount = 0;
-		result = max(result, makeSequence(a, 0, indices.second, -1) * 2);
+		//result = max(result, makeSequence(a, 0, indices.second, -1) * 2);
 	}
 
 	return result;
 }
+
 
 #include <iostream>
 
