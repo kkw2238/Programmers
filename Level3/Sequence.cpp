@@ -260,10 +260,92 @@
 
 using namespace std;
 
+int makeSequence(const vector<int>& vi, int idx, const vector<int>& indices, int beforeIndex)
+{
+	set<pair<int, int>> makeSequences;
+	int beginIndex = -1;
+
+	int result = 0;
+
+	if (vi.size() == 1)
+	{
+		return 0;
+	}
+
+	bool retry = false;
+	int count = 0;
+	for (int i = indices.size() - 1; i >= 0 ; --i)
+	{
+		int sequenceSize = makeSequences.size();
+		int nowIndex = indices[i];
+
+		if (nowIndex > 0 && vi[nowIndex - 1] != vi[nowIndex] && (nowIndex - 1) != beforeIndex)
+		{
+			makeSequences.insert(pair(vi[nowIndex - 1], vi[nowIndex]));
+			beforeIndex = nowIndex;
+		}
+		else if ((nowIndex < (vi.size() - 1) && vi[nowIndex] != vi[nowIndex + 1]))
+		{
+			makeSequences.insert(pair(vi[nowIndex], vi[nowIndex + 1]));
+			beforeIndex = nowIndex + 1;
+		}
+	}
+
+	return makeSequences.size();
+}
+
+int solution(vector<int> a) {
+	int result = 0;
+
+	map<int, vector<int>> eleIndex;
+
+	for (int i = 0; i < a.size(); ++i)
+	{
+		eleIndex[a[i]].push_back(i);
+	}
+
+	vector<pair<int, vector<int>>> vpiv(eleIndex.begin(), eleIndex.end());
+	sort(vpiv.begin(), vpiv.end(), [](const pair<int, vector<int>>& l, const pair<int, vector<int>>& r) {
+		return l.second.size() > r.second.size();
+		});
+
+	for (const auto& indices : vpiv) {
+		if ((indices.second.size() * 2) < result)
+		{
+			break;
+		}
+		result = max(result, makeSequence(a, 0, indices.second, -1) * 2);
+	}
+
+	return result;
+}
+
+#include <iostream>
+
+int main()
+{
+	vector<int> a{ 0,3,3,0,7,2,0,2,2,0 };
+	cout << solution(a);
+}
+/*
+	vector<vector<int>> 각 항목별 index를 기억
+
+*/
+
+
+/*
+
+#include <vector>
+#include <set>
+#include <map>
+#include <algorithm>
+
+using namespace std;
+
 int totalCount = 0;
 
 int makeSequence(const vector<int>& vi, int idx, const vector<int>& indices, set<pair<int, int>>& makedSequences, int beforeIndex)
-{ 
+{
 
 	set<pair<int, int>> makeSequences;
 	int beginIndex = -1;
@@ -331,21 +413,9 @@ int solution(vector<int> a) {
 			break;
 		}
 		totalCount = 0;
-		//result = max(result, makeSequence(a, 0, indices.second, -1) * 2);
+		result = max(result, makeSequence(a, 0, indices.second, -1) * 2);
 	}
 
 	return result;
 }
-
-
-#include <iostream>
-
-int main()
-{
-	vector<int> a{ 0, 0, 3, 1, 2, 1, 3, 4, 0, 1, 4 };
-	cout << solution(a);
-}
-/*
-	vector<vector<int>> 각 항목별 index를 기억
-
 */
