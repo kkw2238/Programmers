@@ -254,7 +254,6 @@
 //}
 
 #include <vector>
-#include <set>
 #include <map>
 #include <algorithm>
 
@@ -262,36 +261,26 @@ using namespace std;
 
 int makeSequence(const vector<int>& vi, int idx, const vector<int>& indices, int beforeIndex)
 {
-	set<pair<int, int>> makeSequences;
-	int beginIndex = -1;
-
-	int result = 0;
-
 	if (vi.size() == 1)
 	{
 		return 0;
 	}
 
-	bool retry = false;
 	int count = 0;
-	for (int i = indices.size() - 1; i >= 0 ; --i)
+	for (const int index : indices)
 	{
-		int sequenceSize = makeSequences.size();
-		int nowIndex = indices[i];
-
-		if (nowIndex > 0 && vi[nowIndex - 1] != vi[nowIndex] && (nowIndex - 1) != beforeIndex)
+		if (index > 0 && vi[index - 1] != vi[index] && (index - 1) != beforeIndex)
 		{
-			makeSequences.insert(pair(vi[nowIndex - 1], vi[nowIndex]));
-			beforeIndex = nowIndex;
+			++count;
 		}
-		else if ((nowIndex < (vi.size() - 1) && vi[nowIndex] != vi[nowIndex + 1]))
+		else if ((index < (vi.size() - 1) && vi[index] != vi[index + 1]))
 		{
-			makeSequences.insert(pair(vi[nowIndex], vi[nowIndex + 1]));
-			beforeIndex = nowIndex + 1;
+			beforeIndex = index + 1;
+			++count;
 		}
 	}
 
-	return makeSequences.size();
+	return count;
 }
 
 int solution(vector<int> a) {
@@ -324,7 +313,7 @@ int solution(vector<int> a) {
 
 int main()
 {
-	vector<int> a{ 0,3,3,0,7,2,0,2,2,0 };
+	vector<int> a{ 5,2,3,3,5,3 };
 	cout << solution(a);
 }
 /*
