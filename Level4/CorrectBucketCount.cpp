@@ -43,3 +43,14 @@ int solution(int n) {
     combBuckets(n, 0, 0, "");
     return correct_buckets.size();
 }
+
+#include <iostream>
+
+int main()
+{
+    for (int i = 2; i <= 14; ++i)
+    {
+        cout << i << " : " << solution(i) << '\n';
+        correct_buckets.clear();
+    }
+}

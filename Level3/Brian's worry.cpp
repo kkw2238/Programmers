@@ -206,128 +206,186 @@ using namespace std;
 //
 //    return true;
 //}
-bool isCorrectCase2(const string& sentence, map<char, string>& subSentence, bool isFirst);
+//bool isCorrectCase2(const string& sentence, map<char, string>& subSentence, bool isFirst);
+//
+//bool isCorrectCase1(const string& sentence, map<char, string>& subSentence, bool isFirst)
+//{
+//    bool isCorrect = true;
+//    char target = sentence[0];
+//
+//    for (int i = 1; i < sentence.length(); ++i)
+//    {
+//        if (isupper(sentence[i]))
+//        {
+//            continue;
+//        }
+//
+//        if (sentence[i] != target && isFirst)
+//        {
+//            char nextTarget = sentence[i];
+//            isCorrect &= isCorrectCase2(subSentence[nextTarget], subSentence, false);
+//            isFirst = false;
+//
+//            continue;
+//        }
+//        else if (sentence[i] == target && i % 2 == 1)
+//        {
+//            return false;
+//        }
+//    }
+//
+//    return isCorrect;
+//}
+//
+//
+//bool isCorrectCase2(const string& sentence, map<char, string>& subSentence, bool isFirst)
+//{
+//    bool isCorrect = true;
+//    char target = sentence[0];
+//
+//    for (int i = 1; i < sentence.length() - 1; ++i)
+//    {
+//        if (isupper(sentence[i]))
+//        {
+//            continue;
+//        }
+//
+//        if (sentence[i] != target && isFirst)
+//        {
+//            char nextTarget = sentence[i];
+//            isCorrect &= isCorrectCase1(subSentence[nextTarget], subSentence, false);
+//            isFirst = false;
+//            
+//            continue;
+//        }
+//
+//        return false;
+//    }
+//
+//    return isCorrect;
+//}
+//
+//string solution(string sentence) {
+//    map<char, string> subSentence;
+//
+//    for (int i = 0; i < sentence.length(); ++i)
+//    {
+//        char c = sentence[i];
+//        if (islower(c) && subSentence[c] == "")
+//        {
+//            int find_lastIndex = sentence.find_last_of(c);
+//
+//            if (find_lastIndex == i)
+//            {
+//                return "invaild";
+//            }
+//
+//            int startPos = max(0, i - 1);
+//            int endPos = min((int)sentence.length(), find_lastIndex + 1);
+//            subSentence[c] = sentence.substr(startPos, endPos - startPos + 1);
+//        }
+//    }
+//
+//    bool isCorrect = true;
+//    int index = 0;
+//
+//    for (int i = 0; i < sentence.length(); ++i)
+//    {
+//        int offset = 1;
+//
+//        if (isupper(sentence[i]) || sentence[i] == ' ')
+//        {
+//            continue;
+//        }
+//
+//        if (!isCorrect)
+//        {
+//            return "invaild";
+//        }
+//
+//        char c = sentence[i];
+//        int charCount = count(subSentence[c].begin(), subSentence[c].end(), c);
+//
+//        if (charCount == 2)
+//        {
+//            isCorrect &= isCorrectCase2(subSentence[c], subSentence, true);
+//        }
+//        else
+//        {
+//            isCorrect &= isCorrectCase1(subSentence[c], subSentence, true);
+//            ++offset;
+//        }
+//
+//        if (isCorrect)
+//        {
+//            index += subSentence[c].length() + offset;
+//            sentence.insert(sentence.begin() + index, ' ');
+//            i = index;
+//        }
+//    }
+//    
+//    sentence.erase(remove_if(sentence.begin(), sentence.end(), islower), sentence.end());
+//    return sentence;
+//}
 
-bool isCorrectCase1(const string& sentence, map<char, string>& subSentence, bool isFirst)
+#include <vector>
+#include <iostream>
+#include <stack>
+
+bool isTypeOne(string& sentence, int index)
 {
-    bool isCorrect = true;
-    char target = sentence[0];
-
-    for (int i = 1; i < sentence.length(); ++i)
+    for (int i = index; i < sentence.length(); ++i)
     {
-        if (isupper(sentence[i]))
-        {
-            continue;
-        }
-
-        if (sentence[i] != target && isFirst)
-        {
-            char nextTarget = sentence[i];
-            isCorrect &= isCorrectCase2(subSentence[nextTarget], subSentence, false);
-            isFirst = false;
-
-            continue;
-        }
-        else if (sentence[i] == target && i % 2 == 1)
+        if (islower(sentence[i]) && sentence[i] != sentence[index])
         {
             return false;
         }
     }
 
-    return isCorrect;
+    return true;
 }
 
-
-bool isCorrectCase2(const string& sentence, map<char, string>& subSentence, bool isFirst)
+bool isTypeTwo(string& sentence, int index)
 {
-    bool isCorrect = true;
-    char target = sentence[0];
-
-    for (int i = 1; i < sentence.length() - 1; ++i)
+    int count = count_if(sentence.begin(), sentence.end(), sentence[index]);
+    
+    if (count != 2)
     {
-        if (isupper(sentence[i]))
-        {
-            continue;
-        }
-
-        if (sentence[i] != target && isFirst)
-        {
-            char nextTarget = sentence[i];
-            isCorrect &= isCorrectCase1(subSentence[nextTarget], subSentence, false);
-            isFirst = false;
-            
-            continue;
-        }
-
         return false;
     }
 
-    return isCorrect;
+    if (index == 0 || sentence[index] != sentence[index + 2])
+    {
+        return true;
+    }
+
+}
+
+bool isTypeTwo(string& sentence, int index)
+{
+    return islower(sentence[index + 2]) && sentence[index] != sentence[index + 2];
 }
 
 string solution(string sentence) {
-    map<char, string> subSentence;
+    int offset = 0;
 
     for (int i = 0; i < sentence.length(); ++i)
     {
-        char c = sentence[i];
-        if (islower(c) && subSentence[c] == "")
+        int lowerIndex = distance(sentence.begin() + offset, find_if(sentence.begin() + offset, sentence.end(), islower));
+
+        char memChar = sentence[lowerIndex];
+        int count = 1;
+
+        while (memChar == sentence[lowerIndex + 2])
         {
-            int find_lastIndex = sentence.find_last_of(c);
-
-            if (find_lastIndex == i)
-            {
-                return "invaild";
-            }
-
-            subSentence[c] = sentence.substr(i, find_lastIndex - i + 1);
+            ++count;
+            lowerIndex += 2;
         }
+
     }
 
-    bool isCorrect = true;
-    int index = 0;
-
-    for (int i = 0; i < sentence.length(); ++i)
-    {
-        int offset = 1;
-
-        if (isupper(sentence[i]) || sentence[i] == ' ')
-        {
-            continue;
-        }
-
-        if (!isCorrect)
-        {
-            return "invaild";
-        }
-
-        char c = sentence[i];
-        int charCount = count(subSentence[c].begin(), subSentence[c].end(), c);
-
-        if (charCount == 2)
-        {
-            isCorrect &= isCorrectCase2(subSentence[c], subSentence, true);
-        }
-        else
-        {
-            isCorrect &= isCorrectCase1(subSentence[c], subSentence, true);
-            ++offset;
-        }
-
-        if (isCorrect)
-        {
-            index += subSentence[c].length() + offset;
-            sentence.insert(sentence.begin() + index, ' ');
-            i = index;
-        }
-    }
-    
-    sentence.erase(remove_if(sentence.begin(), sentence.end(), islower), sentence.end());
     return sentence;
 }
-
-#include <vector>
-#include <iostream>
 
 int main()
 {
