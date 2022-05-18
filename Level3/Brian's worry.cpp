@@ -332,11 +332,41 @@ using namespace std;
 #include <iostream>
 #include <stack>
 
-bool isTypeOne(string& sentence, int index)
+bool isTypeOne(string& sentence, int startIndex, int endIndex)
 {
-    for (int i = index; i < sentence.length(); ++i)
+    int lastestIndex = startIndex;
+
+    for (int i = startIndex; i < sentence.length(); ++i)
     {
-        if (islower(sentence[i]) && sentence[i] != sentence[index])
+        if (sentence[i] == sentence[startIndex] && i != lastestIndex)
+        {
+            if (i - lastestIndex != 2)
+            {
+                return false;
+            }
+            lastestIndex = i;
+        }
+        if (islower(sentence[i]) && sentence[i] != sentence[startIndex])
+        {
+            return false;
+        }
+    }
+
+    return isupper(sentence[sentence.length() - 1]);
+}
+
+bool isTypeTwo(string& sentence, int startiIndex, int endIndex)
+{
+    int charCount = count(sentence.begin(), sentence.end(), sentence[startiIndex]);
+    
+    if (charCount != 2)
+    {
+        return false;
+    }
+
+    for (int i = startiIndex; i < endIndex; ++i)
+    {
+        if (islower(sentence[i]) && sentence[i] != sentence[startiIndex])
         {
             return false;
         }
@@ -345,46 +375,70 @@ bool isTypeOne(string& sentence, int index)
     return true;
 }
 
-bool isTypeTwo(string& sentence, int index)
+bool isTypeBoth(string& sentence, int startiIndex, int endIndex)
 {
-    int count = count_if(sentence.begin(), sentence.end(), sentence[index]);
-    
-    if (count != 2)
+    string subStr = sentence.substr(startiIndex + 1, endIndex - startiIndex - 2);
+    if (!isTypeOne(subStr, startiIndex + 1, endIndex - startiIndex - 2))
     {
         return false;
     }
 
-    if (index == 0 || sentence[index] != sentence[index + 2])
+    int charCount = count(sentence.begin(), sentence.end(), sentence[startiIndex]);
+
+    if (charCount != 2)
     {
-        return true;
+        return false;
     }
 
-}
-
-bool isTypeTwo(string& sentence, int index)
-{
-    return islower(sentence[index + 2]) && sentence[index] != sentence[index + 2];
+    return true;
 }
 
 string solution(string sentence) {
     int offset = 0;
+    string result = "";
 
     for (int i = 0; i < sentence.length(); ++i)
     {
-        int lowerIndex = distance(sentence.begin() + offset, find_if(sentence.begin() + offset, sentence.end(), islower));
-
-        char memChar = sentence[lowerIndex];
-        int count = 1;
-
-        while (memChar == sentence[lowerIndex + 2])
+        if (isupper(sentence[i]) || sentence[i] == ' ')
         {
-            ++count;
-            lowerIndex += 2;
+            result += " ";
+            continue;
         }
+        
+        //int lowerIndex = distance(sentence.begin(), find_if(sentence.begin() + offset, sentence.end(), islower));
+        int lastIndex = sentence.find_last_of(sentence[i]);
+        int beginPos = max(i - 1, 0);
+        int endPos = min((int)sentence.length(), lastIndex + 1);
+        int length = endPos - beginPos + 1;
+        string subStr = sentence.substr(beginPos, length);
 
+        if (i > 0 && isTypeOne(subStr, i - beginPos, endPos - beginPos))
+        {
+            offset += subStr.length() + 2;
+            result += string(subStr.length() + 1, '1');
+            i = offset;
+        }
+        else if (isTypeTwo(subStr, i - beginPos, endPos - beginPos))
+        {
+            offset += subStr.length() - 1;
+            result += string(subStr.length() - 1, '2');
+            sentence.insert(sentence.begin() + offset + 1, ' ');
+            i = offset;
+        }
+        else if (isTypeBoth(subStr, i - beginPos, endPos - beginPos))
+        {
+            offset += subStr.length();
+            result += string(subStr.length() - 1, '3');
+            sentence.insert(sentence.begin() + offset - 1, ' ');
+            i = offset;
+        }  
+        else
+        {
+            return sentence;
+        }
     }
 
-    return sentence;
+    return result;
 }
 
 int main()
@@ -395,7 +449,8 @@ int main()
         "aIaAM",
         "baHELLOabWORLD",
         "aHbEbLbLbOacWdOdRdLdDc",
-        "bAaOb"
+        "bAaOb",
+        "aVBBBBBaCDbSbDbQ"
     };
     vector<string> a{
         "invalid",
@@ -403,8 +458,11 @@ int main()
         "I AM",
         "invalid",
         "HELLO WORLD",
-        "AO"
+        "AO",
+        " "
     };
+
+    cout << solution("bAaOb") << '\n';
 
     for (int i = 0; i < q.size(); ++i)
     {
