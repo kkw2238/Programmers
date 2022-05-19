@@ -329,11 +329,25 @@ using namespace std;
 //}
 
 #include <vector>
-#include <iostream>
-#include <stack>
+#include <string>
+#include <algorithm>
 
-bool isTypeOne(string& sentence, int startIndex, int endIndex)
+using namespace std;
+
+const string INVAILD = "invalid";
+
+const int getAlphaIndex(char c)
 {
+    return c - 'a' + 1;
+}
+
+bool isTypeOne(string& sentence, int startIndex, int endIndex, vector<bool>& usedAlpha)
+{
+    if (sentence[0] == ' ')
+    {
+        return false;
+    }
+
     int lastestIndex = startIndex;
 
     for (int i = startIndex; i < sentence.length(); ++i)
@@ -352,10 +366,23 @@ bool isTypeOne(string& sentence, int startIndex, int endIndex)
         }
     }
 
-    return isupper(sentence[sentence.length() - 1]);
+    int alphaIndex = getAlphaIndex(sentence[startIndex]);
+
+    if (usedAlpha[alphaIndex])
+    {
+        return false;
+    }
+
+    if (isupper(sentence[sentence.length() - 1]))
+    {
+        usedAlpha[alphaIndex] = true;
+        return true;
+    }
+
+    return false;
 }
 
-bool isTypeTwo(string& sentence, int startiIndex, int endIndex)
+bool isTypeTwo(string& sentence, int startiIndex, int endIndex, vector<bool>& usedAlpha)
 {
     int charCount = count(sentence.begin(), sentence.end(), sentence[startiIndex]);
     
@@ -372,13 +399,21 @@ bool isTypeTwo(string& sentence, int startiIndex, int endIndex)
         }
     }
 
+    int alphaIndex = getAlphaIndex(sentence[startiIndex]);
+    if (usedAlpha[alphaIndex])
+    {
+        return false;
+    }
+
+    usedAlpha[alphaIndex] = true;
     return true;
 }
 
-bool isTypeBoth(string& sentence, int startiIndex, int endIndex)
+bool isTypeBoth(string& sentence, int startiIndex, int endIndex, vector<bool>& usedAlpha)
 {
     string subStr = sentence.substr(startiIndex + 1, endIndex - startiIndex - 2);
-    if (!isTypeOne(subStr, startiIndex + 1, endIndex - startiIndex - 2))
+    
+    if (!isTypeOne(subStr, 1, endIndex - startiIndex - 2, usedAlpha))
     {
         return false;
     }
@@ -390,84 +425,153 @@ bool isTypeBoth(string& sentence, int startiIndex, int endIndex)
         return false;
     }
 
+    int alphaIndex = getAlphaIndex(sentence[startiIndex]);
+    if (usedAlpha[alphaIndex])
+    {
+        return false;
+    }
+
+    usedAlpha[alphaIndex] = true;
     return true;
 }
 
+#include <iostream>
+
 string solution(string sentence) {
+    const int ALPHA_COUNT = 'z' - 'a' + 1;
+    vector<bool> usedAlpha(ALPHA_COUNT, false);
     int offset = 0;
+    int count = 0;
     string result = "";
+    string tmpUpper = "";
 
     for (int i = 0; i < sentence.length(); ++i)
     {
-        if (isupper(sentence[i]) || sentence[i] == ' ')
+        if (isupper(sentence[i]))
         {
-            result += " ";
+            tmpUpper += string(1, sentence[i]);
             continue;
         }
-        
-        //int lowerIndex = distance(sentence.begin(), find_if(sentence.begin() + offset, sentence.end(), islower));
+        else if (sentence[i] == ' ')
+        {
+            continue;
+        }
+       
         int lastIndex = sentence.find_last_of(sentence[i]);
+
+        if (lastIndex - i == 1)
+        {
+            return INVAILD;
+        }
+
         int beginPos = max(i - 1, 0);
         int endPos = min((int)sentence.length(), lastIndex + 1);
         int length = endPos - beginPos + 1;
+        
         string subStr = sentence.substr(beginPos, length);
+        int subStartIndex = i - beginPos;
+        int subEndIndex = endPos - beginPos;
 
-        if (i > 0 && isTypeOne(subStr, i - beginPos, endPos - beginPos))
-        {
-            offset += subStr.length() + 2;
-            result += string(subStr.length() + 1, '1');
-            i = offset;
+        if (i > 0 && isTypeOne(subStr, subStartIndex, subEndIndex, usedAlpha))
+        {  
+            if (!tmpUpper.empty())
+            {
+                result += tmpUpper.substr(0, tmpUpper.length() - 1);
+                offset += tmpUpper.length() - 1;
+                sentence.insert(sentence.begin() + offset, ' ');
+                ++offset;
+            }
+
+            offset = i + subStr.length();
+            result += " " + subStr + " ";
+            ++count;
         }
-        else if (isTypeTwo(subStr, i - beginPos, endPos - beginPos))
+        else if (isTypeTwo(subStr, subStartIndex, subEndIndex, usedAlpha) || isTypeBoth(subStr, subStartIndex, subEndIndex, usedAlpha))
         {
-            offset += subStr.length() - 1;
-            result += string(subStr.length() - 1, '2');
-            sentence.insert(sentence.begin() + offset + 1, ' ');
-            i = offset;
+            int distance = lastIndex - beginPos;
+            if (!tmpUpper.empty())
+            {
+                result += tmpUpper.substr(0, tmpUpper.length());
+                offset += tmpUpper.length();
+                sentence.insert(sentence.begin() + offset, ' ');
+                ++offset;
+            }
+
+            offset += distance + 1;
+            result += " " + subStr.substr(i - beginPos, distance) + " ";
+            ++count;
         }
-        else if (isTypeBoth(subStr, i - beginPos, endPos - beginPos))
-        {
-            offset += subStr.length();
-            result += string(subStr.length() - 1, '3');
-            sentence.insert(sentence.begin() + offset - 1, ' ');
-            i = offset;
-        }  
         else
         {
-            return sentence;
+            return INVAILD;
+        }
+
+        sentence.insert(sentence.begin() + offset, ' ');
+        i = offset;
+        tmpUpper = "";
+    }
+
+    if (count == 0)
+    {
+        return INVAILD;
+    }
+
+    result += tmpUpper;
+
+    if (result[0] == ' ')
+    {
+        result.erase(0, 1);
+    }
+    if (result[result.size() - 1] == ' ')
+    {
+        result.pop_back();
+    }
+
+    for (int i = 0; i < result.length();)
+    {
+        if (islower(result[i]))
+        {
+            result.erase(i, 1);
+        }
+        else
+        {
+            ++i;
         }
     }
 
+    while (result.find("  ") != string::npos)
+    {
+        int pos = result.find("  ");
+        result.replace(result.begin() + pos, result.begin() + pos + 2, " ");
+    }
+
+    if (result.empty())
+    {
+        return INVAILD;
+    }
     return result;
 }
 
+
 int main()
 {
-    vector<string> q{
-        "aaXa",
-        "AxAxAxAoBoBoB",
-        "aIaAM",
-        "baHELLOabWORLD",
-        "aHbEbLbLbOacWdOdRdLdDc",
-        "bAaOb",
-        "aVBBBBBaCDbSbDbQ"
-    };
-    vector<string> a{
-        "invalid",
-        "invalid",
-        "I AM",
-        "invalid",
-        "HELLO WORLD",
-        "AO",
-        " "
-    };
+    cout << solution("AAAaBaAbBBBBbCcBdBdBdBcCeBfBeGgGGjGjGRvRvRvRvRvR") << '\n';
+    cout << solution("HaEaLaLaObWORLDb") << '\n';
+    cout << solution("SpIpGpOpNpGJqOqA") << '\n';
+    cout << solution("AxAxAxAoBoBoB") << '\n';
+    cout << solution("aIaAM") << '\n';
+    cout << solution("aaA") << '\n';
+    cout << solution("Aaa") << '\n';
+    cout << solution("HaEaLaLaOWaOaRaLaD") << '\n';
+    cout << solution("aHELLOWORLDa") << '\n';
+    cout << solution("HaEaLaLObWORLDb") << '\n';
+    cout << solution("HaEaLaLaObWORLDb") << '\n';
+    cout << solution("aHbEbLbLbOacWdOdRdLdDc") << '\n';
+    cout << solution("abAba") << '\n';
+    cout << solution("HELLO WORLD") << '\n';
+    cout << solution("xAaAbAaAx") << '\n';
+    cout << solution("AbAaAbAaCa") << '\n';
+    cout << solution("AbAaAbAaC") << '\n';
+    cout << solution("aaXa") << '\n';
 
-    cout << solution("bAaOb") << '\n';
-
-    for (int i = 0; i < q.size(); ++i)
-    {
-        cout << "Q : " << q[i] << '\n';
-        cout << "A : " << solution(q[i]) << '\n';
-        cout << "Correct : " << a[i] << "\n\n";
-    }
 }
