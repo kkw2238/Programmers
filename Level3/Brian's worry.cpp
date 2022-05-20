@@ -343,27 +343,9 @@ const int getAlphaIndex(char c)
 
 bool isTypeOne(string& sentence, int startIndex, int endIndex, vector<bool>& usedAlpha)
 {
-    if (sentence[0] == ' ')
+    if (sentence[0] == ' ' || sentence.length() <= 2 || isupper(sentence[startIndex]))
     {
         return false;
-    }
-
-    int lastestIndex = startIndex;
-
-    for (int i = startIndex; i < sentence.length(); ++i)
-    {
-        if (sentence[i] == sentence[startIndex] && i != lastestIndex)
-        {
-            if (i - lastestIndex != 2)
-            {
-                return false;
-            }
-            lastestIndex = i;
-        }
-        if (islower(sentence[i]) && sentence[i] != sentence[startIndex])
-        {
-            return false;
-        }
     }
 
     int alphaIndex = getAlphaIndex(sentence[startIndex]);
@@ -371,6 +353,28 @@ bool isTypeOne(string& sentence, int startIndex, int endIndex, vector<bool>& use
     if (usedAlpha[alphaIndex])
     {
         return false;
+    }
+
+    int lastestIndex = startIndex - 2;
+    const char target = sentence[startIndex];
+
+    for (int i = startIndex; i < sentence.length(); ++i)
+    {
+        if (i - lastestIndex == 2)
+        {
+            if (sentence[i] != target)
+            {
+                return false;
+            }
+            else
+            {
+                lastestIndex = i;
+            }
+        }
+        else if (islower(sentence[i]))
+        {
+            return false;;
+        }
     }
 
     if (isupper(sentence[sentence.length() - 1]))
@@ -386,7 +390,7 @@ bool isTypeTwo(string& sentence, int startiIndex, int endIndex, vector<bool>& us
 {
     int charCount = count(sentence.begin(), sentence.end(), sentence[startiIndex]);
     
-    if (charCount != 2)
+    if (isupper(sentence[startiIndex]) || charCount != 2)
     {
         return false;
     }
@@ -419,15 +423,14 @@ bool isTypeBoth(string& sentence, int startiIndex, int endIndex, vector<bool>& u
     }
 
     int charCount = count(sentence.begin(), sentence.end(), sentence[startiIndex]);
-
-    if (charCount != 2)
-    {
-        return false;
-    }
-
     int alphaIndex = getAlphaIndex(sentence[startiIndex]);
-    if (usedAlpha[alphaIndex])
+
+    if (isupper(sentence[startiIndex]) || charCount != 2 || usedAlpha[alphaIndex])
     {
+        if (islower(subStr[1]))
+        {
+            usedAlpha[getAlphaIndex(subStr[1])] = false;
+        }
         return false;
     }
 
@@ -435,13 +438,9 @@ bool isTypeBoth(string& sentence, int startiIndex, int endIndex, vector<bool>& u
     return true;
 }
 
-#include <iostream>
-
 string solution(string sentence) {
     const int ALPHA_COUNT = 'z' - 'a' + 1;
     vector<bool> usedAlpha(ALPHA_COUNT, false);
-    int offset = 0;
-    int count = 0;
     string result = "";
     string tmpUpper = "";
 
@@ -466,62 +465,62 @@ string solution(string sentence) {
 
         int beginPos = max(i - 1, 0);
         int endPos = min((int)sentence.length(), lastIndex + 1);
-        int length = endPos - beginPos + 1;
         
-        string subStr = sentence.substr(beginPos, length);
+        string subStr = sentence.substr(beginPos, endPos - beginPos + 1);
         int subStartIndex = i - beginPos;
         int subEndIndex = endPos - beginPos;
 
-        if (i > 0 && isTypeOne(subStr, subStartIndex, subEndIndex, usedAlpha))
-        {  
-            if (!tmpUpper.empty())
-            {
-                result += tmpUpper.substr(0, tmpUpper.length() - 1);
-                offset += tmpUpper.length() - 1;
-                sentence.insert(sentence.begin() + offset, ' ');
-                ++offset;
-            }
-
-            offset = i + subStr.length();
-            result += " " + subStr + " ";
-            ++count;
-        }
-        else if (isTypeTwo(subStr, subStartIndex, subEndIndex, usedAlpha) || isTypeBoth(subStr, subStartIndex, subEndIndex, usedAlpha))
+        if (isTypeTwo(subStr, subStartIndex, subEndIndex, usedAlpha) || isTypeBoth(subStr, subStartIndex, subEndIndex, usedAlpha))
         {
-            int distance = lastIndex - beginPos;
+            subEndIndex = lastIndex - i + 1;
             if (!tmpUpper.empty())
             {
                 result += tmpUpper.substr(0, tmpUpper.length());
-                offset += tmpUpper.length();
-                sentence.insert(sentence.begin() + offset, ' ');
-                ++offset;
+                sentence.insert(sentence.begin() + result.length(), ' ');
             }
-
-            offset += distance + 1;
-            result += " " + subStr.substr(i - beginPos, distance) + " ";
-            ++count;
+        }
+        else if (i > 0 && isTypeOne(subStr, subStartIndex, subEndIndex, usedAlpha))
+        {  
+            if (tmpUpper.length() > 1)
+            {
+                result += tmpUpper.substr(0, tmpUpper.length() - 1);
+                sentence.insert(sentence.begin() + result.length(), ' ');
+            }
+            
+            subStartIndex = 0;
+            subEndIndex = subStr.length();
         }
         else
         {
             return INVAILD;
         }
+        if (!result.empty() && result.back() != ' ')
+        {
+            result += " ";
+        }
 
-        sentence.insert(sentence.begin() + offset, ' ');
-        i = offset;
+        result += subStr.substr(subStartIndex, subEndIndex) + " ";
+
+        if (sentence.length() <= result.length() - 1)
+        {
+            sentence.push_back(' ');
+        }
+        else
+        {
+            sentence.insert(sentence.begin() + result.length() -1, ' ');
+        }
+
+        i = result.length() - 1;
         tmpUpper = "";
     }
 
-    if (count == 0)
+    result += tmpUpper;
+    if (result.empty())
     {
         return INVAILD;
     }
 
-    result += tmpUpper;
 
-    if (result[0] == ' ')
-    {
-        result.erase(0, 1);
-    }
     if (result[result.size() - 1] == ' ')
     {
         result.pop_back();
@@ -539,39 +538,211 @@ string solution(string sentence) {
         }
     }
 
-    while (result.find("  ") != string::npos)
-    {
-        int pos = result.find("  ");
-        result.replace(result.begin() + pos, result.begin() + pos + 2, " ");
-    }
-
-    if (result.empty())
-    {
-        return INVAILD;
-    }
     return result;
 }
 
+#include <iostream>
+#include <vector>
 
 int main()
 {
-    cout << solution("AAAaBaAbBBBBbCcBdBdBdBcCeBfBeGgGGjGjGRvRvRvRvRvR") << '\n';
-    cout << solution("HaEaLaLaObWORLDb") << '\n';
-    cout << solution("SpIpGpOpNpGJqOqA") << '\n';
-    cout << solution("AxAxAxAoBoBoB") << '\n';
-    cout << solution("aIaAM") << '\n';
-    cout << solution("aaA") << '\n';
-    cout << solution("Aaa") << '\n';
-    cout << solution("HaEaLaLaOWaOaRaLaD") << '\n';
-    cout << solution("aHELLOWORLDa") << '\n';
-    cout << solution("HaEaLaLObWORLDb") << '\n';
-    cout << solution("HaEaLaLaObWORLDb") << '\n';
-    cout << solution("aHbEbLbLbOacWdOdRdLdDc") << '\n';
-    cout << solution("abAba") << '\n';
-    cout << solution("HELLO WORLD") << '\n';
-    cout << solution("xAaAbAaAx") << '\n';
-    cout << solution("AbAaAbAaCa") << '\n';
-    cout << solution("AbAaAbAaC") << '\n';
-    cout << solution("aaXa") << '\n';
 
+    solution("AxAxAxABcBcBcB");
+    vector<string> strs = { 
+        "aHELLOa"                                                        ,
+        "AAAAxAbAx"                                                      ,
+        "aHbEbLbLbOa"                                                    ,
+        "HaEaLaLaObWORLDb"                                               ,
+        "SpIpGpOpNpGJqOqA"                                               ,
+        "A"                                                              ,
+        "HELLOWORLD"                                                     ,
+        "aHbEbLbLbOacWdOdRdLdDc"                                         ,
+        "HaEaLaLObWORLDb"                                                ,
+        "AAA"                                                            ,
+        "aHELLOWORLDa"                                                   ,
+        "AAAaBaAbBBBBbCcBdBdBdBcCeBfBeGgGGjGjGRvRvRvRvRvR"               ,
+        "aIaAM"                                                          ,
+        "bAaOb"                                                          ,
+        "a"                                                              ,
+        "Aa"                                                             ,
+        "aA"                                                             ,
+        "HaEaLaLaOWaOaRaLaD"                                             ,
+        "abHELLObaWORLD"                                                 ,
+        "aHELLOa bWORLDb"                                                ,
+        "TxTxTxbAb"                                                      ,
+        "bTxTxTaTxTbkABaCDk"                                             ,
+        "baHELLOabWORLD"                                                 ,
+        "A B"                                                            ,
+        "AxAxAxABcBcBcB"                                                 ,
+        "oBBoA"                                                          ,
+        "AxAxAxA"                                                        ,
+        "HaEaLaLaObWORLDbSpIpGpOpNpGJqOqAdGcWcFcDdeGfWfLeoBBoAAAAxAxAxAA",
+        "aBcAadDeEdvAvlElmEEEEm"                                         ,
+        "AcAcABaBaB"                                                     ,
+        "aGbWbFbDakGnWnLk"                                               ,
+        "XcXbXcX"                                                        ,
+        "aCaCa"                                                          ,
+        "AxAxAxAoBoBoB"                                                  ,
+        "xAaAbAaAx"                                                      ,
+        "AsCsWsQsQsEEEEEEEEeEeEe"                                        ,
+        "ABCaDaEFGbH"                                                    ,
+        "aAaBBBcAeAeAc"                                                  ,
+        "ABCbDaEaFbHI"                                                   ,
+        "AacacaA"                                                        ,
+        "AaBcBcBcBcB"                                                    ,
+        "aAAA"                                                           ,
+        "AAAa"                                                           ,
+        "aAbBBbAa"                                                       ,
+        "aAbBBbAa"                                                       ,
+        "aAAbBbAAa"                                                      ,
+        "aAcAbAbAcAcAcAa"                                                ,
+        "acAcAcAa"                                                       ,
+        "aAcAcAca"                                                       ,
+        "AdAeAeAdA"                                                      ,
+        "dAAeAd"                                                         ,
+        "dAeAAd"                                                         ,
+        "cAbBbAc"                                                        ,
+        "AbbA"                                                           ,
+        "aAaaBa"                                                         ,
+        "aAacBc"                                                         ,
+        "AB"                                                             ,
+        "AcBc"                                                           ,
+        "aAaB"                                                           ,
+        "aAbAbAbAacBdBdBdBc"                                             ,
+        "AbAbAbABdBdBdB"                                                 ,
+        "AbAbAbAcBBBBc"                                                  ,
+        "aAbAbAbAaBdBdBdB"                                               ,
+        "aAbAbAbAacBBBBc"                                                ,
+        "aAAAAaBdBdBdB"                                                  ,
+        "aAAAAacBBBBc"                                                   ,
+        "aAAAAaBdBdBdB"                                                  ,
+        "aAAAAacBdBdBdBc"                                                ,
+        "aAAAAaBdBdBdB"                                                  ,
+        "AbAbAbAcBdBdBdBc"                                               ,
+        "aAAAAaBdBdBdB"                                                  ,
+        "IaMMbMb"                                                        ,
+        "AaAaAabBBb"                                                     ,
+        "AaAaAcA"                                                        ,
+        "aAabBb"                                                         ,
+        "bBbcHdEdEc"                                                     ,
+        "AaAA"                                                           ,
+        "JaOOOaA"                                                        ,
+        "aJaOOOcAc"                                                      ,
+        "IaAMa"                                                          ,
+        "aIaAM"                                                          ,
+        "SpIpGpOpNpGJqOOOqA"                                             ,
+        "AxAxAxAoBoBoB"                                                  ,
+        "HaEaLaLaOWbObRbLbD"                                             ,
+        "AxAxAxABoBoB"                                                   ,
+        "aBa"                                                            ,
+        "baHELLOabWORLD"                                                 ,
+        "aAbAba"                                                         ,
+        "bAaOb"                                                          ,
+        "AAAaBaBBBbB"                                                    
+    };
+
+    vector<string> ans =
+    {
+        "HELLO",
+        "A A A A AA",
+        "HELLO",
+        "HELLO WORLD",
+        "SIGONG J O A",
+        "A",
+        "H E L L O W O R L D",
+        "HELLO WORLD",
+        "HELL O WORLD",
+        "A A A",
+        "HELLOWORLD",
+        "A A A B A BBBB C BBBB C BB GG G G G RRRRRR",
+        "I A M",
+        "AO",
+        "invalid",
+        "invalid",
+        "invalid",
+        "invalid",
+        "invalid",
+        "invalid",
+        "invalid",
+        "invalid",
+        "invalid",
+        "invalid",
+        "AAAA BBBB",
+        "BB A",
+        "AAAA",
+        "HELLO WORLD SIGONG J O A GWFD GWL BB A A A AAAA A",
+        "BA DE A E EEEE",
+        "A A A B B B",
+        "GWFD GWL",
+        "X XX X",
+        "invalid",
+        "invalid",
+        "invalid",
+        "invalid",
+        "A B C D E F GH",
+        "A B B B AAA",
+        "A B C DEF H I",
+        "invalid",
+        "invalid",
+        "invalid",
+        "invalid",
+        "invalid",
+        "invalid",
+        "invalid",
+        "invalid",
+        "invalid",
+        "invalid",
+        "A AAA A",
+        "invalid",
+        "invalid",
+        "ABA",
+        "invalid",
+        "invalid",
+        "A B",
+        "A B",
+        "A B",
+        "A B",
+        "AAAA BBBB",
+        "AAAA BBBB",
+        "AAAA BBBB",
+        "AAAA BBBB",
+        "AAAA BBBB",
+        "AAAA BBBB",
+        "AAAA BBBB",
+        "AAAA BBBB",
+        "AAAA BBBB",
+        "AAAA BBBB",
+        "AAAA BBBB",
+        "AAAA BBBB",
+        "IM M M",
+        "invalid",
+        "A A AA",
+        "A B",
+        "B HEE",
+        "AA A",
+        "J OOO A",
+        "J O O O A",
+        "I AM",
+        "I A M",
+        "SIGONG J OOO A",
+        "invalid",
+        "HELLO WORLD",
+        "AAAA B B B",
+        "B",
+        "invalid",
+        "invalid",
+        "AO",
+        "A A A B B B BB",
+    };
+
+    for (int i = 0; i < strs.size(); ++i)
+    {
+        string myAns = solution(strs[i]);
+        if(myAns != ans[i])
+            cout << "Q : " << strs[i] << "\t\t" << "A : " << myAns << "\t\t" << "E : " << ans[i] << '\n';
+    }
+
+   
+   
 }
+
