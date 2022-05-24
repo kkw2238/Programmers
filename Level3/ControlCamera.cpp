@@ -85,6 +85,9 @@ struct Cmp
     }
 };
 
+#include <iostream>
+
+
 vector<vector<int>> init(multiset<vector<int>, Cmp>& road, int minRange, int maxRange)
 {
     int range = maxRange - minRange;
@@ -93,12 +96,13 @@ vector<vector<int>> init(multiset<vector<int>, Cmp>& road, int minRange, int max
 
     vector<vector<int>> tree;
 
-    while (range > 0)
+    while (range > 1)
     {
         tree.push_back(vector<int>(range + (range % 2) + 1));
-        range = range / 2;
+        range = range / 2 + (range % 2);
         ++tier;
     }
+    tree.push_back(vector<int>(range + 1));
 
     for (const vector<int>& log : road)
     {
@@ -110,12 +114,44 @@ vector<vector<int>> init(multiset<vector<int>, Cmp>& road, int minRange, int max
             ++tree[i][leftIndex];
             --tree[i][rightIndex];
 
-            leftIndex = leftIndex / 2 + leftIndex % 2;
-            rightIndex = rightIndex / 2 + rightIndex % 2;
+            leftIndex = leftIndex / 2;
+            rightIndex = rightIndex / 2;
         }
     }
 
+    for (vector<int>& vi : tree)
+    {
+        for (int i : vi)
+        {
+            cout << i << ' ';
+        }
+        cout << '\n';
+    }
+
     return tree;
+}
+
+int findMaximum(vector<vector<int>>& tree)
+{
+    int maximum = -INT_MAX;
+    int count = 0;
+    int xIndex = 0, yIndex = 0;
+
+    for (int y = tree.size() - 1; y >= 0; --y)
+    {
+        for (int x = 0; x < tree[y].size(); ++x)
+        {
+            if (tree[y][x] > maximum)
+            {
+                maximum = tree[y][x];
+                xIndex = x;
+                yIndex = y;
+            }
+        }
+    }
+
+
+
 }
 
 int solution(vector<vector<int>> routes) {
