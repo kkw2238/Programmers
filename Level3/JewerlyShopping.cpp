@@ -30,12 +30,16 @@
 
 using namespace std;
 
-int leftIndex = 0;
+int leftIndex = 100001;
 int rightIndex = 0;
 int maximum = 100001;
 
 int findSide(vector<string>& gems, int left, int right, set<string>& typeOfgems)
 {
+    if (left > right)
+    {
+        return 100001;
+    }
     set<string> typeOfInsideGems = set<string>(gems.begin() + left, gems.begin() + right);
 
     int range = right - left;
@@ -46,14 +50,14 @@ int findSide(vector<string>& gems, int left, int right, set<string>& typeOfgems)
         return 100001;
     }
 
-    vector<int> leftSide{ mid + 1, left, left + ((mid - left) / 2), left };
-    vector<int> rightSide{ right, mid - 1, right, mid + ((right - mid) / 2) };
+    vector<int> leftSide{ mid + 1   , left      , left + ((mid - left) / 2) };
+    vector<int> rightSide{ right    , mid - 1   , mid + ((right - mid) / 2) };
 
-    for (int i = 3; i >= 0; --i)
+    for (int i = 2; i >= 0; --i)
     {
         range = min(findSide(gems, leftSide[i], rightSide[i], typeOfgems), range);
 
-        if (range < maximum)
+        if ((range <= maximum) && (leftSide[i] < leftIndex))
         {
             maximum = range;
             leftIndex = leftSide[i];
@@ -65,18 +69,80 @@ int findSide(vector<string>& gems, int left, int right, set<string>& typeOfgems)
 }
 
 
+
+//
+//vector<int> solution(vector<string> gems) {
+//    set<string> typeOfGems(gems.begin(), gems.end());
+//
+//    findSide(gems, 0, gems.size(), typeOfGems);
+//
+//    return vector<int>{leftIndex + 1, rightIndex + 1};
+//}
+//
+
+#include <string>
+#include <vector>
+#include <map>
+
 vector<int> solution(vector<string> gems) {
-    set<string> typeOfGems(gems.begin(), gems.end());
+    map<string, int> gemNumber;
+    int count = 0;
+    int startIndex = 0;
+    int memStartIndex = 0;
+    int endIndex = 0;
+    int memEndIndex = 0;
 
-    findSide(gems, 0, gems.size(), typeOfGems);
+    for (const string& gem : gems)
+    {
+        if (gemNumber[gem] == 0)
+        {
+            gemNumber[gem] = ++count;
+        }
+    }
 
-    return vector<int>{leftIndex + 1, rightIndex + 1};
+    vector<int> backet(count + 1, 0);
+    int sum = (count + 1) * count / 2;
+    int length = 100001;
+
+    while (memEndIndex < gems.size() && memStartIndex < gems.size())
+    {
+        const string gem = gems[memEndIndex];
+        int gemIndex = gemNumber[gem];
+
+        if (backet[gemIndex] == 0)
+        {
+            sum -= gemIndex;
+        }
+
+        if (sum > 0)
+        {
+            ++backet[gemIndex];
+            ++memEndIndex;
+
+            continue;
+        }
+        else if (sum == 0 && (memEndIndex - memStartIndex) < length)
+        {
+            endIndex = memEndIndex;
+            startIndex = memStartIndex;
+            length = memEndIndex - memStartIndex; 
+        }
+
+        int startGemNumber = gemNumber[gems[memStartIndex]];
+
+        --backet[startGemNumber];
+        if (backet[startGemNumber] == 0)
+        {
+            sum += startGemNumber;
+        }
+        ++memStartIndex;
+    }
+
+    return vector<int>{startIndex + 1, endIndex + 1};
 }
-
-
 
 int main()
 {
-    vector<string> gems{ "XYZ", "XYZ", "XYZ" };
+    vector<string> gems{ "DIA", "RUBY", "RUBY", "DIA", "DIA", "EMERALD", "SAPPHIRE", "DIA" };
     solution(gems);
 }
