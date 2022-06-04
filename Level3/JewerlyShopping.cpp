@@ -84,13 +84,38 @@ int findSide(vector<string>& gems, int left, int right, set<string>& typeOfgems)
 #include <vector>
 #include <map>
 
-vector<int> solution(vector<string> gems) {
-    map<string, int> gemNumber;
+map<string, int> gemNumber;
+
+int buy(vector<int>& backet, string& gemType)
+{
+    int gemIndex = gemNumber[gemType];
+    int result = 0;
+
+    if (backet[gemIndex] == 0)
+    {
+        result = -gemIndex;
+    }
+
+    ++backet[gemIndex];
+    return result;
+}
+
+int refund(vector<int>& backet, string& gemType)
+{
+    int gemIndex = gemNumber[gemType];
+    int result = 0;
+
+    --backet[gemIndex];
+    if (backet[gemIndex] == 0)
+    {
+        result = gemIndex;
+    }
+    return result;
+}
+
+int initialize(const vector<string>& gems)
+{
     int count = 0;
-    int startIndex = 0;
-    int memStartIndex = 0;
-    int endIndex = 0;
-    int memEndIndex = 0;
 
     for (const string& gem : gems)
     {
@@ -100,49 +125,53 @@ vector<int> solution(vector<string> gems) {
         }
     }
 
+    return count;
+}
+
+vector<int> solution(vector<string> gems) {
+    
+    vector<int> result = { 0, 0 };
+    int count = initialize(gems);
     vector<int> backet(count + 1, 0);
+    vector<bool> isFind(gems.size(), false);
+    int memStartIndex = 0;
     int sum = (count + 1) * count / 2;
     int length = 100001;
 
-    while (memEndIndex < gems.size() && memStartIndex < gems.size())
+    for (int memEndIndex = 0; memEndIndex < gems.size();)
     {
-        const string gem = gems[memEndIndex];
-        int gemIndex = gemNumber[gem];
-
-        if (backet[gemIndex] == 0)
+        if (isFind[memEndIndex] == false)
         {
-            sum -= gemIndex;
+            isFind[memEndIndex] = true;
+
+            sum += buy(backet, gems[memEndIndex]);
         }
 
         if (sum > 0)
         {
-            ++backet[gemIndex];
             ++memEndIndex;
-
-            continue;
         }
-        else if (sum == 0 && (memEndIndex - memStartIndex) < length)
+        else
         {
-            endIndex = memEndIndex;
-            startIndex = memStartIndex;
-            length = memEndIndex - memStartIndex; 
-        }
+            int memLength = memEndIndex - memStartIndex;
+            if (memLength < length)
+            {
+                length = memLength;
 
-        int startGemNumber = gemNumber[gems[memStartIndex]];
+                result[1] = memEndIndex + 1;
+                result[0] = memStartIndex + 1;
+            }
 
-        --backet[startGemNumber];
-        if (backet[startGemNumber] == 0)
-        {
-            sum += startGemNumber;
+            sum += refund(backet, gems[memStartIndex]);
+            ++memStartIndex;
         }
-        ++memStartIndex;
     }
 
-    return vector<int>{startIndex + 1, endIndex + 1};
+    return result;
 }
 
 int main()
 {
-    vector<string> gems{ "DIA", "RUBY", "RUBY", "DIA", "DIA", "EMERALD", "SAPPHIRE", "DIA" };
+    vector<string> gems{ "A","B","B","B","B","B","B","C","B","A" };
     solution(gems);
 }
