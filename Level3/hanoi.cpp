@@ -32,11 +32,6 @@ vector<vector<int>> solution(int n) {
     return moveLog;
 }
 
-int main()
-{
-    solution(3);
-}
-
 /*
     a b c
     a -> b로 n - 1개 이동 
