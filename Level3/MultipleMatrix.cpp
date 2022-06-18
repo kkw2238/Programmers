@@ -11,11 +11,24 @@ const int MAXIMUM = 201;
 
 int memory[MAXIMUM][MAXIMUM];
 
-int minimum(int start, int mid, int end, const vector<int>& d)
+int minimum(int start, int end, const vector<int>& d)
 {
     int result = INT_MAX;
+    int minimum = 0;
 
-    return 0;
+    for (int k = start; k < end; ++k)
+    {
+        int value = memory[start][k] + memory[k + 1][end];
+        value += d[start - 1] * d[k] * d[end];
+
+        if (result > value)
+        {
+            result = value;
+            minimum = k;
+        }
+    }
+
+    return result;
 }
 
 int mul(vector<int>& d)
@@ -25,16 +38,16 @@ int mul(vector<int>& d)
         memory[i][i] = 0;
     }
 
-    for (int start = 1; start < d.size(); ++start)
+    for (int diagonal = 1; diagonal < d.size(); ++diagonal)
     {
-        for (int mid = 1; mid < d.size() - start + 1; ++mid)
+        for (int start = 1; start < d.size() - diagonal; ++start)
         {  
-            int end = start + mid;
-            memory[start][end] = minimum(start, mid, end, d);
+            int eleIndex = start + diagonal;
+            memory[start][eleIndex] = minimum(start, eleIndex, d);
         }
     }
 
-    return 0;
+    return memory[1][d.size() - 1];
 }
 
 int solution(vector<vector<int>> matrix_sizes) 
@@ -46,8 +59,8 @@ int solution(vector<vector<int>> matrix_sizes)
     {
         d[i + 1] = matrix_sizes[i][1];
     }
-    
-    return 0;
+
+    return mul(d);
 }
 
 //
@@ -96,7 +109,7 @@ int solution(vector<vector<int>> matrix_sizes)
 int main()
 {
     
-    solution({ {5, 3}, {3,10}, {10,6}, {5, 3}, {3,10}, {10,6}, {5, 3}, {3,10}, {10,6}, {5, 3}, {3,10}, {10,6}, {5, 3}, {3,10}, {10,6}, {5, 3}, {3,10}, {10,6}, {5, 3}, {3,10}, {10,6}, {5, 3}, {3,10}, {10,6}, {5, 3}, {3,10}, {10,6}, {5, 3}, {3,10}, {10,6}, {5, 3}, {3,10}, {10,6}, {5, 3}, {3,10}, {10,6}, {5, 3}, {3,10}, {10,6}, {5, 3}, {3,10}, {10,6}, {5, 3}, {3,10}, {10,6}, {5, 3}, {3,10}, {10,6}, {5, 3}, {3,10}, {10,6}, {5, 3}, {3,10}, {10,6}, {5, 3}, {3,10}, {10,6}, {5, 3}, {3,10}, {10,6} });
+    solution({ {5, 3}, {3,10}, {10,6} });
 }
 
 /*
