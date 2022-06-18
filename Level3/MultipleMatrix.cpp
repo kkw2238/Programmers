@@ -11,14 +11,28 @@ const int MAXIMUM = 201;
 
 int memory[MAXIMUM][MAXIMUM];
 
-int minimum(int start, int mid, int end, int dk)
+int minimum(int start, int mid, int end, const vector<int>& d)
 {
+    int result = INT_MAX;
+
     return 0;
 }
 
 int mul(vector<int>& d)
 {
+    for (int i = 0; i < d.size(); ++i)
+    {
+        memory[i][i] = 0;
+    }
 
+    for (int start = 1; start < d.size(); ++start)
+    {
+        for (int mid = 1; mid < d.size() - start + 1; ++mid)
+        {  
+            int end = start + mid;
+            memory[start][end] = minimum(start, mid, end, d);
+        }
+    }
 
     return 0;
 }
