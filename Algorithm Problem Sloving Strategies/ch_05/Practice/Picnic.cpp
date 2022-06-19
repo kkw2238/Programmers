@@ -1,8 +1,4 @@
-#include <vector>
-#include <iostream>
 #include <set>
-
-using namespace std;
 
 //set<vector<int>> makedFriendsPair;
 //
@@ -74,16 +70,19 @@ using namespace std;
 //	cout << ssp.size() << '\n';
 //}
 
-const int MAX_STUDENTCOUNT = 10;
-bool areFriends[MAX_STUDENTCOUNT][MAX_STUDENTCOUNT];
-int gstudentCount = 0;
 
-int makePairs(bool alreadyExist[10])
+#include <vector>
+#include <iostream>
+using namespace std;
+
+const int MAX_STUDENTCOUNT = 10;
+
+int makePairs(bool alreadyExist[MAX_STUDENTCOUNT], int studentCount, const bool areFriends[MAX_STUDENTCOUNT][MAX_STUDENTCOUNT])
 {
 	int result = 0;
 	int firstFriends = -1;
 
-	for (int i = 0; i < gstudentCount; ++i)
+	for (int i = 0; i < studentCount; ++i)
 	{
 		if (!alreadyExist[i])
 		{
@@ -97,14 +96,14 @@ int makePairs(bool alreadyExist[10])
 		return 1;
 	}
 
-	for (int i = firstFriends + 1; i < gstudentCount; ++i)
+	for (int i = firstFriends + 1; i < studentCount; ++i)
 	{
 		if (!alreadyExist[i] && areFriends[firstFriends][i])
 		{
 			alreadyExist[i] = true;
 			alreadyExist[firstFriends] = true;
 			
-			result += makePairs(alreadyExist);
+			result += makePairs(alreadyExist, studentCount, areFriends);
 			
 			alreadyExist[i] = false;
 			alreadyExist[firstFriends] = false;
@@ -116,7 +115,8 @@ int makePairs(bool alreadyExist[10])
 
 void Run(int studentCount, int pairCount, vector<int> pairs)
 {
-	gstudentCount = studentCount;
+	bool areFriends[MAX_STUDENTCOUNT][MAX_STUDENTCOUNT] = { {false}};
+
 	for (int i = 0; i < pairCount; ++i)
 	{
 		int now = min(pairs[i * 2], pairs[i * 2 + 1]);
@@ -125,6 +125,31 @@ void Run(int studentCount, int pairCount, vector<int> pairs)
 		areFriends[now][pairFriend] = true;
 	}
 
-	bool alreadyExist[10] = { false, false, false, false, false, false, false, false, false, false };
-	cout << makePairs(alreadyExist) <<'\n';
+	bool alreadyExist[MAX_STUDENTCOUNT] = { false, false, false, false, false, false, false, false, false, false };
+	cout << makePairs(alreadyExist, studentCount, areFriends) <<'\n';
+}
+
+int main()
+{
+	int count = 0;
+	vector<int> pairs;
+	cin >> count;
+	cin.clear();
+
+	for (int i = 0; i < count; ++i)
+	{
+		int studentCount, pairCount;
+		cin >> studentCount >> pairCount;
+		cin.clear();
+
+		int student;
+		for (int j = 0; j < pairCount * 2; ++j)
+		{
+			cin >> student;
+			cin.clear();
+			pairs.push_back(student);
+		}
+		Run(studentCount, pairCount, pairs);
+		pairs.clear();
+	}
 }
