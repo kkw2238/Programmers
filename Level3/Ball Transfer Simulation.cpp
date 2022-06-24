@@ -1,7 +1,7 @@
-///*
-//    https://programmers.co.kr/learn/courses/30/lessons/87391?language=cpp
-//*/
-//
+/*
+    https://programmers.co.kr/learn/courses/30/lessons/87391?language=cpp
+*/
+
 //#include <vector>
 //#include <algorithm>
 //
@@ -132,8 +132,61 @@
 //
 //    return answer > totalBlocks ? totalBlocks : answer;
 //}
-//
-//int main()
-//{
-//    solution(2, 5, 0, 1, { {3, 1},{2, 2},{1, 1},{2, 3},{0, 1},{2, 1} });
-//}
+
+#include <string>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+enum { LEFT, RIGHT, UP, DOWN };
+
+
+long long solution(int n, int m, int x, int y, vector<vector<int>> queries) {
+    long long answer = -1;
+    vector<int> totalDistance(2, 0);
+    vector<pair<int, int>> maximumDistance(4, pair(0, 0));
+
+    int nowType = queries[0][0];
+    int moveDistance = 0;
+    int orders = 0;
+
+    for (vector<int>& query : queries)
+    {
+        if (nowType != query[0])
+        {
+            int lineType = nowType / 2;
+            totalDistance[lineType] += moveDistance;
+
+            if (totalDistance[lineType] > 0 && totalDistance[lineType] > maximumDistance[lineType + 1].first)
+            {
+                maximumDistance[lineType + 1].first = totalDistance[lineType];
+                maximumDistance[lineType + 1].second = orders++;
+            }
+            else if (totalDistance[lineType] < 0 && -totalDistance[lineType] > maximumDistance[lineType].first)
+            {
+                maximumDistance[lineType].first = -totalDistance[lineType];
+                maximumDistance[lineType].second = orders++;
+            }
+        }
+
+        switch (query[0])
+        {
+        case LEFT:
+        case UP:
+            moveDistance -= query[1];
+            break;
+        case RIGHT:
+        case DOWN:
+            moveDistance += query[1];
+            break;
+        }
+    }
+
+    return answer;
+}
+
+int main()
+{
+    solution(2, 5, 0, 1, { {3, 1},{2, 2},{1, 1},{2, 3},{0, 1},{2, 1} });
+}
