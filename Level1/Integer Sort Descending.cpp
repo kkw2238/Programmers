@@ -9,12 +9,12 @@ using namespace std;
 
 long long solution(long long n) {
 	long long answer = 0;
-	// ¹®ÀÚ¿­·Î º¯È¯
+	// ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
 	string numStr = to_string(n);
 
-	// º¯È¯ÇÑ ¹®ÀÚ¿­À» ³»¸²Â÷¼øÀ¸·Î Á¤·Ä
+	// ï¿½ï¿½È¯ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	sort(numStr.begin(), numStr.end(), greater<char>());
 
-	// Á¤·ÄÇÑ ¹®ÀÚ¸¦ long long Çüº¯È¯
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¸ï¿½ long long ï¿½ï¿½ï¿½ï¿½È¯
 	return stoll(numStr);
 }

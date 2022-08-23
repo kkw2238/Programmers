@@ -17,30 +17,30 @@ Board board;
 const int DIRECTION = 4;
 int board_Width, board_Height;
 
-// Reflection : ÇØ´ç À§Ä¡¿¡ µµ´ÞÇÑ ºûÀÌ ÁøÇàÇÒ ¹æÇâÀ» ¹ÝÈ¯ÇØÁÖ´Â ÇÔ¼ö
+// Reflection : ï¿½Ø´ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Ô¼ï¿½
 const int Refelction(const int inputDirection, const char reflectDirection)
 {
     switch (reflectDirection)
     {       
     case 'S':
-        // S : µé¾î¿Â ¹æÇâ ±×´ë·Î ÁøÇàÇÑ´Ù.
+        // S : ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½×´ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
         return inputDirection;
 
         /*
-            L, R ÀÌÀü ºí·°¿¡¼­ ½ð ¹æÇâ¿¡ µû¶ó ´Ù¸¥ ÁøÇà ¹æÇâÀ» ¸®ÅÏÇØ ÁÖ´Âµ¥ 
-            Input°ú OutputÀÇ ¸®ÅÏ °ü°è´Â ¾Æ·¡¿Í °°´Ù.
+            L, R ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½â¿¡ ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Âµï¿½ 
+            Inputï¿½ï¿½ Outputï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
 
-            UP - L :      ¡ç L < reflectDirection
-                            ¡è < inputDirection
+            UP - L :      ï¿½ï¿½ L < reflectDirection
+                            ï¿½ï¿½ < inputDirection
                 => Return L
 
-            DOWN - L :      ¡é < inputDirection
-                            L ¡æ < reflectDirection
+            DOWN - L :      ï¿½ï¿½ < inputDirection
+                            L ï¿½ï¿½ < reflectDirection
                 => Return R
 
                 ...
 
-                LightDirection ¹è¿­ ±âÁØÀ¸·Î inputDirectionÀÇ -1 À§Ä¡¿¡ ¹Ý»ç±¤ÀÌ ÁøÇàÇÒ ¹æÇâ°ªÀÌ µé¾îÀÖ´Ù.
+                LightDirection ï¿½è¿­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ inputDirectionï¿½ï¿½ -1 ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ý»ç±¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½â°ªï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö´ï¿½.
         */
     case 'L':
         return (inputDirection + DIRECTION - 1) % DIRECTION;
@@ -49,13 +49,13 @@ const int Refelction(const int inputDirection, const char reflectDirection)
     }
 }
 
-// Move : ºûÀÇ ¹æÇâ¿¡ µû¶ó ÁøÇàÇÑ °á°ú¸¦ ¹ÝÈ¯ÇØÁÖ´Â ÇÔ¼ö
+// Move : ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½â¿¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Ô¼ï¿½
 const void Move(int& xPos, int& yPos, const int direction)
 {
     /*
-        y = 0ÀÎ À§Ä¡¿¡¼­ À§·Î ½î°Å³ª y = heightÀÎ À§Ä¡¿¡¼­ ºûÀ» ¾Æ·¡·Î ½ò °æ¿ì 
-        ¹Ý´ëÂÊÀ¸·Î ¼øÈ¯ÇÏ°Ô ¸¸µé¾î¾ß ÇÏ±â¿¡
-        % board_Height or % board_Width ¿¬»êÀ» ÅëÇØ ¼øÈ¯
+        y = 0ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å³ï¿½ y = heightï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Æ·ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ 
+        ï¿½Ý´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï±â¿¡
+        % board_Height or % board_Width ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
     */
     switch (direction)
     {
@@ -74,20 +74,20 @@ const void Move(int& xPos, int& yPos, const int direction)
     }
 }
 
-// Light : ½ÃÀÛ À§Ä¡¿¡¼­ direction ¹æÇâÀ¸·Î ºûÀ» ½ò °æ¿ì ¸î ¹ø ÀÌµ¿ÇØ¾ß ºûÀÌ ¼øÈ¯µÇ´ÂÁö ¾Ë·ÁÁÖ´Â ÇÔ¼ö
+// Light : ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ direction ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ø¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½Ç´ï¿½ï¿½ï¿½ ï¿½Ë·ï¿½ï¿½Ö´ï¿½ ï¿½Ô¼ï¿½
 const int Lighting(vector<string> grid, int xPos, int yPos, int direction)
 {
     int moveDist = 0;
 
-    // ÀÌ¹Ì Áö³ª°£ °÷ÀÎÁö È®ÀÎ
+    // ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
     while (!board[yPos][xPos][direction])
     {
-        // Áö³ª°£ °÷À» Ã¼Å© ÇØÁØ´Ù.
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã¼Å© ï¿½ï¿½ï¿½Ø´ï¿½.
         board[yPos][xPos][direction] = true;
 
-        // ÀÌµ¿
+        // ï¿½Ìµï¿½
         Move(xPos, yPos, direction);
-        // ¹Ý»ç
+        // ï¿½Ý»ï¿½
         direction = Refelction(direction, grid[yPos][xPos]);
 
         ++moveDist;

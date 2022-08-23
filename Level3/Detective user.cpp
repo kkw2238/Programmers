@@ -11,13 +11,13 @@ using namespace std;
 
 set<vector<string>> combinations_Detected_Users;
 
-// ºÒ·® »ç¿ëÀÚ ¸í´ÜÀ» Á¶ÇÕÇÏ´Â ÇÔ¼ö
+// ï¿½Ò·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
 void Combination(set<string> existedID, vector<vector<string>>& detectedUser, const int index)
 {
-    // ¸¶Áö¸· index±îÁö ¿Â °æ¿ì 
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ indexï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ 
     if (index == detectedUser.size())
     {
-        // À¯Àú Á¶ÇÕ¿¡ »ðÀÔ
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Õ¿ï¿½ ï¿½ï¿½ï¿½ï¿½
         combinations_Detected_Users.emplace(existedID.begin(), existedID.end());
 
         return;
@@ -25,7 +25,7 @@ void Combination(set<string> existedID, vector<vector<string>>& detectedUser, co
 
     for (int i = 0; i < detectedUser[index].size(); ++i)
     {
-        // ÀÌ¹Ì ¸í´Ü¿¡ µé¾î°£ ¾ÆÀÌµð ¿©ºÎ ÆÇ´Ü
+        // ï¿½Ì¹ï¿½ ï¿½ï¿½Ü¿ï¿½ ï¿½ï¿½î°£ ï¿½ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½
         if (existedID.find(detectedUser[index][i]) != existedID.end())
         {
             continue;
@@ -40,7 +40,7 @@ void Combination(set<string> existedID, vector<vector<string>>& detectedUser, co
 
 const bool Equal(const string& a, const string& b, vector<string>& detected_users)
 {
-    // length°¡ ´Ù¸¥ °æ¿ì ¹ÝÈ¯
+    // lengthï¿½ï¿½ ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
     if (a.length() != b.length())
     {
         return false;
@@ -48,7 +48,7 @@ const bool Equal(const string& a, const string& b, vector<string>& detected_user
 
     for (int i = 0; i < a.length(); ++i)
     {
-        // b( banned id )ÀÇ ÇØ´ç ¹®ÀÚ°¡ * ÀÎ °æ¿ì 
+        // b( banned id )ï¿½ï¿½ ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½Ú°ï¿½ * ï¿½ï¿½ ï¿½ï¿½ï¿½ 
         if (b[i] == '*' || (a[i] == b[i]))
         {
             continue;

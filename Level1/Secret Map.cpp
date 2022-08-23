@@ -9,12 +9,12 @@ using namespace std;
 
 string GetMapLine(const int n, int mapLine1, int mapLine2) {
 	string result(n, ' ');
-	// ºñÆ® OR ¿¬»êÀ» ÅëÇØ ºñÆ®¸¦ ÇÕÄ£´Ù.
+	// ï¿½ï¿½Æ® OR ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½Ä£ï¿½ï¿½.
 	int finallyMapLine = mapLine1 | mapLine2;
 
 	for (int i = 1; i <= n; ++i)
 	{
-		// Á¦ÀÏ ¿À¸¥ÂÊ ºñÆ®°¡ 1ÀÎ °æ¿ì 
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½ 1ï¿½ï¿½ ï¿½ï¿½ï¿½ 
 		if (finallyMapLine & 1)
 		{
 			result[n - i] = '#';
@@ -23,7 +23,7 @@ string GetMapLine(const int n, int mapLine1, int mapLine2) {
 		{
 			result[n - i] = ' ';
 		}
-		// ºñÆ®¸¦ ¿À¸¥ÂÊÀ¸·Î ÇÑÄ­ ¹Î´Ù.
+		// ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä­ ï¿½Î´ï¿½.
 		finallyMapLine = finallyMapLine >> 1;
 	}
 

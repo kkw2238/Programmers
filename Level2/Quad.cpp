@@ -19,13 +19,13 @@ void AddCount(const vector<int>& nums)
 
 int Quad(int size, int x, int y, const vector<vector<int>>& arr)
 {
-    // ÃÖ¼Ò »çÀÌÁîÀÎ °æ¿ì ÇöÀç À§Ä¡ ¹ÝÈ¯
+    // ï¿½Ö¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½È¯
     if (size == 1)
     {
         return arr[y][x];
     }
 
-    // ´ÙÀ½ ½ÃÀÛ À§Ä¡
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡
     const int NEXT_XPOS[CHILD_COUNT] = { x, x + size / (CHILD_COUNT / 2), x, x + size / (CHILD_COUNT / 2) };
     const int NEXT_YPOS[CHILD_COUNT] = { y, y, y + size / (CHILD_COUNT / 2), y + size / (CHILD_COUNT / 2) };
     
@@ -36,27 +36,27 @@ int Quad(int size, int x, int y, const vector<vector<int>>& arr)
     {
         int child = Quad(size / (CHILD_COUNT / 2), NEXT_XPOS[i], NEXT_YPOS[i], arr);
         
-        // child°¡ ÇÕÃÄÁ®ÀÖ´Â °æ¿ì( 0, 1°ªÀ» °®°í ÀÖ´Â °æ¿ì )
+        // childï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½( 0, 1ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ )
         if (child != -1)
         {
-            // children¿¡ »ðÀÔÇÑ´Ù
+            // childrenï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½
             children.emplace_back(child);
             sum_of_children += child;
         }
     }
 
-    // ÀÚ½ÄÀÌ ÇÕÃÄÁø ¿ø¼Ò·Î¸¸ ÀÌ·ç¾îÁ® ÀÖ°í, µ¿ÀÏÇÑ ¼ýÀÚ 4°³·Î ÀÌ·ç¾îÁø °æ¿ì
+    // ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ò·Î¸ï¿½ ï¿½Ì·ï¿½ï¿½ï¿½ï¿½ ï¿½Ö°ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 4ï¿½ï¿½ï¿½ï¿½ ï¿½Ì·ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
     if (!children.size() == CHILD_COUNT && sum_of_children == children.front() * CHILD_COUNT)
     {
-        // ¾ÐÃà
+        // ï¿½ï¿½ï¿½ï¿½
         return children[0];
     }
     else
     {
-        // ¾Æ´Ò °æ¿ì 0°ú 1ÀÇ °³¼ö¸¦ ´õÇØÁÜ
+        // ï¿½Æ´ï¿½ ï¿½ï¿½ï¿½ 0ï¿½ï¿½ 1ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         AddCount(children);
 
-        // ¾ÐÃàÀÌ ÀÌ·ç¾îÁöÁö ¾ÊÀº °æ¿ì -1 ¹ÝÈ¯
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ -1 ï¿½ï¿½È¯
         return -1;
     }
 }
@@ -64,7 +64,7 @@ int Quad(int size, int x, int y, const vector<vector<int>>& arr)
 vector<int> solution(vector<vector<int>> arr) {
     int num = Quad(arr.size(), 0, 0, arr);
     
-    // ¸ðµç ¼ýÀÚ°¡ ÇÑ°¡Áö ¼ýÀÚ·Î¸¸ ÀÌ·ç¾îÁ® ÀÖ´Â °æ¿ì ÆÇ´Ü
+    // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½Ñ°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú·Î¸ï¿½ ï¿½Ì·ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½
     if (num != -1)
     {
         ++numCount[num];

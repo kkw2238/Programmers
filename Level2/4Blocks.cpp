@@ -12,7 +12,7 @@ vector<vector<bool>> blockMarker;
 const int X_OFFSET[4] = { 0, 0, 1, 1 };
 const int Y_OFFSET[4] = { 0, 1, 0, 1 };
 
-// Board¸¦ ÀüÄ¡Çà·Ä È­ÇÏ¿© ºí·°À» Áö¿ï°æ¿ì ¾Ë¾Æ¼­ ³»·Á¿Àµµ·Ï º¯Çü
+// Boardï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ È­ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ë¾Æ¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 vector<string> TransposeBoard(vector<string> board)
 {
     vector<string> transposedBord(board[0].length(), string(board.size(), ' '));
@@ -21,7 +21,7 @@ vector<string> TransposeBoard(vector<string> board)
     {
         for (int x = 0; x < board[y].size(); ++x)
         {
-            // ¿ÞÂÊ ÃÖ»ó´ÜÀÌ 0,0 ÀÌ ¾Æ´Ñ ¿ÞÂÊ ÃÖÇÏ´ÜÀÌ 0,0 À¸·Î º¯È¯
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ 0,0 ï¿½ï¿½ ï¿½Æ´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½ 0,0 ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
             transposedBord[x][y] = board[board.size() - ( y + 1 )][x];
         }
     }
@@ -33,7 +33,7 @@ const bool Is4Blocks(const vector<string>& board, const int x, const int y)
 {
     for (int i = 1; i < 4; ++i)
     {
-        // 4ºí·°ÀÎÁö ¿©ºÎ È®ÀÎ
+        // 4ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
         if (board[x][y] != board[x + X_OFFSET[i]][y + Y_OFFSET[i]])
         {
             return false;
@@ -45,7 +45,7 @@ const bool Is4Blocks(const vector<string>& board, const int x, const int y)
 
 void Marking4Blocks(const int x, const int y)
 {
-    // 4BlocksÀÇ ÀÎµ¦½º¸¦ blockMarker¿¡¼­ ¸¶Å· 
+    // 4Blocksï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ blockMarkerï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å· 
     for (int i = 0; i < 4; ++i)
     {
         blockMarker[x + X_OFFSET[i]][y + Y_OFFSET[i]] = true;
@@ -60,10 +60,10 @@ int Erased4Blocks(vector<string>& board)
     {
         for (int y = board[x].size() - 1; y >= 0; --y)
         {
-            // ÇØ´ç ÀÎµ¦½º°¡ 4blockÀÇ ³»ºÎÀÎ °æ¿ì
+            // ï¿½Ø´ï¿½ ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ 4blockï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             if (blockMarker[x][y])
             {
-                // ÇØ´ç ¹®ÀÚ¿­À» Áö¿ì°í ¸Ç µÚ¿¡ ' '¸¦ Ãß°¡ -> Is4Block ¿À·ù ¹æÁö
+                // ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ú¿ï¿½ ' 'ï¿½ï¿½ ï¿½ß°ï¿½ -> Is4Block ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 board[x].erase(y, 1);
                 board[x].push_back(' ');
                 ++erasedBlocks;
@@ -80,10 +80,10 @@ int solution(int m, int n, vector<string> board) {
 
     board = TransposeBoard(board);
 
-    // Ã£Àº 4blocks°¡ ¾øÀ»¶§±îÁö ¹Ýº¹
+    // Ã£ï¿½ï¿½ 4blocksï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ýºï¿½
     while (finded4blocks != 0)
     {
-        // blockMarker ÃÊ±âÈ­
+        // blockMarker ï¿½Ê±ï¿½È­
         blockMarker = vector<vector<bool>>(n, vector<bool>(m, 0));
     
         for (int x = 0; x <= board.size() - 2; ++x)

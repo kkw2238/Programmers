@@ -17,19 +17,19 @@ class Trie
 public:
     void Initialize(const vector<string>& info, int index)
     {
-        // °¢ Ç×¸ñÀÇ Ã¹ ¹®ÀÚ¿­Àº ¸ðµÎ ´Ù¸£±â¿¡ char·Î ÆÇ´Ü
+        // ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ Ã¹ ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ï¿½â¿¡ charï¿½ï¿½ ï¿½Ç´ï¿½
         const char front = info[index].front();
 
         if (index != SCROE_INDEX)
         {
             /* 
-                ÈÄ Å½»ö ¼Óµµ¸¦ ³ôÈ÷±â À§ÇØ front¿Í '-'¿¡ °¢°¢ »ðÀÔ
+                ï¿½ï¿½ Å½ï¿½ï¿½ ï¿½Óµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ frontï¿½ï¿½ '-'ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                  => ex 
                     [java][backend][junior][pizza]
                     [-][backend][junior][pizza]
                     [-][-][junior][pizza]
                     [-][-][-][pizzq]
-                    ... µîµî ÃÑ 16°¡Áö·Î ºÐÇÒ
+                    ... ï¿½ï¿½ï¿½ ï¿½ï¿½ 16ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             */
             nextTier[front].Initialize(info, index + 1);
             nextTier[ALL].Initialize(info, index + 1);
@@ -58,11 +58,11 @@ public:
 
     const int GetOverScoreCount(int n)
     {
-        // ÇØ´ç Ç×¸ñÀ» Ã³À½À¸·Î ÂüÁ¶ÇÒ °æ¿ì Á¤·Ä -> ÂüÁ¶ ¾ÈÇÒ °æ¿ì Á¤·ÄÀ» ÇÒ ÇÊ¿ä°¡ X
+        // ï¿½Ø´ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ -> ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ê¿ä°¡ X
         if (!sorted)
         {
             sort(scores.begin(), scores.end());
-            // Áßº¹ Á¤·ÄÀ» ¸·±â À§ÇØ ÀÌ¹Ì Á¤·ÄÀ» Çß´Ù´Â flag¸¦ ¼³Á¤ÇÑ´Ù.
+            // ï¿½ßºï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß´Ù´ï¿½ flagï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
             sorted = true;
         }
 
@@ -81,7 +81,7 @@ vector<string> Split(string& info, const string& demi)
 
     while (!info.empty())
     {
-        // demi¸¦ ±âÁØÀ¸·Î ºÐÇØ
+        // demiï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         int index = info.find(demi);
 
         if (index == string::npos)
@@ -89,13 +89,13 @@ vector<string> Split(string& info, const string& demi)
             break;
         }
 
-        // 0 ~ demi¸¦ ¹ß°ßÇÑ ±¸°£±îÁö ºÐ¸® ÈÄ »ðÀÔ
+        // 0 ~ demiï¿½ï¿½ ï¿½ß°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð¸ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         result.emplace_back(info.substr(0, index));
 
         info = info.substr(index + demi.length());
     }
 
-    // ºÐ¸®°¡ ´úµÈ °æ¿ì ¿¹¿Ü Ã³¸®
+    // ï¿½Ð¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
     if (int index = info.find(" "); index != string::npos)
     {
         result.emplace_back(info.substr(0, index));
@@ -112,13 +112,13 @@ vector<int> solution(vector<string> info, vector<string> query) {
 
     for (string& s : info)
     {
-        // info¸¦ ºÐÇØ ÈÄ Trie¿¡ »ðÀÔ
+        // infoï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Trieï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         trie.Initialize(Split(s, " "), 0);
     }
 
     for (string& q : query)
     {
-        // query¸¦ ºÐÇØ ÈÄ Å½»ö
+        // queryï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Å½ï¿½ï¿½
         answer.emplace_back(trie.GetCount(Split(q, " and "), 0));
     }
 

@@ -7,10 +7,10 @@ int binarySearch(const vector<int>& sortedData, int target)
 	int l = 0;
 	int r = sortedData.size();
 
-	// l >= rÀÎ °æ¿ì´Â Å½»ö¿¡ ½ÇÆÐÇÑ °æ¿ìÀÌ±â¿¡ l < rÀÌ trueÀÎ °æ¿ì¸¸ ÆÇ´Ü
+	// l >= rï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ì±â¿¡ l < rï¿½ï¿½ trueï¿½ï¿½ ï¿½ï¿½ì¸¸ ï¿½Ç´ï¿½
 	while (l < r)
 	{
-		// Áß°£ °ª ºñ±³
+		// ï¿½ß°ï¿½ ï¿½ï¿½ ï¿½ï¿½
 		int mid = (l + r) / 2;
 
 		if (sortedData[mid] == target)
@@ -18,12 +18,12 @@ int binarySearch(const vector<int>& sortedData, int target)
 			return mid;
 		}
 
-		// [mid] °ªÀÌ targetº¸´Ù Å« °æ¿ì => ¿ÞÂÊ ¿µ¿ªÀ» Å½»ö
+		// [mid] ï¿½ï¿½ï¿½ï¿½ targetï¿½ï¿½ï¿½ï¿½ Å« ï¿½ï¿½ï¿½ => ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å½ï¿½ï¿½
 		if (sortedData[mid] > target)
 		{
 			r = mid - 1;
 		}
-		// [mid] °ªÀÌ targetº¸´Ù ÀÛÀº °æ¿ì => ¿À¸¥ÂÊ ¿µ¿ªÀ» Å½»ö
+		// [mid] ï¿½ï¿½ï¿½ï¿½ targetï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ => ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å½ï¿½ï¿½
 		else
 		{
 			l = mid + 1;

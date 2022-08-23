@@ -8,7 +8,7 @@
 
 using namespace std;
 
-// 1 ~ n±îÁöÀÇ factorialÀ» ÀúÀå => Áßº¹ °è»êÀ» ¸·±â À§ÇÑ Ã³¸®
+// 1 ~ nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ factorialï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ => ï¿½ßºï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
 vector<long long> GetFactorials(int n)
 {
     vector<long long> factorials(n + 1, 1);
@@ -24,18 +24,18 @@ vector<long long> GetFactorials(int n)
 vector<int> solution(int n, long long k) {
     vector<int> answer;
     vector<long long> factorials = GetFactorials(n--);
-    // »ç¿ë °¡´ÉÇÑ ¼ýÀÚ
+    // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     vector<int> remainingNum(n + 1);
    
-    // ( 1 ~ n )±îÁö Ã¤¿î´Ù.
+    // ( 1 ~ n )ï¿½ï¿½ï¿½ï¿½ Ã¤ï¿½ï¿½ï¿½.
     iota(remainingNum.begin(), remainingNum.end(), 1);
-    // ¼ø¿µ Á¦ÀÏ Ã¹ ÀÎµ¦½º¸¦ 0À¸·Î Á¤Çß±â¿¡ k¸¦ 1 °¨¼Ò
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã¹ ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß±â¿¡ kï¿½ï¿½ 1 ï¿½ï¿½ï¿½ï¿½
     --k;
 
-    // ¸ðµç ¼ýÀÚ°¡ ´Ù µé¾î°¥¶§±îÁö ¹Ýº¹
+    // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½ï¿½ ï¿½ï¿½î°¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ýºï¿½
     while (answer.size() != factorials.size() - 1)
     {
-        // n¹øÂ° ¼ýÀÚ´Â k / (n - 1)! ¹ø¤Š ÀÎµ¦½ºÀÇ ¼ýÀÚ¸¦ »ç¿ë
+        // nï¿½ï¿½Â° ï¿½ï¿½ï¿½Ú´ï¿½ k / (n - 1)! ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¸ï¿½ ï¿½ï¿½ï¿½
         /*
            ex) k = 5 / ramain number 1 2 3
                     => remain number[ k / 2 ]  => 3
@@ -44,7 +44,7 @@ vector<int> solution(int n, long long k) {
         int lineupNumber = remainingNum[lineupNumberIndex];
 
         answer.emplace_back(lineupNumber);
-        // ÀÌ¹Ì »ç¿ëÇÑ ¼ýÀÚ´Â Á¦°Å
+        // ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú´ï¿½ ï¿½ï¿½ï¿½ï¿½
         remainingNum.erase(remainingNum.begin() + lineupNumberIndex);
 
         k = k % (long long)factorials[n--];

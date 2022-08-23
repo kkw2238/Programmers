@@ -25,15 +25,15 @@ const int Abs(const int n)
 
 int Distance(int nowPos, const int nextPos)
 {
-    // ÇØ´ç ¼ýÀÚ°¡ ¿Þ¼Õ ¿µ¿ªÀÎ °æ¿ì ( 1, 4, 7 )
+    // ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½Þ¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ( 1, 4, 7 )
     if (nowPos % ROW_COUNT == 1)
     {
-        // °è»êÀ» ½±°Ô ÇÏ±â À§ÇØ ¿À¸¥¼Õ ¿µ¿ªÀ¸·Î º¯È¯ÇÑ´Ù.
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½Ñ´ï¿½.
         nowPos += 2;
     }
 
     int dist = Abs(nowPos - nextPos);
-    // ÃÖÁ¾°Å¸® = x°Å¸® + y°Å¸® => y°Å¸® = dist / ROW_COUNT, x°Å¸® = dist % ROW_COUNT
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ = xï¿½Å¸ï¿½ + yï¿½Å¸ï¿½ => yï¿½Å¸ï¿½ = dist / ROW_COUNT, xï¿½Å¸ï¿½ = dist % ROW_COUNT
     return dist / ROW_COUNT + dist % ROW_COUNT;
 }
 
@@ -44,19 +44,19 @@ int GetNearlyHandIndex(int nextNumber, const string& hand)
         int distance_by_Lhand = Distance(hands_Position[L_HAND_INDEX], nextNumber);
         int distnace_by_Rhand = Distance(hands_Position[R_HAND_INDEX], nextNumber);
 
-        // ¿À¸¥¼ÕÀÌ ´õ °¡±î¿ï°æ¿ì
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (distance_by_Lhand > distnace_by_Rhand)
         {
             return R_HAND_INDEX;
         }
-        // ¿Þ¼ÕÀÌ ´õ °¡±î¿ï °æ¿ì
+        // ï¿½Þ¼ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         else if (distance_by_Lhand < distnace_by_Rhand)
         {
             return L_HAND_INDEX;
         }
         else
         {
-            // ÇÚµåÀÇ Ã¹ ±ÛÀÚ°¡ 'r'ÀÎ°æ¿ì => ¿À¸¥¼ÕÀÎ °æ¿ì
+            // ï¿½Úµï¿½ï¿½ï¿½ Ã¹ ï¿½ï¿½ï¿½Ú°ï¿½ 'r'ï¿½Î°ï¿½ï¿½ => ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             if (hand[0] == 'r')
             {
                 return R_HAND_INDEX;
@@ -77,16 +77,16 @@ string solution(vector<int> numbers, string hand) {
 
     for (int number : numbers)
     {
-        // ¼ýÀÚ°¡ 0ÀÎ °æ¿ì ½ÇÁ¦ 0ÀÇ Æ÷Áö¼ÇÀÎ 11·Î º¯È¯
+        // ï¿½ï¿½ï¿½Ú°ï¿½ 0ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 0ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 11ï¿½ï¿½ ï¿½ï¿½È¯
         if (number == 0)
         {
             number = ZERO_POS;
         }
 
-        // ÇØ´ç Æ÷Áö¼Ç¿¡¼­ °¡Àå °¡±î¿î ¼Õ Index¸¦ ¾ò¾î¿Â´Ù.
+        // ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Indexï¿½ï¿½ ï¿½ï¿½ï¿½Â´ï¿½.
         int handIndex = GetNearlyHandIndex(number, hand);
         answer += HAND_CHARACTER[handIndex];
-        // ÇØ´ç ¼ÕÀÇ À§Ä¡¸¦ ÀÌµ¿
+        // ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½
         hands_Position[handIndex] = number;
     }
 
@@ -94,7 +94,7 @@ string solution(vector<int> numbers, string hand) {
 }
 
 
-/* ÀÌÀü ÄÚµå
+/* ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½
 #include <string>
 #include <vector>
 

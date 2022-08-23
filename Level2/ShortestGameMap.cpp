@@ -20,20 +20,20 @@ struct Node {
         x(newX), y(newY), moveCount(newMoveCount)
     {   }
 
-    // moveCount ±âÁØ ¿À¸§Â÷¼øÀ¸·Î Á¤·Ä
+    // moveCount ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     const bool operator<(const Node& other) const
     {
         return moveCount > other.moveCount;
     }
 };
 
-// ¸Ê °¡·Î ³»ºÎ¿¡ ÀÖ´ÂÁö ÆÇº° 
+// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ ï¿½Çºï¿½ 
 const bool InWidth(const int xPos)
 {
     return xPos >= 0 && xPos < map_Width;
 }
 
-// ¸Ê ¼¼·Î ³»ºÎ¿¡ ÀÖ´ÂÁö ÆÇº°
+// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ ï¿½Çºï¿½
 const bool InHeight(const int yPos)
 {
     return yPos >= 0 && yPos < map_Height;
@@ -49,7 +49,7 @@ int solution(vector<vector<int>> maps)
     const int X_OFFSET[4]{ -1, 0, 0, 1 };
     const int Y_OFFSET[4]{ 0, 1, -1, 0 };
 
-    // ½ÃÀÛ À§Ä¡, °ÉÀ½ ¼ö ÀúÀå
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     queue.emplace(0, 0, 1);
     
     // BFS 
@@ -69,23 +69,23 @@ int solution(vector<vector<int>> maps)
             const int yPos = nowNode.y + Y_OFFSET[i];
             const int nextMoveCount = nowNode.moveCount + 1;
 
-            // ¸É ³»ºÎ¿¡ ÀÖ°í && Áö³ª°¥ ¼ö ÀÖÀ¸¸ç && ÇØ´ç À§Ä¡ °ÉÀ½ ¼ö º¸´Ù ÀûÀ» °æ¿ì ÀÌµ¿
+            // ï¿½ï¿½ ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½Ö°ï¿½ && ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ && ï¿½Ø´ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
             if (InWidth(xPos) && InHeight(yPos) && maps[yPos][xPos] != 0 && footPrint[yPos][xPos] > nextMoveCount)
             {
-                // ¹ßÀÚÃë¸¦ ³²±ä´Ù.
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ë¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½.
                 footPrint[yPos][xPos] = nextMoveCount;
                 queue.emplace(nowNode.x + X_OFFSET[i], nowNode.y + Y_OFFSET[i], nextMoveCount);
             }
         }
     }
     
-    // µµ´ÞÇÏÁö ¸øÇÑ °æ¿ì
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
     if (footPrint[map_Height - 1][map_Width - 1] == MAXIMUM_MOVECOUNT)
     {
         return -1;
     }
 
-    // µµ´ÞÇÑ °æ¿ì
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
     return footPrint[map_Height - 1][map_Width - 1];
 }
 
@@ -104,17 +104,17 @@ int solution(vector<vector<int>> maps)
 //vector<vector<int>> footPrints;
 //vector<vector<int>> tmpFootPrints;
 //
-//// [y][x]·Î Á¤ÇÔ
+//// [y][x]ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 //
 //bool IsEnableMove(const vector<vector<int>>& maps, int x, int y, int moveCount)
 //{
-//    // ¸Ê ¹üÀ§¸¦ ¹þ¾î³­ °æ¿ì
+//    // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½î³­ ï¿½ï¿½ï¿½
 //    if ((x < 0 || y < 0) || (x >= maps[0].size() || y >= maps.size()))
 //    {
 //        return false;
 //    }
 //
-//    // ÀÌµ¿ÇÏ°íÀÚ ÇÏ´Â À§Ä¡°¡ ÀÌ¹Ì Áö³ª°£ ±æÀÎ °æ¿ì
+//    // ï¿½Ìµï¿½ï¿½Ï°ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 //    if (moveCount >= footPrints[y][x])
 //    {
 //        return false;
@@ -132,7 +132,7 @@ int solution(vector<vector<int>> maps)
 //
 //    queue<FindingNode> findNode;
 //
-//    // »ó ÇÏ ÁÂ ¿ì
+//    // ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½
 //    const int X_MOVE[4] = { 0, 0, -1, 1 };
 //    const int Y_MOVE[4] = { -1, 1, 0, 0 };
 //

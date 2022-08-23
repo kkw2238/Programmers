@@ -24,12 +24,12 @@ struct MusicInfo
 	}
 };
 
-// X#µéÀ» Æ¯Á¤ ¹®ÀÚ¿­·Î º¯È¯ ( C#°ú °°Àº ÄÉÀÌ½º¸¦ Ã³¸®ÇÏ±â ¿ëÀÌÇÏ±â ¸¸µé±â À§ÇÔ )
+// X#ï¿½ï¿½ï¿½ï¿½ Æ¯ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ ( C#ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ )
 string ConvertMellody(string s)
 {
 	int index = s.find('#');
 
-	// '#'À» Ã£Áö ¸øÇÒ ¶§ ±îÁö ¹Ýº¹
+	// '#'ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ýºï¿½
 	while (index != string::npos)
 	{
 		string mellody = convert_mellody[s.substr(index - 1, 2)];
@@ -42,7 +42,7 @@ string ConvertMellody(string s)
 
 int GetPlayTime(const string& musicInfo)
 {
-	// XXºÐ YYÃÊ ±¸Á¶¸¦ NÃÊ·Î È¯»ê
+	// XXï¿½ï¿½ YYï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Nï¿½Ê·ï¿½ È¯ï¿½ï¿½
 	int startTime = stoi(musicInfo.substr(START_TIME_H, 2)) * 60 + stoi(musicInfo.substr(START_TIME_M, 2));
 	int	endTime = stoi(musicInfo.substr(END_TIME_H, 2)) * 60 + stoi(musicInfo.substr(END_TIME_M, 2));
 
@@ -56,7 +56,7 @@ MusicInfo ConvertMusicInfoToMellodies(const string musicinfo)
 	string name = musicinfo.substr(NAME_START, findMellodyStart - NAME_START - 1);
 	string mellody = ConvertMellody(musicinfo.substr(findMellodyStart));
 
-	// mellody¸¦ playÅ¸ÀÓ ¸¸Å­ ´Ã·ÁÁØ´Ù
+	// mellodyï¿½ï¿½ playÅ¸ï¿½ï¿½ ï¿½ï¿½Å­ ï¿½Ã·ï¿½ï¿½Ø´ï¿½
 	for (int length = mellody.length(); length < playTime; length *= 2)
 	{
 		mellody.append(mellody);
@@ -74,28 +74,28 @@ string solution(string m, vector<string> musicinfos) {
 	{
 		MusicInfo mellodies = ConvertMusicInfoToMellodies(musicinfo);
 
-		// mellody°¡ µé¾îÀÖ´Â °æ¿ì
+		// mellodyï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½
 		if (mellodies.mellody.find(m) != string::npos)
 		{
-			// music¿¡ ÀúÀå
+			// musicï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			musics.emplace_back(mellodies);
 		}
 	}
 	
-	// ÀÏÄ¡ÇÏ´Â ³ë·¡°¡ ¾øÀ» °æ¿ì NoneÀ» ¹ÝÈ¯
+	// ï¿½ï¿½Ä¡ï¿½Ï´ï¿½ ï¿½ë·¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Noneï¿½ï¿½ ï¿½ï¿½È¯
 	if (musics.empty())
 	{
 		return "(None)";
 	}
 
-	// ¼ø¼­¸¦ À¯ÁöÇØ¾ß ÇÏ±â¿¡ stable_sort»ç¿ë
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¾ï¿½ ï¿½Ï±â¿¡ stable_sortï¿½ï¿½ï¿½
 	stable_sort(musics.begin(), musics.end());
 
-	// ÃÖÁ¾ °á°ú´Â Ç×»ó 0¹ø ÀÎµ¦½º¿¡ Á¸ÀçÇÑ´Ù.
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×»ï¿½ 0ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
 	return musics[0].name;
 }
 
-/* ¿¹Àü ÄÚµå
+/* ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½
 * 
 #include <string>
 #include <vector>

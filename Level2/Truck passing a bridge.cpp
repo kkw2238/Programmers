@@ -43,7 +43,7 @@ int solution(int bridge_length, int weight, vector<int> truck_weights) {
 	return elapsedTime + 1;
 }
 
-/* ¿¹Àü ÄÚµå
+/* ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½
 #include <vector>
 #include <queue>
 

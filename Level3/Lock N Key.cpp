@@ -13,11 +13,11 @@ using Point = pair<int, int>;
 
 const int ANGLE_COUNT = 4;
 
-vector<vector<Point>> key_Bumps = vector<vector<Point>>(ANGLE_COUNT); // ¿­¼è µ¹±â index
-vector<Point> lock_Homes = vector<Point>(); // ÀÚ¹°¼è È¨ index
+vector<vector<Point>> key_Bumps = vector<vector<Point>>(ANGLE_COUNT); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ index
+vector<Point> lock_Homes = vector<Point>(); // ï¿½Ú¹ï¿½ï¿½ï¿½ È¨ index
 int M, N;
 
-// 90µµ È¸ÀüÇÑ ÈÄÀÇ À§Ä¡¸¦ ¹ÝÈ¯ÇÏ´Â ÇÔ¼ö
+// 90ï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½È¯ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
 pair<int, int> RotatePoint(int& y, int& x)
 {
 	y = M - y;
@@ -137,8 +137,8 @@ int main()
 }
 
 /*
-* key ´Â M X M ( 3 ~ 20 )Å©±âÀÇ 2Â÷¿ø ¹è¿­ 
-* lock Àº N X N Å©±âÀÇ 2Â÷¿ø ¹è¿­
+* key ï¿½ï¿½ M X M ( 3 ~ 20 )Å©ï¿½ï¿½ï¿½ï¿½ 2ï¿½ï¿½ï¿½ï¿½ ï¿½è¿­ 
+* lock ï¿½ï¿½ N X N Å©ï¿½ï¿½ï¿½ï¿½ 2ï¿½ï¿½ï¿½ï¿½ ï¿½è¿­
 * M <= N
-* key¿Í lock Àº 0, 1·Î ÀÌ·ç¾îÁü ( 0 = È¨, 1 = µ¹±â )
+* keyï¿½ï¿½ lock ï¿½ï¿½ 0, 1ï¿½ï¿½ ï¿½Ì·ï¿½ï¿½ï¿½ï¿½ ( 0 = È¨, 1 = ï¿½ï¿½ï¿½ï¿½ )
 */

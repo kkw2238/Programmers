@@ -30,12 +30,12 @@ public:
 		
 		if (table[index.first][index.second] == type)
 		{
-			// ¸ðµç Á¤Á¡À» ÃÖ»ó´Ü ÁÂÃø ÁÂÇ¥ ±âÁØÀ¸·Î ¿Å±ä´Ù.
+			// ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Å±ï¿½ï¿½.
 			bumps.emplace_back(index + offset);
-			// Áßº¹À¸·Î Ã³¸®ÇÏÁö ¾Ê°Ô²û board or tableÀ» ¸Þ²Û´Ù.
+			// ï¿½ßºï¿½ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê°Ô²ï¿½ board or tableï¿½ï¿½ ï¿½Þ²Û´ï¿½.
 			table[index.first][index.second] = 1 - type;
 
-			// DFSÀ» ÀÌ¿ëÇÏ¿© Piece¸¦ Å½»öÇÑ´Ù.
+			// DFSï¿½ï¿½ ï¿½Ì¿ï¿½ï¿½Ï¿ï¿½ Pieceï¿½ï¿½ Å½ï¿½ï¿½ï¿½Ñ´ï¿½.
 			MakePiece(table, Point(index.first + 1, index.second), type);
 			MakePiece(table, Point(index.first - 1, index.second), type);
 			MakePiece(table, Point(index.first, index.second + 1), type);
@@ -47,7 +47,7 @@ public:
 
 	const bool operator==(const Piece& other) const
 	{
-		// È¨°ú µ¹±âÀÇ °³¼ö°¡ ´Ù¸¦ °æ¿ì ¸ÂÁö ¾Ê´Â ºí·°À¸·Î °£ÁÖ
+		// È¨ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		if (other.bumps.size() != bumps.size())
 		{
 			return false;
@@ -56,9 +56,9 @@ public:
 		for (int index = 0; index < bumps.size(); ++index)
 		{
 			/*
-				°¢ Á¶°¢ÀÇ À§Ä¡°¡ ¼­·Î ´Ù¸¦ °æ¿ì false ¹ÝÈ¯ 
-					=>	°¢ ÆÛÁñÀÇ ½ÃÀÛÁöÁ¡Àº ¹«Á¶°Ç ÃÖ»ó´Ü ÁÂÃø indexÀÌ¸ç, 
-						µ¿ÀÏÇÑ ¾Ë°í¸®ÁòÀ» ÀÌ¿ëÇß±â¿¡ index°¡ °°À¸¸é µ¿ÀÏÇÑ À§Ä¡¿©¾ß¸¸ ÇÑ´Ù.
+				ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ false ï¿½ï¿½È¯ 
+					=>	ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ indexï¿½Ì¸ï¿½, 
+						ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ë°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¿ï¿½ï¿½ß±â¿¡ indexï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ß¸ï¿½ ï¿½Ñ´ï¿½.
 			 */
 			if (bumps[index].first != other.bumps[index].first || bumps[index].second != other.bumps[index].second)
 			{
@@ -81,7 +81,7 @@ vector<Piece> GetPieces(vector<vector<int>> table, const int type)
 	{
 		for (int x = 0; x < table.size(); ++x)
 		{
-			// È¨ or µ¹±âÀÏ °æ¿ì ÇØ´ç ÀÎµ¦½º¸¦ ±âÁ¡À¸·Î Á¶°¢À» ¸¸µé¾î ÀúÀå
+			// È¨ or ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			if (table[y][x] == type)
 			{
 				Piece piece(Point(y, x));
@@ -97,14 +97,14 @@ vector<Piece> GetPieces(vector<vector<int>> table, const int type)
 
 void RotateBoard(vector<vector<int>>& game_board)
 {
-	// °ÔÀÓº¸µå¸¦ È¸ÀüÇÏ±â Àü ÀÓ½Ã ÀúÀå
+	// ï¿½ï¿½ï¿½Óºï¿½ï¿½å¸¦ È¸ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ ï¿½Ó½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	vector<vector<int>> tmp_Board = game_board;
 
 	for (int y = 0; y < tmp_Board.size(); ++y)
 	{
 		for (int x = 0; x < tmp_Board[y].size(); ++x)
 		{
-			// °ÔÀÓº¸µå¸¦ È¸Àü
+			// ï¿½ï¿½ï¿½Óºï¿½ï¿½å¸¦ È¸ï¿½ï¿½
 			game_board[x][tmp_Board.size() - y - 1] = tmp_Board[y][x];
 		}
 	}
@@ -116,15 +116,15 @@ int FindMatchPiece(vector<Piece>& board_Pieces, vector<Piece>& puzzle_Pieces, ve
 
 	for (int i = 0; i < board_Pieces.size(); ++i)
 	{
-		// puzzle Á¶°¢°ú ÀÏÄ¡ÇÏ´Â game_board È¨À» Å½»ö
+		// puzzle ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½Ï´ï¿½ game_board È¨ï¿½ï¿½ Å½ï¿½ï¿½
 		auto iter = find(puzzle_Pieces.begin(), puzzle_Pieces.end(), board_Pieces[i]);
 
-		// Á¸ÀçÇÒ °æ¿ì
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 		if (iter != puzzle_Pieces.end())
 		{
 			vector<Point> bumps = board_Pieces[i].bumps;
 
-			// game_boardÀÇ È¨À» ¸Þ²Û´Ù.
+			// game_boardï¿½ï¿½ È¨ï¿½ï¿½ ï¿½Þ²Û´ï¿½.
 			for (int j = 0; j < bumps.size(); ++j)
 			{
 				game_board[bumps[j].first - board_Pieces[i].offset.first][bumps[j].second - board_Pieces[i].offset.second] = BUMP;
@@ -132,7 +132,7 @@ int FindMatchPiece(vector<Piece>& board_Pieces, vector<Piece>& puzzle_Pieces, ve
 
 			result += bumps.size();
 
-			// Áßº¹ Ã³¸®¸¦ ¸·±â À§ÇØ Á¦°Å
+			// ï¿½ßºï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			board_Pieces.erase(board_Pieces.begin() + i);
 			puzzle_Pieces.erase(iter);
 			--i;
@@ -145,17 +145,17 @@ int FindMatchPiece(vector<Piece>& board_Pieces, vector<Piece>& puzzle_Pieces, ve
 int solution(vector<vector<int>> game_board, vector<vector<int>> table) {
     int answer = 0;
 
-	// ÆÛÁñ Á¶°¢À» ºÐ·ù
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð·ï¿½
 	vector<Piece> puzzle_Pieces = GetPieces(table, BUMP);
 
 	for (int i = 0; i < 4; ++i) 
 	{
-		// ÇöÀç °ÔÀÓº¸µå »óÅÂ¿¡ ´ëÇÑ ÆÛÁñ Á¶°¢µéÀ» ºÐ·ù
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Óºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð·ï¿½
 		vector<Piece> game_board_Pieces = GetPieces(game_board, EMPTY);
 
 		answer += FindMatchPiece(game_board_Pieces, puzzle_Pieces, game_board);
 
-		// º¸µå¸¦ -90µµ È¸Àü
+		// ï¿½ï¿½ï¿½å¸¦ -90ï¿½ï¿½ È¸ï¿½ï¿½
 		RotateBoard(game_board);
 	}
 

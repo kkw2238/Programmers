@@ -17,7 +17,7 @@ int RoundResult(const int originalThisRoundScore, const char bonus)
 
 	switch (bonus)
 	{
-		// TÀÇ °æ¿ì ¾Æ·¡·Î ³»·Á°¡¸é¼­ D±îÁö Ã³¸®ÇÏ±â¿¡ 3Á¦°ö ¼öÇà
+		// Tï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Æ·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½é¼­ Dï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½Ï±â¿¡ 3ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	case 'T':
 		totalScoreThisRound *= originalThisRoundScore;
 	case 'D':
@@ -29,21 +29,21 @@ int RoundResult(const int originalThisRoundScore, const char bonus)
 
 void ProcessingOption(vector<int>& scores, const char option)
 {
-	// solution¿¡¼­ emplace_backÀ» ÅëÇØ »ðÀÔÇß±â ¶§¹®¿¡ size() - 1Àº Ç×»ó ÇöÀç ¶ó¿îµå¸¦ °¡¸£Å²´Ù.
+	// solutionï¿½ï¿½ï¿½ï¿½ emplace_backï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ß±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ size() - 1ï¿½ï¿½ ï¿½×»ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½å¸¦ ï¿½ï¿½ï¿½ï¿½Å²ï¿½ï¿½.
 	const int THIS_ROUND = scores.size() - 1;
 	switch (option)
 	{
 	case '*':
-		// ÇöÀç ½ºÄÚ¾î¸¦ 2¹è Ã³¸®
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¾î¸¦ 2ï¿½ï¿½ Ã³ï¿½ï¿½
 		scores[THIS_ROUND] *= 2;
 		if (THIS_ROUND > 0)
 		{
-			// ÀÌÀü ½ºÄÚ¾î°¡ ÀÖÀ» °æ¿ì ÇØ´ç ½ºÄÚ¾îµµ 2¹è Ã³¸®
+			// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¾î°¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½Ú¾îµµ 2ï¿½ï¿½ Ã³ï¿½ï¿½
 			scores[THIS_ROUND - 1] *= 2;
 		}
 		break;
 	case '#':
-		// ÇöÀç ¶ó¿îµå À½¼ö Ã³¸®
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
 		scores[THIS_ROUND] *= -1;
 		break;
 	}
@@ -65,24 +65,24 @@ int solution(string dartResult) {
 		char bonus = '\0';
 		char option = '\0';
 		
-		// sstreamÀ» ÀÌ¿ëÇÏ¿© ½ºÄÚ¾î, º¸³Ê½º, ¿É¼ÇÀ» ÃßÃâÇØ³½´Ù.
+		// sstreamï¿½ï¿½ ï¿½Ì¿ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½Ú¾ï¿½, ï¿½ï¿½ï¿½Ê½ï¿½, ï¿½É¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø³ï¿½ï¿½ï¿½.
 		ss >> score >> bonus >> option;
 		scores.emplace_back(RoundResult(score, bonus));
 		
-		// optionÀÌ µé¾îÀÖ´ÂÁö ÆÇº° ('*', '#')
+		// optionï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ ï¿½Çºï¿½ ('*', '#')
 		if (IsNotOption(option))
 		{
-			// ¿É¼ÇÀÌ ¾Æ´Ò °æ¿ì seek¸¦ 1Ä­ ¾ÕÀ¸·Î º¸³½´Ù.
+			// ï¿½É¼ï¿½ï¿½ï¿½ ï¿½Æ´ï¿½ ï¿½ï¿½ï¿½ seekï¿½ï¿½ 1Ä­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
 			ss.unget();
 		}
 		else
 		{
-			// ¿É¼ÇÀÏ °æ¿ì ¿É¼Ç¿¡ ¸Â´Â °è»ê ¼öÇà
+			// ï¿½É¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½É¼Ç¿ï¿½ ï¿½Â´ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			ProcessingOption(scores, option);
 		}
 	}
 
-	// ÃÖÁ¾ ½ºÄÚ¾îµéÀ» ÇÕ»ê
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¾ï¿½ï¿½ï¿½ï¿½ ï¿½Õ»ï¿½
 	for (int score : scores)
 	{
 		answer += score;
