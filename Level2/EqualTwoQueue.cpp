@@ -4,6 +4,90 @@
 
 #include <string>
 #include <vector>
+#include <list>
+#include <numeric>
+
+using namespace std;
+
+int minimumCount = 2147483647;
+
+void move(list<int>& src, list<int>& dest, long long& sumOfSrc, long long& sumOfDest)
+{
+    int num = src.front();
+
+    sumOfSrc -= num;
+    sumOfDest += num;
+
+    src.pop_front();
+    dest.push_back(num);
+}
+
+void RollBack(list<int>& src, list<int>& dest, long long& sumOfSrc, long long& sumOfDest)
+{
+    int num = dest.back();
+
+    sumOfSrc += num;
+    sumOfDest -= num;
+
+    src.push_front(num);
+    dest.pop_back();
+}
+
+void Find(list<int> queue1, list<int> queue2, long long sumOfQueue1, long long sumOfQueue2, int moveCount)
+{
+    if (moveCount >= (queue1.size() + queue2.size()))
+    {
+        return;
+    }
+    else if (moveCount > minimumCount)
+    {
+        return;
+    }
+
+    if (sumOfQueue1 == sumOfQueue2)
+    {
+        if (moveCount < minimumCount)
+        {
+            minimumCount = moveCount;
+        }
+        return;
+    }
+
+    if (!queue1.empty()) 
+    {
+        move(queue1, queue2, sumOfQueue1, sumOfQueue2);
+        Find(queue1, queue2, sumOfQueue1, sumOfQueue2, moveCount + 1);
+        RollBack(queue1, queue2, sumOfQueue1, sumOfQueue2);
+    }
+    if (!queue2.empty())
+    {
+        move(queue2, queue1, sumOfQueue2, sumOfQueue1);
+        Find(queue1, queue2, sumOfQueue1, sumOfQueue2, moveCount + 1);
+        RollBack(queue2, queue1, sumOfQueue2, sumOfQueue1);
+    }
+}
+
+int solution(vector<int> queue1, vector<int> queue2) {
+    long long lTotal = accumulate(queue1.begin(), queue1.end(), 0);
+    long long rTotal = accumulate(queue2.begin(), queue2.end(), 0);
+
+    list<int> listQueue1(queue1.begin(), queue1.end());
+    list<int> listQueue2(queue2.begin(), queue2.end());
+
+    Find(listQueue1, listQueue2, lTotal, rTotal, 0);
+
+    return minimumCount == 2147483647 ? -1 : minimumCount;
+}
+
+int main()
+{
+    solution({ 3, 2, 7, 2 }, { 4, 6, 5, 1 });
+}
+
+/*
+
+#include <string>
+#include <vector>
 #include <numeric>
 
 using namespace std;
@@ -13,11 +97,11 @@ int GetCount(int length, int begin, int end)
     int half = length / 2;
     if (begin >= half)
     {
-        if (end == length - 1)
+        if (end == (length - 1))
         {
             return begin - half;
         }
-        else if (end >= half)
+        else if (end >= begin)
         {
             return half + (begin - half) * 2 + (end - begin);
         }
@@ -28,7 +112,7 @@ int GetCount(int length, int begin, int end)
     }
     else
     {
-        if (end == half - 1)
+        if (end == (half - 1))
         {
             return begin;
         }
@@ -43,11 +127,16 @@ int GetCount(int length, int begin, int end)
     }
 }
 
-int Find(vector<int> queue, int sumOfAll)
+int Find(vector<int> queue, long long sumOfAll)
 {
-    int half = sumOfAll / 2;
+    if (sumOfAll % 2 == 1)
+    {
+        return -1;
+    }
+
+    unsigned long long half = sumOfAll / 2;
     int begin = 0, end = 0;
-    int sum = 0;
+    unsigned long long sum = 0;
 
     for (; begin < queue.size();)
     {
@@ -59,11 +148,11 @@ int Find(vector<int> queue, int sumOfAll)
         }
         else if ((sum + queue[endPos]) > half)
         {
-            sum -= queue[begin];
+            sum -= queue[begin++];
         }
         else
         {
-            return GetCount(queue.size(), begin, endPos);
+            return GetCount(queue.size(), begin, endPos) + 1;
         }
     }
 
@@ -71,7 +160,7 @@ int Find(vector<int> queue, int sumOfAll)
 }
 
 int solution(vector<int> queue1, vector<int> queue2) {
-    int sumOfQueue = 0;
+    unsigned long long sumOfQueue = 0;
 
     vector<int> unionQueue = move(queue1);
     unionQueue.insert(unionQueue.end(), queue2.begin(), queue2.end());
@@ -80,3 +169,4 @@ int solution(vector<int> queue1, vector<int> queue2) {
 
     return Find(unionQueue, sumOfQueue);
 }
+*/
