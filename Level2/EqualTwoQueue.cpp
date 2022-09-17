@@ -255,9 +255,3 @@ int solution(vector<int> queue1, vector<int> queue2) {
 
     return answer;
 }
-
-int main()
-{
-    solution({ 3, 2, 7, 2 }, { 4, 6, 5, 1 });
-}
-
