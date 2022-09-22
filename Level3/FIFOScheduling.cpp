@@ -7,7 +7,7 @@
 
 using namespace std;
 
-const int MAXIMUM = 2147483647;
+const int MAXIMUM = 50000 * 10000;
 
 const bool isSuccessfully(int n, const int time,const vector<int>& cores)
 {
@@ -72,9 +72,4 @@ int solution(int n, vector<int> cores) {
     }
 
     return 0;
-}
-
-int main()
-{
-    solution(6, { 1,2,3 });
 }
