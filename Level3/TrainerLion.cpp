@@ -41,26 +41,35 @@ int solution(int n, int m, vector<vector<int>> timetable) {
         }
     }
 
-    switch (maximumCustomer)
+    if (maximumCustomer == 1)
     {
-    case 1:
         return 0;
-    case 2:
-        return (n - 1) * 2;
-    case 3:
-        return -1 + (n / 3) * 4 + offset[(n - 1) % 3];
-    case 4:
-        return n - 1;
-    case 5:
-        return n / 2 + n % 2;
-    default:
-        break;
     }
-
-    else if (maximumCustomer == 5)
+    if (maximumCustomer == 2)
     {
-        
+        return (n - 1) * 2;
     }
+    if (maximumCustomer == 3)
+    {
+        return -1 + (n / 3) * 4 + offset[(n - 1) % 3];;
+    }
+    if (maximumCustomer == 4)
+    {
+        return n - 1;
+    }
+    if (maximumCustomer == 5)
+    {
+        return n / 2 + n % 2;
+    }
+    if (maximumCustomer > ((n * n) / 2))
+    {
+        return 1;
+    }
+    
+    vector<vector<int>> board(n, vector<int>(n, 1));
+
+
+
 
     return answer;
 }
