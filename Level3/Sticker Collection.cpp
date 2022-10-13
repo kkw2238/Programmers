@@ -38,9 +38,3 @@ int solution(vector<int> sticker)
 
     return result;
 }
-
-int main()
-{
-    int n = solution({ 14, 6 });
-    n = n;
-}
