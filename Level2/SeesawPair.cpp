@@ -7,38 +7,32 @@
 
 using namespace std;
 
-
-#include <iostream>
-
 long long solution(vector<int> weights) {
     long long count = 0;
     map<int, long long> weightToIndex;
 
-    for (int i = 0; i < weights.size(); ++i)
+    for (const int& weight : weights)
     {
-        ++weightToIndex[weights[i]];
+        ++weightToIndex[weight];
     }
 
-    for (auto& iter : weightToIndex)
+    for (const auto& iter : weightToIndex)
     {
         int nowWeight = iter.first;
 
         count += (weightToIndex[nowWeight] * (weightToIndex[nowWeight] - 1)) / (long long)2;
 
-        for (int j = 1; j <= 4; ++j)
+        for (int i = 2; i <= 4; ++i)
         {
-            for (int i = j + 1; i <= 4; ++i)
+            for (int j = i + 1; j <= 4; ++j)
             {
-                if (j == 2 && i == 4)
-                {
-                    continue;
-                }
+                int pairWeight = nowWeight * i;
 
-                if (nowWeight % j == 0)
+                if (pairWeight % j == 0)
                 {
-                    if (weightToIndex.find((nowWeight * i) / j) != weightToIndex.end())
+                    if (weightToIndex.find(pairWeight / j) != weightToIndex.end())
                     {
-                        count += weightToIndex[(nowWeight * i) / j] * weightToIndex[nowWeight];
+                        count += (weightToIndex[pairWeight / j]) * weightToIndex[nowWeight];
                     }
                 }
             }
@@ -46,16 +40,4 @@ long long solution(vector<int> weights) {
     }
 
     return count;
-}
-
-
-int main()
-{
-    vector<int> vi;
-    for (int i = 1; i <= 100000; ++i)
-    {
-        vi.emplace_back(i);
-
-        cout << i << ' ' << solution(vi) << '\n';
-    }
 }
