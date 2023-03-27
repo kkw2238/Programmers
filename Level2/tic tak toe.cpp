@@ -7,35 +7,66 @@
 
 using namespace std;
 
-
 int solution(vector<string> board) {
-    int answer = -1;
+    int XCount = 0, OCount = 0;
+    bool XWin = false, OWin = false;
 
-    int XCount = 0;
-    int OCount = 0;
+    string cross = "", reverseCross = "";
 
-    for (int y = 0; y < 3; ++y)
+    for (int x = 0; x < 3; ++x)
     {
-        int widthXCount = 0;
-        int widthYCount = 0;
+        int heightXCount = 0, heightOCount = 0;
 
-        for (int x = 0; x < 3; ++x)
+        for (int y = 0; y < 3; ++y)
         {
             if (board[y][x] == 'X')
             {
-                ++widthXCount;
+                ++heightXCount;
             }
             else if (board[y][x] == 'O')
             {
-                ++widthYCount;
+                ++heightOCount;
             }
         }
+
+        cross += board[x][x];
+        reverseCross += board[2 - x][x];
+
+        XCount += heightXCount;
+        OCount += heightOCount;
+
+        if (board[x] == "XXX" || heightXCount == 3 || reverseCross == "XXX" || cross == "XXX")
+        {
+            XWin = true;
+        }
+        if (board[x] == "OOO" || heightOCount == 3 || reverseCross == "OOO" || cross == "OOO")
+        {
+            OWin = true;
+        }
     }
+
+    if (XWin && OWin)
+    {
+        return 0;
+    }
+    else if (OWin && (XCount >= OCount))
+    {
+        return 0;
+    }
+    else if (XWin && (OCount > XCount))
+    {
+        return 0;
+    }
+    int offset = (XCount - OCount);
 
     if (XCount > OCount)
     {
         return 0;
     }
+    else if ((offset * offset) > 1)
+    {
+        return 0;
+    }
 
-    return answer;
+    return 1;
 }
