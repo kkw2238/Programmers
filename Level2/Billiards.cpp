@@ -22,18 +22,25 @@ vector<int> solution(int m, int n, int startX, int startY, vector<vector<int>> b
     {
         int length = 4000000;
 
-        length = min(length, calculateLength(startX, startY, -balls[i][0], balls[i][1]));
-        length = min(length, calculateLength(startX, startY, balls[i][0] + 2 * (m - balls[i][0]), balls[i][1]));
-        length = min(length, calculateLength(startX, startY, balls[i][0], balls[i][1] + 2 * (n - balls[i][1])));
-        length = min(length, calculateLength(startX, startY, balls[i][0], -balls[i][1]));
+        if (!(startY == balls[i][1] && startX > balls[i][0]))
+        {
+            length = min(length, calculateLength(startX, startY, -balls[i][0], balls[i][1]));
+        }
+        if (!(startY == balls[i][1] && startX < balls[i][0]))
+        {
+            length = min(length, calculateLength(startX, startY, m + (m - balls[i][0]), balls[i][1]));
+        }
+        if (!(startX == balls[i][0] && startY < balls[i][1]))
+        {
+            length = min(length, calculateLength(startX, startY, balls[i][0], n + (n - balls[i][1])));
+        }
+        if (!(startX == balls[i][0] && startY > balls[i][1]))
+        {
+            length = min(length, calculateLength(startX, startY, balls[i][0], -balls[i][1]));
+        }
 
         answer.push_back(length);
     }
 
     return answer;
-}
-
-int main()
-{
-    solution(10, 10, 3, 7, { {2, 7} });
 }
