@@ -63,8 +63,3 @@ vector<string> solution(vector<vector<string>> plans) {
 
     return answer;
 }
-
-int main()
-{
-    solution({{"aaa", "12:00", "20"}, {"bbb", "12:10", "30"}, {"ccc", "12:40", "10"}} );
-}
