@@ -31,10 +31,3 @@ vector<string> solution(vector<string> players, vector<string> callings) {
     
     return players;
 }
-
-int main()
-{
-    string c(3, 'a');
-
-    c += 'c';
-}
