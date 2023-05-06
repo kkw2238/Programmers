@@ -54,14 +54,3 @@ string solution(int n, int k, vector<string> cmd) {
 
     return answer;
 }
-
-#include <iostream>
-
-int main()
-{
-    vector<string> cmd = { "C","C","C","C","C","C","C", "Z","Z","Z","Z","Z","Z","Z", "C", "Z" };
-    int n = 8;
-    int k = 2;
-
-    cout << solution(n, k, cmd);
-}

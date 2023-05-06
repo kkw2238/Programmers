@@ -91,8 +91,3 @@ int solution(int n, int start, int end, vector<vector<int>> roads, vector<int> t
 
     return answer;
 }
-
-int main()
-{
-    solution(4, 1, 4, { {1, 2, 1},{3, 2, 1}, {2, 4, 1} }, { 2, 3 });
-}

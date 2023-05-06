@@ -99,19 +99,3 @@ vector<int> solution(vector<vector<string>> places) {
     }
     return answer;
 }
-
-int main()
-{
-    vector<vector<string>> places{ 
-        
-        {
-            "POPOP", 
-            "OPOPO", 
-            "POPOP", 
-            "OPOPO", 
-            "POPOP"
-        }
-    };
-
-    solution(places);
-}

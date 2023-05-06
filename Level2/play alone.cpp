@@ -2,7 +2,6 @@
     https://school.programmers.co.kr/learn/courses/30/lessons/131130
 */
 
-#include <string>
 #include <vector>
 #include <queue>
 
@@ -21,20 +20,26 @@ int solution(vector<int> cards) {
             continue;
         }
 
-        int nextIndex = cards[i];
+        int nextIndex = cards[i] - 1;
         int counts = 1;
         while (nextIndex != i)
         {
             groupIndex[nextIndex] = groupCount;
-            nextIndex = cards[nextIndex];
+            nextIndex = cards[nextIndex] - 1;
+            ++counts;
         }
 
-        groupIndex[nextIndex] = groupCount;
+        groupIndex[nextIndex] = groupCount++;
         score.push(counts);
     }
 
+    answer = score.top();
+    score.pop();
 
+    if (!score.empty())
+    {
+        answer *= score.top();
+    }
 
-
-    return answer;
+    return answer * !(score.empty());
 }

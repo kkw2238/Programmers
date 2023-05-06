@@ -71,19 +71,3 @@ long long llsolution(int balls, int share) {
 
     return totalNumerator / totalDenominator;
 }
-#include <iostream>
-
-int main()
-{
-    solution(30, 15);
-    for (int i = 1; i <= 30; ++i)
-    {
-        for (int j = 1; j <= i; ++j)
-        {
-            if (solution(i, j) != llsolution(i, j))
-            {
-                cout << i << ", " << j << "unsigned : " << solution(i, j) << ", signed : " << llsolution(i, j) << '\n';
-            }
-        }
-    }
-}

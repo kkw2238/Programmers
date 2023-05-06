@@ -35,11 +35,3 @@ int solution(string s) {
 
     return stoi(s);
 }
-
-#include <iostream>
-int main()
-{
-    string s = "one4seveneight";
-
-    cout << solution(s);
-}
