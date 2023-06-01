@@ -4,41 +4,61 @@
 
 #include <string>
 #include <vector>
+#include <queue>
 
 using namespace std;
 
-vector<vector<int>> range;
-
-void pathFind(int b, int s, int d)
+class Compair
 {
-    if (range[s] != nullptr)
-    {
-        return ;
+public:
+    constexpr bool operator()(const pair<int, int>& _Left, const pair<int, int>& _Right) const {
+        return _Left.second > _Right.second;
     }
-    targets[s] = target;
-    target->push_back(s);
-
-    for (int i = 1; i < range.size(); ++i)
-    {
-        if (i != b && range[s][i] == 1)
-        {
-            pathFind(s, i, d)
-        }
-    }
-
-}
+};
 
 vector<int> solution(int n, vector<vector<int>> roads, vector<int> sources, int destination) {
     vector<int> answer;
-    range = vector<vector<int>>(n + 1, vector<int>(n + 1, -1));
+    vector<int> range = vector<int>(n + 1, -1);
+    vector<vector<int>> lines = vector<vector<int>>(n + 1);
+
+    priority_queue<pair<int, int>, vector<pair<int, int>>, Compair> q;
 
     for (vector<int>& road : roads)
     {
-        range[road[0]][road[1]] = 1;
-        range[road[1]][road[0]] = 1;
+        lines[road[0]].push_back(road[1]);
+        lines[road[1]].push_back(road[0]);
     }
 
+    q.push(pair(destination, 0));
 
+    while (!q.empty())
+    {
+        int now = q.top().first;
+        int step = q.top().second;
+
+        q.pop();
+
+        if (range[now] != -1 && range[now] <= step)
+        {
+            continue;
+        }
+
+        range[now] = step;
+
+        for (int i : lines[now])
+        {
+            if (range[i] != -1 && range[i] <= (step + 1))
+            {
+                continue;
+            }
+            q.push(pair(i, step + 1));
+        }
+    }
+
+    for (int s : sources)
+    {
+        answer.push_back(range[s]);
+    }
 
     return answer;
 }
