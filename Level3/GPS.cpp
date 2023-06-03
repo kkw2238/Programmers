@@ -166,7 +166,7 @@ int solution(int n, int m, vector<vector<int>> edge_list, int k, vector<int> gps
     return answer;
 }
 
-int main()
-{
-    solution(7, 10, vector<vector<int>>{ {1, 2}, { 1, 3 }, { 2, 3 }, { 2, 4 }, { 3, 4 }, { 3, 5 }, { 4, 6 }, { 5, 6 }, { 5, 7 }, { 6, 7 } }, 6, vector<int>{1, 2, 3, 3, 6, 7});
-}
+//int main()
+//{
+//    solution(7, 10, vector<vector<int>>{ {1, 2}, { 1, 3 }, { 2, 3 }, { 2, 4 }, { 3, 4 }, { 3, 5 }, { 4, 6 }, { 5, 6 }, { 5, 7 }, { 6, 7 } }, 6, vector<int>{1, 2, 3, 3, 6, 7});
+//}
