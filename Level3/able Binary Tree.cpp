@@ -10,21 +10,24 @@ using namespace std;
 
 bool isAble(string& bit, long long index, int tier)
 {
+    bool result = true;
     if (tier == 1)
     {
-        return true;
+        return result;
     }
-    else if (bit[index] == '0')
+
+    long long left = index - pow(2, (tier - 2));
+    long long right = index + pow(2, (tier - 2));
+
+    if (bit[index] == '0' && (bit[left] == '1' || bit[right] == '1'))
     {
         return false;
     }
 
-    bool result = true;
-
-    result &= isAble(bit, index - pow(2, (tier - 2)), tier - 1);
-    if (result == true)
+    result = result && isAble(bit, left, tier - 1);
+    if (result)
     {
-        result &= isAble(bit, index + pow(2, (tier - 2)), tier - 1);
+        result = result && isAble(bit, right, tier - 1);
     }
 
     return result;
@@ -32,11 +35,15 @@ bool isAble(string& bit, long long index, int tier)
 
 bool getBitset(long long num)
 {
+    if (num == 1)
+    {
+        return true;
+    }
     long long offset = 1;
     long long nowNum = 1;
     int tier = 1;
 
-    for (nowNum; pow(2, nowNum) < num;)
+    for (nowNum; pow(2, nowNum) <= num;)
     {
         offset *= 2;
         nowNum += offset;
@@ -64,19 +71,4 @@ vector<int> solution(vector<long long> numbers) {
     }
 
     return answer;
-}
-
-#include <iostream>
-int main()
-{
-    for (int i = 1; i < 1000000000000000; ++i)
-    {
-        try {
-            cout << i << '\n';
-            solution({ 2 });
-        } catch (exception ex)
-        {
-            cout << i << '\n';
-        }
-    }
 }
