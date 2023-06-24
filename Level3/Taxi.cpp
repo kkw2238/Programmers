@@ -266,13 +266,15 @@ int solution(int n, int s, int a, int b, vector<vector<int>> fares) {
 	vector<vector<int>> range(n + 1, vector<int>(n + 1, 100000000));
 
 	for (vector<int>& fare : fares) {
+		range[fare[0]][fare[0]] = 0;
+		range[fare[1]][fare[1]] = 0;
 		range[fare[0]][fare[1]] = fare[2];
 		range[fare[1]][fare[0]] = fare[2];
 	}
 
-	for (int from = 1; from <= n; ++from)
+	for (int j = 1; j <= n; ++j)
 	{
-		for (int j = 1; j <= n; ++j)
+		for (int from = 1; from <= n; ++from)
 		{
 			for (int to = 1; to <= n; ++to)
 			{
