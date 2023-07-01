@@ -148,8 +148,3 @@ vector<string> solution(vector<string> commands) {
 
     return answer;
 }
-
-int main()
-{
-    solution({ "UPDATE 1 1 A", "UPDATE 2 2 B", "UPDATE 3 3 C", "UPDATE 4 4 D", "MERGE 1 1 2 2", "MERGE 3 3 4 4", "MERGE 1 1 4 4", "UNMERGE 3 3", "PRINT 1 1", "PRINT 2 2", "PRINT 3 3", "PRINT 4 4" });
-}
