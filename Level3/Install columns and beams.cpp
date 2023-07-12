@@ -13,44 +13,96 @@ enum TYPE{ COLUMN = 1, BEAM = 2 };
     보는 한쪽 끝 부분이 기둥 위에 있거나, 또는 양쪽 끝 부분이 다른 보와 동시에 연결되어 있어야 합니다.
 */
 
-bool isAbleBuild(vector<vector<int>>& graph, int n, int x, int y, int objectType)
+bool isAbleBuild(vector<vector<int>>& graph, int x, int y, int objectType)
 {
     switch (objectType)
     {
-    case 0:
+    case COLUMN:
         return y == 0 || graph[y - 1][x] == COLUMN || (graph[y][x - 1] >= BEAM || graph[y][x] >= BEAM);
-    case 1:
-        return ((graph[y][x - 1] % 2 == BEAM && graph[y][x + 1] % 2 == BEAM) || graph[y - 1][x] >= COLUMN || graph[y - 1][x + 1] >= COLUMN);
+    case BEAM:
+        return ((x > 0 && graph[y][x - 1] % 2 == BEAM) && graph[y][x + 1] % 2 == BEAM) || graph[y - 1][x] >= COLUMN || graph[y - 1][x + 1] >= COLUMN;
     }
 }
 
-bool isAbleErase(vector<vector<int>>& graph, vector<vector<int>>& build_frame, int index, int n, int objectType)
+bool isAbleErase(vector<vector<int>>& graph, vector<vector<int>>& build_frame, int index, int objectType)
 {
     for (int i = 0; i < index; ++i)
     {
-        
-        if(isAbleBuild()
+        if (build_frame[i][3] == 0)
+        {
+            continue;
+        }
+        if (!isAbleBuild(graph, build_frame[i][0], build_frame[i][1], build_frame[i][2] + 1))
+        {
+            return false;
+        }
     }
+
+    return true;
 }
 
 vector<vector<int>> solution(int n, vector<vector<int>> build_frame) {
-    vector<vector<int>> graph(n + 1, vector<int>(n + 1, 0));
+    vector<vector<int>> graph(n + 2, vector<int>(n + 2, 0));
     vector<vector<int>> answer;
 
-    for (vector<int>& build : build_frame)
+    for (int i = 0; i < build_frame.size(); ++i)
     {
-        int index = build[0] + build[1] * (n + 1);
-        int objectType = build[2];
+        int objectType = build_frame[i][2] + 1;
         
-        if (build[3] == 0)
+        if (build_frame[i][3] == 0)
         {
-
+            graph[build_frame[i][1]][build_frame[i][0]] -= objectType;
+            if (!isAbleErase(graph, build_frame, i, objectType))
+            {
+                graph[build_frame[i][1]][build_frame[i][0]] += objectType;
+            }
         }
-        else if (build[3] == 1)
+        else if (build_frame[i][3] == 1)
         {
+            if (isAbleBuild(graph, build_frame[i][0], build_frame[i][1], objectType))
+            {
+                graph[build_frame[i][1]][build_frame[i][0]] += objectType;
+            }
+        }
+    }
 
+    for (int x = 0; x <= n; ++x)
+    {
+        for (int y = 0; y <= n; ++y)
+        {
+            if (graph[y][x] % 2 == 1)
+            {
+                answer.push_back({ x, y, 0 });
+            }
+            if (graph[y][x] >= 2)
+            {
+                answer.push_back({ x, y, 1 });
+            }
         }
     }
 
     return answer;
+}
+
+#include <string>
+#include <iostream>
+
+int main()
+{
+    string str = "[[0,0,0,1],[2,0,0,1],[4,0,0,1],[0,1,1,1],[1,1,1,1],[2,1,1,1],[3,1,1,1],[2,0,0,0],[1,1,1,0],[2,2,0,1]]";
+
+    for (char& c : str)
+    {
+        if (c == '[')
+        {
+            c = '{';
+        }
+        else if (c == ']')
+        {
+            c = '}';
+        }
+    }
+    cout << str << '\n';
+    
+    solution(5, { {0,0,0,1},{2,0,0,1},{4,0,0,1},{0,1,1,1},{1,1,1,1},{2,1,1,1},{3,1,1,1},{2,0,0,0},{1,1,1,0},{2,2,0,1} });
 }
