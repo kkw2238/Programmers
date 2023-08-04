@@ -2,19 +2,12 @@
 	https://school.programmers.co.kr/learn/courses/30/lessons/60061
 */
 
-#include <string>
 #include <vector>
 #include <set>
 
 using namespace std;
 
 enum TYPE{ COLUMN = 1, BEAM = 2 };
-
-/*
-    기둥은 바닥 위에 있거나 보의 한쪽 끝 부분 위에 있거나, 또는 다른 기둥 위에 있어야 합니다.
-    보는 한쪽 끝 부분이 기둥 위에 있거나, 또는 양쪽 끝 부분이 다른 보와 동시에 연결되어 있어야 합니다.
-
-*/
 
 bool isAbleBuild(vector<vector<int>>& graph, int x, int y, int objectType)
 {
@@ -91,27 +84,4 @@ vector<vector<int>> solution(int n, vector<vector<int>> build_frame) {
     }
 
     return answer;
-}
-
-#include <string>
-#include <iostream>
-
-int main()
-{
-    string str = "[[0,0,0,1],[2,0,0,1],[4,0,0,1],[0,1,1,1],[1,1,1,1],[2,1,1,1],[3,1,1,1],[2,0,0,0],[1,1,1,0],[2,2,0,1]]";
-
-    for (char& c : str)
-    {
-        if (c == '[')
-        {
-            c = '{';
-        }
-        else if (c == ']')
-        {
-            c = '}';
-        }
-    }
-    cout << str << '\n';
-    
-    solution(5, { {0,0,0,1},{2,0,0,1},{4,0,0,1},{0,1,1,1},{1,1,1,1},{2,1,1,1},{3,1,1,1},{2,0,0,0},{1,1,1,0},{2,2,0,1} });
 }
