@@ -103,86 +103,161 @@
 
 
 
+//#include <vector>
+//#include <algorithm>
+//
+//using namespace std;
+//
+//enum { alp_req, cop_req, alp_rwd, cop_rwd, cost };
+//
+//int alp_max = 0, cop_max = 0;
+//vector<vector<int>> minTimeAtAlpCop(151, vector<int>(151, 2147483647));
+//
+//void DFS(int alp, int cop, int time, vector<vector<int>>& problems, int index)
+//{
+//    int maximum = 0;
+//    alp = min(alp_max, alp);
+//    cop = min(cop_max, cop);
+//
+//    if (problems[index][alp_req] > alp)
+//    {
+//        time += problems[index][alp_req] - alp;
+//        alp = problems[index][alp_req];
+//    }
+//    if (problems[index][cop_req] > cop)
+//    {
+//        time += problems[index][cop_req] - cop;
+//        cop = problems[index][cop_req];
+//    }
+//
+//    if (alp == alp_max && cop == cop_max)
+//    {
+//        minTimeAtAlpCop[alp][cop] = min(minTimeAtAlpCop[alp][cop], time);
+//        return;
+//    }
+//    else if (minTimeAtAlpCop[alp][cop] <= time)
+//    {
+//        return;
+//    }
+//    else if (minTimeAtAlpCop[alp][cop] > time)
+//    {
+//        minTimeAtAlpCop[alp][cop] = time;
+//    }
+//
+//    if (problems[index][alp_rwd] > 0)
+//    {
+//        maximum = max(maximum, (alp_max - alp) / problems[index][alp_rwd] + 1);
+//    }
+//    if (problems[index][cop_rwd] > 0)
+//    {
+//        maximum = max(maximum, (cop_max - cop) / problems[index][cop_rwd] + 1);
+//    }
+//
+//    for (int i = index + 1; i < problems.size(); ++i)
+//    {        
+//        swap(problems[i], problems[index + 1]);
+//        for (int j = 0; j <= maximum; ++j)
+//        {
+//            DFS(alp + problems[index][alp_rwd] * j, cop + problems[index][cop_rwd] * j, time + problems[index][cost] * j, problems, index + 1);
+//        }
+//        swap(problems[i], problems[index + 1]);
+//    }
+//}
+//
+//int solution(int alp, int cop, vector<vector<int>> problems) {
+//    for (int i = 0; i < problems.size(); ++i)
+//    {
+//        alp_max = max(alp_max, problems[i][alp_req]);
+//        cop_max = max(cop_max, problems[i][cop_req]);
+//    }
+//
+//    for (int j = 0; j < problems.size(); ++j)
+//    {
+//        swap(problems[0], problems[j]);
+//
+//        DFS(alp, cop, 0, problems, 0);
+//
+//        swap(problems[0], problems[j]);
+//    }
+//
+//    return  minTimeAtAlpCop[alp_max][cop_max];
+//}
+
+#include <string>
 #include <vector>
 #include <algorithm>
 
-using namespace std;
-
 enum { alp_req, cop_req, alp_rwd, cop_rwd, cost };
 
-int alp_max = 0, cop_max = 0;
-vector<vector<int>> minTimeAtAlpCop(151, vector<int>(151, 2147483647));
-
-void DFS(int alp, int cop, int time, vector<vector<int>>& problems, int index)
-{
-    int maximum = 0;
-    alp = min(alp_max, alp);
-    cop = min(cop_max, cop);
-
-    if (problems[index][alp_req] > alp)
-    {
-        time += problems[index][alp_req] - alp;
-        alp = problems[index][alp_req];
-    }
-    if (problems[index][cop_req] > cop)
-    {
-        time += problems[index][cop_req] - cop;
-        cop = problems[index][cop_req];
-    }
-
-    if (alp == alp_max && cop == cop_max)
-    {
-        minTimeAtAlpCop[alp][cop] = min(minTimeAtAlpCop[alp][cop], time);
-        return;
-    }
-    else if (minTimeAtAlpCop[alp][cop] <= time)
-    {
-        return;
-    }
-    else if (minTimeAtAlpCop[alp][cop] > time)
-    {
-        minTimeAtAlpCop[alp][cop] = time;
-    }
-
-    if (problems[index][alp_rwd] > 0)
-    {
-        maximum = max(maximum, (alp_max - alp) / problems[index][alp_rwd] + 1);
-    }
-    if (problems[index][cop_rwd] > 0)
-    {
-        maximum = max(maximum, (cop_max - cop) / problems[index][cop_rwd] + 1);
-    }
-
-    for (int i = index + 1; i < problems.size(); ++i)
-    {        
-        swap(problems[i], problems[index + 1]);
-        for (int j = 0; j <= maximum; ++j)
-        {
-            DFS(alp + problems[index][alp_rwd] * j, cop + problems[index][cop_rwd] * j, time + problems[index][cost] * j, problems, index + 1);
-        }
-        swap(problems[i], problems[index + 1]);
-    }
-}
+using namespace std;
 
 int solution(int alp, int cop, vector<vector<int>> problems) {
-    for (int i = 0; i < problems.size(); ++i)
+    int answer = 0;
+    int alp_max = 0, cop_max = 0;
+    vector<vector<int>> minTimeAtAlpCop(151, vector<int>(151, 2147483647));
+
+    sort(problems.begin(), problems.end(), [&alp_max, &cop_max](vector<int>& a, vector<int>& b) {
+        return a[alp_req] + a[cop_req] < b[alp_req] + b[cop_req];
+        });
+
+    for (vector<int>& problem : problems)
     {
-        alp_max = max(alp_max, problems[i][alp_req]);
-        cop_max = max(cop_max, problems[i][cop_req]);
+        alp_max = max(alp_max, problem[alp_req]);
+        cop_max = max(cop_max, problem[cop_req]);
     }
 
-    for (int j = 0; j < problems.size(); ++j)
+    for (int a = alp; a <= alp_max; ++a)
     {
-        swap(problems[0], problems[j]);
-
-        DFS(alp, cop, 0, problems, 0);
-
-        swap(problems[0], problems[j]);
+        for (int c = cop; c <= cop_max; ++c)
+        {
+            minTimeAtAlpCop[a][c] = max(0, a - alp) + max(0, c - cop);
+        }
     }
 
-    return  minTimeAtAlpCop[alp_max][cop_max];
+    for (int a = min(alp, alp_max); a <= alp_max; ++a)
+    {
+        for (int c = min(cop, cop_max); c <= cop_max; ++c)
+        {
+            for (int i = 0; i < problems.size(); ++i)
+            {
+                if (problems[i][alp_req] > a || problems[i][cop_req] > c)
+                {
+                    continue;
+                }
+                else if (problems[i][alp_req] + problems[i][cop_req] > a + c)
+                {
+                    break;
+                }
+
+                int maximum = 0;
+                if (problems[i][alp_rwd] > 0)
+                {
+                    maximum = max(maximum, (alp_max - a) / problems[i][alp_rwd] + 1);
+                }
+                if (problems[i][cop_rwd] > 0)
+                {
+                    maximum = max(maximum, (cop_max - c) / problems[i][cop_rwd] + 1);
+                }
+
+                for (int j = 1; j <= maximum; ++j)
+                {
+                    int nextAlp = min(alp_max, a + problems[i][alp_rwd] * j);
+                    int nextCop = min(cop_max, c + problems[i][cop_rwd] * j);
+                    int nextTime = minTimeAtAlpCop[a][c] + problems[i][cost] * j;
+
+                    if (minTimeAtAlpCop[nextAlp][nextCop] <= nextTime)
+                    {
+                        break;
+                    }
+
+                    minTimeAtAlpCop[nextAlp][nextCop] = nextTime;
+                }
+            }
+        }
+    }
+
+    return minTimeAtAlpCop[alp_max][cop_max];
 }
-
 
 int main()
 {
