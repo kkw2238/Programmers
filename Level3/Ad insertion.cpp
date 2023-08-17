@@ -63,28 +63,32 @@ string solution(string play_time, string adv_time, vector<string> logs) {
         vector<int> unpacked = unpackLogs(log);
 
         ++timeline[unpacked[0]];
-        --timeline[unpacked[1]];
+        --timeline[unpacked[1] + 1];
     }
 
-    int bti = 0;
-    long long memAnswer = 0;
     long long sumTime = 0, nowWatching = 0, memTime = 0;
+    long long memAnswer = 0;
 
-    for (int eti = 0; eti <= pt; ++eti)
+    for (int i = 0; i < pt; ++i)
     {
-        nowWatching += timeline[eti];
-        sumTime += nowWatching;
-        timeline[eti] = nowWatching;
-        
-        if ((eti - bti) > at)
+        timeline[i + 1] += timeline[i];
+
+        if (i <= at)
         {
-            if (sumTime > memTime)
-            {
-                memTime = sumTime;
-                memAnswer = bti;
-            }
-            sumTime -= timeline[bti++];
+            sumTime += timeline[i];
         }
+    }
+
+    for (int bti = 0; bti < pt - at; ++bti)
+    {
+        if (sumTime > memTime)
+        {
+            memTime = sumTime;
+            memAnswer = bti;
+        }
+
+        sumTime += timeline[bti + at + 1];
+        sumTime -= timeline[bti];
     }
 
     return reverseTime(memAnswer);
@@ -170,7 +174,18 @@ string solution(string play_time, string adv_time, vector<string> logs) {
 //    return reverseTime(memAnswer);
 //}
 
+#include <iostream>
+
 int main()
 {
+    for (long long i = 0; i <= 360000; ++i)
+    {
+        string str = reverseTime(i);
+        if (convertTime(str) != i)
+        {
+            cout << i << " " << str << '\n';
+        }
+
+    }
     solution("02:03:55", "00:14:15", { "01:20:15-01:45:14", "00:40:31-01:00:00", "00:25:50-00:48:29", "01:30:59-01:53:29", "01:37:44-02:02:30" });
 }
