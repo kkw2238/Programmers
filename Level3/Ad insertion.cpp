@@ -4,7 +4,6 @@
 
 #include <string>
 #include <vector>
-#include <map>
 #include <algorithm>
 
 using namespace std;
@@ -37,7 +36,7 @@ string reverseTime(long long log)
 
 vector<int> unpackLogs(string& log)
 {
-    vector<int> unpacked; 
+    vector<int> unpacked;
     vector<string> distributeLog;
 
     distributeLog.push_back(log.substr(0, 8));
@@ -47,7 +46,7 @@ vector<int> unpackLogs(string& log)
     {
         unpacked.push_back(convertTime(distributeLog[i]));
     }
-    
+
     return unpacked;
 }
 string solution(string play_time, string adv_time, vector<string> logs) {
@@ -56,30 +55,30 @@ string solution(string play_time, string adv_time, vector<string> logs) {
     int pt = convertTime(play_time);
     int at = convertTime(adv_time);
 
-    vector<long long> timeline(pt + 1, 0);
+    vector<unsigned long long> timeline(pt + 2, 0);
 
     for (string& log : logs)
     {
         vector<int> unpacked = unpackLogs(log);
 
         ++timeline[unpacked[0]];
-        --timeline[unpacked[1] + 1];
+        --timeline[unpacked[1]];
     }
 
-    long long sumTime = 0, nowWatching = 0, memTime = 0;
-    long long memAnswer = 0;
+    unsigned long long sumTime = 0, nowWatching = 0, memTime = 0;
+    unsigned long long memAnswer = 0;
 
-    for (int i = 0; i < pt; ++i)
+    for (int i = 0; i <= pt; ++i)
     {
         timeline[i + 1] += timeline[i];
 
-        if (i <= at)
+        if (i < at)
         {
             sumTime += timeline[i];
         }
     }
 
-    for (int bti = 0; bti < pt - at; ++bti)
+    for (int bti = 0; bti <= pt - at; ++bti)
     {
         if (sumTime > memTime)
         {
@@ -87,7 +86,7 @@ string solution(string play_time, string adv_time, vector<string> logs) {
             memAnswer = bti;
         }
 
-        sumTime += timeline[bti + at + 1];
+        sumTime += timeline[bti + at];
         sumTime -= timeline[bti];
     }
 
