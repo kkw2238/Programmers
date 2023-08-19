@@ -4,7 +4,6 @@
 
 #include <algorithm>
 #include <vector>
-#include <cmath>
 
 using namespace std;
 
@@ -18,7 +17,7 @@ void DFS(vector<int>& weak, int weakIndex, int clearCount, vector<int>& dist, in
         result = min(result, distIndex);
         return;
     }
-    else if (distIndex == dist.size())
+    else if (distIndex == dist.size() || distIndex > result)
     {
         return;
     }
