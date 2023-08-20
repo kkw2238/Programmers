@@ -6,6 +6,80 @@
 #include <vector>
 
 using namespace std;
+
+string Move110(string number)
+{
+    int countOf110 = 0;
+    string base = "";
+
+    for (int i = 0; i < number.size(); ++i)
+    {
+        base += number[i];
+
+        if (base.length() >= 3 && base.substr(base.length() - 3) == "110")
+        {
+            ++countOf110;
+            base.erase(base.end() - 3, base.end());
+        }
+    }
+
+    if (countOf110 > 0)
+    {
+        string tmpBase = base + "110";
+        int index = base.find("111");
+
+        if (index == string::npos)
+        {
+            index = base.length();
+            for (int i = base.length() - 1; i >= 0; --i)
+            {
+                if (base[i] == '0')
+                {
+                    continue;
+                }
+                string nextString = base.substr(0, i) + "110" + base.substr(i);
+
+                if (tmpBase > nextString)
+                {
+                    tmpBase = nextString;
+                    index = i;
+                }
+            }
+        }
+
+        string insertStr = "";
+        for (int i = 0; i < countOf110; ++i)
+        {
+            insertStr.append("110");
+        }
+
+        base = base.substr(0, index) + insertStr + base.substr(index);
+    }
+    else
+    {
+        base = number;
+    }
+
+    return base;
+}
+
+vector<string> solution(vector<string> s) {
+    vector<string> answer;
+
+    for (string& number : s)
+    {
+        answer.push_back(Move110(number));
+    }
+
+    return answer;
+}
+
+int main()
+{
+    solution({ "0101101101101101"});
+}
+
+
 //
 //string MOVE_STRING = "110";
 //const string REPLACE_STRING = "111";
@@ -41,71 +115,68 @@ using namespace std;
 //
 //    return s;
 //}
-const string remakeBase(const string& num, int index)
-{
-    return num.substr(0, index) + "110" + num.substr(index + 1);
-}
 
-string Move110(string number)
-{
-    int countOf110 = 0;
-    string base = "";
-
-    for (int i = 0; i < number.size(); ++i)
-    {
-        base += number[i];
-
-        if (base.ends_with("110"))
-        {
-            ++countOf110;
-            base.erase(base.end() - 3, base.end());
-        }
-    }
-
-    if (base.empty())
-    {
-        base += "110";
-        --countOf110;
-    }
-
-    for (int i = 0; i < base.length(); ++i)
-    {
-        if (countOf110 <= 0)
-        {
-            break;
-        }
-        string remakedString = remakeBase(base, i);
-        if (remakedString < base)
-        {
-            base = remakedString;
-            --countOf110;
-        }
-    }
-
-    if (base > number)
-    {
-        return number;
-    }
-    return base;
-}
-
-vector<string> solution(vector<string> s) {
-    vector<string> answer;
-
-    for (string& number : s)
-    {
-        answer.push_back(Move110(number));
-    }
-
-    return answer;
-}
-
-int main()
-{
-    if ("110" < "1101")
-    {
-        int a = 0;
-        ++a;
-    }
-    solution({ "1110","100111100","0111111010" });
-}
+//
+//#include <string>
+//#include <vector>
+//#include <map>
+//
+//using namespace std;
+//
+//map<string, string> dictionary;
+//
+//const string remakeBase(const string& num, int index)
+//{
+//    return num.substr(0, index) + "110" + num.substr(index);
+//}
+//
+//string Move110(string number)
+//{
+//    int countOf110 = 0;
+//    string base = "";
+//
+//    for (int i = 0; i < number.size(); ++i)
+//    {
+//        base += number[i];
+//
+//        if (base.length() >= 3 && base.substr(base.length() - 3) == "110")
+//        {
+//            ++countOf110;
+//            base.erase(base.end() - 3, base.end());
+//        }
+//    }
+//
+//    if (base.empty())
+//    {
+//        base += "110";
+//        --countOf110;
+//    }
+//
+//    for (int j = 0; j < countOf110; ++j)
+//    {
+//        string memBase = base;
+//        string tmpString = "110" + base;
+//        if (dictionary[base] == "")
+//        {
+//            for (int i = 1; i <= base.length(); ++i)
+//            {
+//                string remakedString = remakeBase(base, i);
+//                if (remakedString < tmpString)
+//                {
+//                    tmpString = remakedString;
+//                }
+//            }
+//
+//            dictionary[base] = tmpString;
+//        }
+//        tmpString = dictionary[base];
+//
+//        if (tmpString > number)
+//        {
+//            return number;
+//        }
+//        base = tmpString;
+//    }
+//
+//    return base;
+//}
