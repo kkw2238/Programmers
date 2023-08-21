@@ -74,12 +74,6 @@ vector<string> solution(vector<string> s) {
     return answer;
 }
 
-int main()
-{
-    solution({ "0101101101101101"});
-}
-
-
 //
 //string MOVE_STRING = "110";
 //const string REPLACE_STRING = "111";
