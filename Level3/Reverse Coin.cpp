@@ -2,7 +2,6 @@
 	https://school.programmers.co.kr/learn/courses/30/lessons/131703
 */
 
-#include <string>
 #include <vector>
 
 using namespace std;
@@ -47,7 +46,6 @@ bool isCorrect(vector<vector<int>>& board, const vector<vector<int>>& target, in
 
     return true;
 }
-
 
 void DFS(vector<vector<int>>& board, const vector<vector<int>>& target, int index, int count)
 {
@@ -95,33 +93,4 @@ int solution(vector<vector<int>> beginning, vector<vector<int>> target) {
     }
 
     return minimum;
-}
-
-int main()
-{
-    solution({
-        {0, 0, 1, 0, 0, 1, 0},
-        {1, 0, 0, 0, 0, 1, 0},
-        {0, 0, 0, 0, 0, 1, 0},
-        {0, 0, 0, 0, 0, 1, 0},
-        {0, 0, 0, 0, 0, 1, 0},
-        {0, 0, 1, 0, 0, 1, 0},
-        {1, 0, 0, 0, 0, 1, 0},
-        {0, 0, 0, 0, 0, 1, 0},
-        {0, 0, 0, 0, 0, 1, 0},
-        {0, 0, 0, 0, 0, 1, 0}
-        },
-
-    {
-        {0, 0, 1, 0, 0, 1, 0},
-        {1, 0, 0, 0, 0, 1, 0},
-        {0, 0, 0, 0, 0, 1, 0},
-        {0, 0, 0, 0, 0, 1, 0},
-        {0, 0, 0, 0, 0, 1, 0},
-        {0, 0, 1, 0, 0, 1, 0},
-        {1, 0, 0, 0, 0, 1, 0},
-        {0, 0, 0, 0, 0, 1, 0},
-        {0, 0, 0, 0, 0, 1, 0},
-        {0, 0, 0, 0, 0, 1, 0}
-    });
 }
