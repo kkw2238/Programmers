@@ -2,7 +2,6 @@
     https://school.programmers.co.kr/learn/courses/30/lessons/76503
 */
 
-#include <string>
 #include <vector>
 #include <cmath>
 
@@ -89,9 +88,4 @@ long long solution(vector<int> a, vector<vector<int>> edges) {
 
     DFS(ll, 0);
     return scount;
-}
-
-int main()
-{
-    solution({ -2, 8, -5, -5, -3, 0, 5, 2 }, { {0, 1}, {0, 2}, {1, 3}, {1, 4}, {1, 5}, {2, 6}, {2, 7} });
 }
