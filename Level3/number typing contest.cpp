@@ -108,14 +108,8 @@ int dist(int now, int next)
 {
     int dist = 0;
 
-    if (next == 10)
-    {
-        next += 1;
-    }
-    if (now == 10)
-    {
-        now += 1;
-    }
+    next == 10 ? next + 1 : next;
+    now == 10 ? now + 1 : now;
 
     int xOffset = abs((next - 1) % 3 - (now - 1) % 3);
     int yOffset = abs((next - 1) / 3 - (now - 1) / 3);
@@ -131,7 +125,6 @@ int dist(int now, int next)
 
     return dist + (xOffset + yOffset) * 2;
 }
-
 
 int solution(string numbers) {
     const int maximum = 1000000;
@@ -160,7 +153,7 @@ int solution(string numbers) {
 
     ct[0][numbers[0] - '0'][6] = distan[numbers[0] - '0'][4];
     ct[0][4][numbers[0] - '0'] = distan[numbers[0] - '0'][6];
-
+    
     for (int i = 0; i < numbers.size() - 1; ++i)
     {
         int next = numbers[i + 1] - '0';
@@ -170,28 +163,28 @@ int solution(string numbers) {
         {
             if (ct[i][j][now] != maximum)
             {
-                for (int m = 0; m < 10; ++m)
+                if (j != next)
                 {
-                    int rHandDist = distan[now][m];
-                    ct[i + 1][j][m] = min(ct[i + 1][j][m], ct[i][j][now] + rHandDist);
+                    int rHandDist = distan[now][next];
+                    ct[i + 1][j][next] = min(ct[i + 1][j][next], ct[i][j][now] + rHandDist);
                 }
-                for (int n = 0; n < 10; ++n)
+                if (now != next)
                 {
-                    int lHandDist = distan[now][n];
-                    ct[i + 1][n][now] = min(ct[i + 1][n][now], ct[i][j][now] + lHandDist);
+                    int lHandDist = distan[j][next];
+                    ct[i + 1][next][now] = min(ct[i + 1][next][now], ct[i][j][now] + lHandDist);
                 }
             }
             if(ct[i][now][j] != maximum)
             {
-                for (int m = 0; m < 10; ++m)
+                if (now != next)
                 {
-                    int rHandDist = distan[now][m];
-                    ct[i + 1][now][m] = min(ct[i + 1][now][m], ct[i][j][now] + rHandDist);
+                    int rHandDist = distan[j][next];
+                    ct[i + 1][now][next] = min(ct[i + 1][now][next], ct[i][now][j] + rHandDist);
                 }
-                for (int n = 0; n < 10; ++n)
+                if (j != next)
                 {
-                    int lHandDist = distan[now][n];
-                    ct[i + 1][now][j] = min(ct[i + 1][n][j], ct[i][j][now] + lHandDist);
+                    int lHandDist = distan[now][next];
+                    ct[i + 1][next][j] = min(ct[i + 1][next][j], ct[i][now][j] + lHandDist);
                 }
             }   
         }
@@ -201,26 +194,8 @@ int solution(string numbers) {
 
     for (int j = 0; j < 10; ++j)
     {
-        if (ct[numbers.size() - 1][j][lastNum] != maximum)
-        {
-            answer = min(answer, ct[numbers.size() - 1][j][lastNum]);
-        }
-        if (ct[numbers.size() - 1][lastNum][j] != maximum)
-        {
-            answer = min(answer, ct[numbers.size() - 1][lastNum][j]);
-        }
+        answer = min(answer, ct[numbers.size() - 1][j][lastNum]);
+        answer = min(answer, ct[numbers.size() - 1][lastNum][j]);
     }
     return answer;
 }
-
-int main()
-{
-    solution("1111");
-}
-
-/*
-    1. 왼손 가중치 계산
-    2. 오른손 가중치 계산
-
-    최선 선택 -> 최선이 꼭 답 보장 X
-*/
