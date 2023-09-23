@@ -170,70 +170,33 @@
 //    //solution(3, 2, { {1200, 1210},{1210, 1260} });
 //}
 
-#include <vector>
-#include <algorithm>
-#include <set>
-#include <cmath>
-
-using namespace std;
-
-int width;
-int nearestDist = 0;
-
-set<int> tmp;
-
-#include <iostream>
-
-int distan(int index, int other)
-{
-    int yoff = index / width - other / width;
-    int xoff = index % width - other % width;
-
-    return abs(yoff) + abs(xoff);
-}
-
-int getNearDistance(int index, set<int>& lockerRoom)
-{
-    int d = 200;
-
-    for (int i : lockerRoom)
-    {
-        if (i != index)
-        {
-            d = min(d, distan(index, i));
-        }
-    }
-
-    return d;
-}
-
-void DFS(int index, int maxCustomer, set<int>& lockerRoom, int minDist)
-{
-    minDist = min(minDist, getNearDistance(index, lockerRoom));
-
-    if (minDist <= nearestDist)
-    {
-        return;
-    }
-
-    if (lockerRoom.size() == maxCustomer)
-    {
-        nearestDist = max(nearestDist, minDist);
-        if (nearestDist == minDist)
-        {
-            tmp = lockerRoom;
-        }
-        return;
-    }
-
-    int reamin = maxCustomer - lockerRoom.size();
-    for (int i = index + 1; i <= (width * width) - reamin; ++i)
-    {
-        lockerRoom.insert(i);
-        DFS(i, maxCustomer, lockerRoom, minDist);
-        lockerRoom.erase(i);
-    }
-}
+//void DFS(int index, int maxCustomer, set<int>& lockerRoom, int minDist)
+//{
+//    minDist = min(minDist, getNearDistance(index, lockerRoom));
+//
+//    if (minDist <= nearestDist)
+//    {
+//        return;
+//    }
+//
+//    if (lockerRoom.size() == maxCustomer)
+//    {
+//        nearestDist = max(nearestDist, minDist);
+//        if (nearestDist == minDist)
+//        {
+//            tmp = lockerRoom;
+//        }
+//        return;
+//    }
+//
+//    int reamin = maxCustomer - lockerRoom.size();
+//    for (int i = index + 1; i < (width * width) - reamin; ++i)
+//    {
+//        lockerRoom.insert(i);
+//        DFS(i, maxCustomer, lockerRoom, minDist);
+//        lockerRoom.erase(i);
+//    }
+//}
 
 //int solution(int n, int m, vector<vector<int>> timetable) {
 //    width = n;
@@ -289,26 +252,13 @@ void DFS(int index, int maxCustomer, set<int>& lockerRoom, int minDist)
 //    return nearestDist;
 //}
 //
-//#include <iostream>
-//
-void Draw()
-{
-    vector<int> vi(width * width, 0);
 
-    for (int n : tmp)
-    {
-        vi[n] = 1;
-    }
-    for (int i = 0; i < width; ++i)
-    {
-        for (int j = 0; j < width; ++j)
-        {
-            cout << vi[i * width + j];
-        }
-        cout << '\n';
-    }
-}
 
+
+/*
+* 
+* 
+    
 int tmpFunc(int n, int dist)
 {
     int maximum = 0;
@@ -318,6 +268,7 @@ int tmpFunc(int n, int dist)
         index.insert(begin);
         for (int offset = begin + 1; offset < n * n; ++offset)
         {
+
             index.insert(offset);
             if (getNearDistance(offset, index) != dist)
             {
@@ -335,45 +286,271 @@ int tmpFunc(int n, int dist)
 
     return maximum;
 }
-int main()
+*/
+
+//int main()
+//{
+//
+//    //for (int w = 2; w <= 10; ++w)
+//    //{
+//    //    width = w;
+//    //    for (int dist = 2; dist < 2 + (w - 2) * 2; ++dist)
+//    //    {
+//    //        cout << "width : " << w << " dist : " << dist << " result : " << tmpFunc(w, dist) << '\n';
+//    //        Draw();
+//    //    }
+//    //    cout << '\n';
+//    //}
+//
+//
+//    for (int w = 8; w <= 8; ++w)
+//    {
+//        width = w;
+//
+//        for (int i = 2; i < (w * w) / 2; ++i)
+//        {
+//
+//                mc = 0;
+//                set<int> si = set<int>();
+//                for (int beg = 0; beg < w; ++beg)
+//                {
+//                    si.insert(beg);
+//                    DFS(beg, si, i);
+//                    si.erase(beg);
+//                }
+//            
+//
+//            cout << "width : " << width << " dist : " << i << " maxCustomer : " << mc << '\n';
+//        }
+//
+//        for (int maximum = 1; maximum <= 64; ++maximum)
+//        {
+//            nearestDist = 0;
+//            set<int> si;
+//
+//            for (int i = 0; i <= (w * w) - maximum; ++i)
+//            {
+//                si.insert(i);
+//                DFS(i, maximum, si, 200);
+//                si.erase(i);
+//            
+//            }
+//
+//            cout << "width : " << width << " maximum : " << maximum << " nearest : " << nearestDist << '\n';
+//            //Draw();
+//
+//            cout << "\n\n";
+//            tmp = set<int>();
+//        }
+//    }
+//}
+
+#include <vector>
+#include <algorithm>
+#include <set>
+#include <cmath>
+
+using namespace std;
+
+
+int width;
+
+vector<int> totalCount;
+
+#include <iostream>
+
+set<int> tmp;
+
+void Draw()
 {
+    vector<int> vi(width * width, 0);
 
-    //for (int w = 2; w <= 10; ++w)
-    //{
-    //    width = w;
-    //    for (int dist = 2; dist < 2 + (w - 2) * 2; ++dist)
-    //    {
-    //        cout << "width : " << w << " dist : " << dist << " result : " << tmpFunc(w, dist) << '\n';
-    //        Draw();
-    //    }
-    //    cout << '\n';
-    //}
-
-    width = 8;
-    cout << "width : " << 8 << " dist : " << 3 << " result : " << tmpFunc(8, 3) << '\n';
-    Draw();
-
-    for (int w = 8; w <= 8; ++w)
+    for (int n : tmp)
     {
-        width = w;
-
-        for (int maximum = 13; maximum <= 13; ++maximum)
+        if(n != width * width)
+            vi[n] = 1;
+    }
+    for (int i = 0; i < width; ++i)
+    {
+        for (int j = 0; j < width; ++j)
         {
-            nearestDist = 0;
-            set<int> si;
+            cout << vi[i * width + j];
+        }
+        cout << '\n';
+    }
+}
 
-            for (int i = 0; i <= (w * w) - maximum; ++i)
-            {
-                si.insert(i);
-                DFS(i, maximum, si, 200);
-                si.erase(i);
-            }
 
-            cout << "width : " << width << " maximum : " << maximum << " nearest : " << nearestDist << '\n';
-            Draw();
+int distan(int index, int other)
+{
+    int yoff = index / width - other / width;
+    int xoff = index % width - other % width;
 
-            cout << "\n\n";
-            tmp = set<int>();
+    return abs(yoff) + abs(xoff);
+}
+
+int getNearDistance(int index, set<int>& lockerRoom)
+{
+    int d = 200;
+
+    for (int i : lockerRoom)
+    {
+        if (i != index)
+        {
+            d = min(d, distan(index, i));
         }
     }
+
+    return d;
+}
+
+void DFS(int index, set<int>& lockerRoom, int targetDist)
+{
+    if (index == width * width)
+    {
+        totalCount[index] = max(totalCount[index], (int)lockerRoom.size() - 1);
+
+        if (totalCount[index] == (int)lockerRoom.size() - 1)
+        {
+            tmp = lockerRoom;
+        }
+        return;
+    }
+    int minDist = getNearDistance(index, lockerRoom);
+
+    if ((lockerRoom.size() > 1 && minDist != targetDist) || (totalCount[index] > (lockerRoom.size() - 1)))
+    {
+        return;
+    }
+
+    totalCount[index] = max(totalCount[index], (int)lockerRoom.size() - 1);
+
+    for (int i = index + 1; i <= (width * width); ++i)
+    {
+        lockerRoom.insert(i);
+        DFS(i, lockerRoom, targetDist);
+        lockerRoom.erase(i);
+    }
+}
+
+int solution(int n, int m, vector<vector<int>> timetable) {
+    width = n;
+    int answer = 0;
+    sort(timetable.begin(), timetable.end(), [](const vector<int>& a, const vector<int>& b) {
+        if (a[0] == b[0])
+        {
+            return a[1] < b[1];
+        }
+
+        return a[0] < b[0];
+        });
+
+    int maximumCustomer = 0;
+    for (int i = 0; i < timetable.size(); ++i)
+    {
+        int customer = 1;
+        for (int j = i + 1; j < timetable.size(); ++j)
+        {
+            if (timetable[j][0] >= timetable[i][0] && timetable[j][0] <= timetable[i][1])
+            {
+                ++customer;
+            }
+            else
+            {
+                break;
+            }
+        }
+        maximumCustomer = max(maximumCustomer, customer);
+    }
+
+    if (maximumCustomer <= 1 || n == 1)
+    {
+        return 0;
+    }
+
+    set<int> lockerRoom;
+    for (int dist = 2; dist <= n * 2; ++dist)
+    {
+        int maxTotalCount = 0;
+        for (int b = 0; b < n; ++b)
+        {
+            totalCount = vector<int>(101, 0);
+            lockerRoom.insert(b);
+            DFS(b, lockerRoom, dist);
+            lockerRoom.erase(b);
+            maxTotalCount = max(totalCount[n * n], maxTotalCount);
+        }
+
+        if (maxTotalCount >= maximumCustomer)
+        {
+            answer = max(answer, dist);
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    return answer;
+}
+
+int main()
+{
+    int n = 3;
+    width = 8;
+    set<int> lockerRoom;
+
+    for (width = 2; width <= 10; ++width)
+    {
+        cout << "width : " << width << '\n';
+        for (int dist = 1; dist <= width * 2 - 2; ++dist)
+        {
+            totalCount = vector<int>(101, 0);
+            for (int b = 0; b < width; ++b)
+            {
+                lockerRoom.insert(b);
+                DFS(b, lockerRoom, dist);
+                lockerRoom.erase(b);
+            }
+
+            cout << "dist : " << dist << " totalCount : " << totalCount[width * width] << '\n';
+        }
+        cout << '\n';
+    }
+
+    for (width = 1; width <= 10; ++width)
+    {
+        cout << "width : " << width << '\n';
+
+        for (int maxCustomer = 2; maxCustomer < width * width; ++maxCustomer)
+        {
+            int answer = 0;
+            for (int dist = 1; dist <= width * 2; ++dist)
+            {
+                int maxTotalCount = 0;
+                totalCount = vector<int>(101, 0);
+                for (int b = 0; b < n; ++b)
+                {
+                    lockerRoom.insert(b);
+                    DFS(b, lockerRoom, dist);
+                    lockerRoom.erase(b);
+                    maxTotalCount = max(totalCount[width * width], maxTotalCount);
+                }
+
+                if (maxTotalCount >= maxCustomer)
+                {
+                    answer = max(answer, dist);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            cout << "maxCustomer : " << maxCustomer << " dist : " << answer <<  '\n';
+        }
+        cout << '\n';
+    }
+    solution(4, 5, { {1140, 1200}, {1150, 1200}, {1100, 1200}, {1210, 1300}, {1220, 1280} });
+    Draw();
 }
