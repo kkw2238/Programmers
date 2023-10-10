@@ -2,29 +2,10 @@
 	https://school.programmers.co.kr/learn/courses/30/lessons/42894
 */
 
-
-
-
-
 #include <string>
 #include <vector>
 
 using namespace std;
-
-#include <iostream>
-
-void printNow(vector<vector<int>>& checkBoard)
-{
-    for (int y = 0; y < checkBoard.size(); ++y)
-    {
-        for (int c : checkBoard[y])
-        {
-            cout << c << ' ';
-        }
-        cout << '\n';
-    }
-}
-
 
 int offsetX[12][4] = {  { 0, 1, 2, 2 }, { 0, 1, 0, 0 }, {0, 0, 1, 2}, {0, 0, 0, -1 }, 
                         { 0, 1, 2, 0}, {0, 0, 0, 1}, {0, 0, -1, -2}, {0, 1, 1, 1},
@@ -71,8 +52,8 @@ int getType(vector<vector<int>>& board, vector<vector<int>>& checkBoard, int x, 
 
         if (check == 4)
         {
-            checkBoard[y][x] = i;
-            return i;
+            checkBoard[y][x] = i + 1;
+            return i + 1;
         }
     }
 
@@ -81,7 +62,7 @@ int getType(vector<vector<int>>& board, vector<vector<int>>& checkBoard, int x, 
 
 bool isAbleErase(vector<vector<int>>& checkBoard, int index, int x, int y, vector<int> topIndex)
 {
-    int type = checkBoard[y][x];
+    int type = checkBoard[y][x] - 1;
 
     if (voidPosX[type][0] == -99)
     {
@@ -116,7 +97,7 @@ int findNextY(vector<vector<int>>& checkBoard, vector<vector<int>>& board, int x
 
 void boardErase(vector<vector<int>>& board, vector<vector<int>>& checkBoard, vector<int>& topIndex, int index, int x, int y)
 {
-    int type = checkBoard[y][x];
+    int type = checkBoard[y][x] - 1;
 
     for (int i = 0; i < 4; ++i)
     {
@@ -149,8 +130,6 @@ int solution(vector<vector<int>> board) {
         }
     }
 
-    printNow(checkBoard);
-
     for (int y = 0; y < board.size(); ++y)
     {
         for (int x = 0; x < board.size(); ++x)
@@ -160,38 +139,10 @@ int solution(vector<vector<int>> board) {
                 boardErase(board, checkBoard, topPos, board[y][x], x, y);
                 x = 0;
                 y = 0;
-                printNow(checkBoard);
                 ++answer;
             }
         }
     }
 
     return answer;
-}
-
-int main()
-{
-    solution(
-        {
-            {0, 0, 1, 1, 1},
-            {0, 0, 0, 1, 0},
-            {3, 0, 0, 2, 0},
-            {3, 2, 2, 2, 0},
-            {3, 3, 0, 0, 0}
-        }
-    );
-    solution(
-        {
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 
-            {0, 0, 0, 0, 0, 0, 4, 0, 0, 0}, 
-            {0, 0, 0, 0, 0, 4, 4, 0, 0, 0}, 
-            {0, 0, 0, 0, 3, 0, 4, 0, 0, 0}, 
-            {0, 0, 0, 2, 3, 0, 0, 0, 5, 5}, 
-            {1, 2, 2, 2, 3, 3, 0, 0, 0, 5}, 
-            {1, 1, 1, 0, 0, 0, 0, 0, 0, 5}
-        }
-    );
 }
