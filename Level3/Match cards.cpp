@@ -387,8 +387,3 @@ int solution(vector<vector<int>> board, int r, int c) {
 
     return answer;
 }
-
-int main()
-{
-    solution({ { 1, 0, 0, 3},{2, 0, 0, 0},{0, 0, 0, 2},{3, 0, 1, 0} }, 1, 0);
-}
