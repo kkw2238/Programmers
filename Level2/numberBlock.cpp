@@ -7,21 +7,24 @@
 
 using namespace std;
 
-const int MAXIMUM_BLOCK = 10000000;
-
-int getMeasure(int n)
+int getMeasure(long long n)
 {
-    int sqrtN = sqrt(n);
+    int sqrtN = sqrtl(n);
+    int biggest = 1;
 
     for (int i = 2; i <= sqrtN + 1; ++i)
     {
-        if (n % i == 0 && (n / i) <= MAXIMUM_BLOCK)
+        if (n % i == 0)
         {
-            return n / i;
+            if (n / i <= 10000000)
+            {
+                return n / i;
+            }
+            biggest = i;
         }
     }
 
-    return 1;
+    return biggest;
 }
 
 vector<int> solution(long long begin, long long end) {
@@ -33,10 +36,15 @@ vector<int> solution(long long begin, long long end) {
         ++begin;
     }
 
-    for (int ll = static_cast<int>(begin); ll <= static_cast<int>(end); ++ll)
+    for (long long ll = begin; ll <= end; ++ll)
     {
         answer.emplace_back(getMeasure(ll));
     }
 
     return answer;
+}
+
+int main()
+{
+    solution(100000014, 100000016);
 }

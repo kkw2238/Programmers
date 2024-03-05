@@ -171,11 +171,6 @@ int solution(vector<vector<int>> board, vector<int> aloc, vector<int> bloc) {
     return Play(board, aloc[1], aloc[0], bloc[1], bloc[0], 0, true);
 }
 
-int main()
-{
-    cout << solution({ {1, 1, 1, 0 },{1, 1, 0, 1 }, {1, 0, 1,1}, {0,1,1,1} }, { 0, 0 }, { 3, 3 }) << '\n';
-}
-
 /*
     
 void DFS(vector<vector<int>>& board, int ax, int ay, int bx, int by, int turnCount, bool aTurn)
