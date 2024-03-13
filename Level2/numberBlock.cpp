@@ -43,8 +43,3 @@ vector<int> solution(long long begin, long long end) {
 
     return answer;
 }
-
-int main()
-{
-    solution(100000014, 100000016);
-}
