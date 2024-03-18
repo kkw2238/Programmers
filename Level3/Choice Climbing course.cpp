@@ -46,7 +46,6 @@
 //    return answer;
 //}
 
-#include <string>
 #include <vector>
 #include <queue>
 
@@ -89,16 +88,19 @@ pair<int, int> dijkstra(int n, int start, vector<Node>& nodes)
 
         for (pair<int, int>& nx : nodes[now.second].next)
         {   
-            intensity[nx.first] = min(intensity[nx.first], max(nx.second, now.first));
-            next.emplace(intensity[nx.first], nx.first);
+            if (intensity[nx.first] < max(nx.second, now.first))
+            {
+                intensity[nx.first] = min(intensity[nx.first], max(nx.second, now.first));
+                next.emplace(intensity[nx.first], nx.first);
+            }
         }
     }
 
-    return pair<int, int>(0, 0);
+    return pair<int, int>(1000000000, 1000000000);
 }
 
 vector<int> solution(int n, vector<vector<int>> paths, vector<int> gates, vector<int> summits) {
-    vector<int> answer{ 0, 1000000000 };
+    vector<int> answer{ 1000000000, 1000000000 };
     vector<Node> nodes(n + 1);
 
     for (vector<int>& path : paths)
@@ -128,9 +130,4 @@ vector<int> solution(int n, vector<vector<int>> paths, vector<int> gates, vector
     }
 
     return answer;
-}
-
-int main()
-{
-    solution(6, { {1,2,3}, {2,3,5}, {2,4,2}, {2,5,4}, {3,4,4}, {4,5,3}, {4,6,1}, {5,6,1} }, { 1,3 }, { 5 });
 }

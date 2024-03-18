@@ -78,92 +78,161 @@
 //    return answer;
 //}
 
+//#include <vector>
+//#include <queue>
+//
+//using namespace std;
+//
+//struct queueNode {
+//    int length;
+//    int next;
+//    int before;
+//};
+//
+//int bfs(int nodeIndex, vector<vector<int>>& roads, int gpsIndex, const vector<int>& gps_log)
+//{
+//    queue<queueNode> nodeQueue;
+//
+//    nodeQueue.push({ 0, gps_log[gpsIndex - 1], nodeIndex });
+//    
+//    for (int i = 0; i < roads[nodeIndex].size(); ++i)
+//    {
+//        if (gps_log[gpsIndex - 1] == roads[nodeIndex][i])
+//        {
+//            continue;
+//        }
+//
+//        nodeQueue.push( {1, roads[nodeIndex][i], nodeIndex});
+//    }
+//
+//    while (nodeQueue.empty())
+//    {
+//        queueNode qNode = nodeQueue.front();
+//        nodeQueue.pop();
+//
+//        if (qNode.length > gpsIndex)
+//        {
+//            return -1;
+//        }
+//
+//        for (int i = 0; i < roads[qNode.next].size(); ++i)
+//        {
+//            if (qNode.length > 0 && gps_log[gpsIndex - 1 - qNode.length] == roads[qNode.next][i])
+//            {
+//                return qNode.length;
+//            }
+//            if (roads[qNode.next][i] == qNode.before)
+//            {
+//                continue;
+//            }
+//
+//            nodeQueue.push({ qNode.length + 1, roads[qNode.next][i], qNode.next });
+//        }
+//    }
+//
+//    return -1;
+//}
+//
+//int solution(int n, int m, vector<vector<int>> edge_list, int k, vector<int> gps_log) {
+//    int answer = 0;
+//    vector<vector<int>> roads(n + 1, vector<int>());
+//
+//    for (vector<int>& edge : edge_list)
+//    {
+//        roads[edge[0]].push_back(edge[1]);
+//        roads[edge[1]].push_back(edge[0]);
+//    }
+//
+//    for (int i = gps_log.size() - 1; i > 0; --i)
+//    {
+//        bool isAble = false;
+//        for (int j = 0; j < roads[gps_log[i]].size(); ++j)
+//        {
+//            if (roads[gps_log[i]][j] == gps_log[i - 1])
+//            {
+//                isAble = true;
+//                break;
+//            }
+//        }
+//
+//        if (!isAble)
+//        {
+//            bfs(gps_log[min(i + 1, (int)gps_log.size())], roads, i + 1, (int)gps_log.size()), gps_log);
+//        }
+//
+//    }
+//
+//
+//    return answer;
+//}
+
 #include <vector>
+#include <map>
 #include <queue>
 
 using namespace std;
 
-struct queueNode {
-    int length;
-    int next;
-    int before;
+struct node {
+    int cost;
+    int nowIndex;
+    int nowPos;
 };
 
-int bfs(int nodeIndex, vector<vector<int>>& roads, int gpsIndex, const vector<int>& gps_log)
-{
-    queue<queueNode> nodeQueue;
-
-    nodeQueue.push({ 0, gps_log[gpsIndex - 1], nodeIndex });
-    
-    for (int i = 0; i < roads[nodeIndex].size(); ++i)
+class compare {
+public:
+    const bool operator()(const node& a, const node& b)
     {
-        if (gps_log[gpsIndex - 1] == roads[nodeIndex][i])
-        {
-            continue;
-        }
-
-        nodeQueue.push( {1, roads[nodeIndex][i], nodeIndex});
+        return a.cost > b.cost;
     }
+};
 
-    while (nodeQueue.empty())
+vector<map<int, int>> pathFinder(int n, vector<vector<int>>& linked, int k, vector<int>& gps_log)
+{
+
+}
+
+int solution(int n, int m, vector<vector<int>> edge_list, int k, vector<int> gps_log) {
+    vector<vector<int>> linked(n + 1, vector<int>());
+
+    for (vector<int>& edge : edge_list)
     {
-        queueNode qNode = nodeQueue.front();
-        nodeQueue.pop();
+        linked[edge[0]].push_back(edge[1]);
+        linked[edge[1]].push_back(edge[0]);
+    }
+    
+    for (int i = 1; i <= n; ++i)
+    {
+        linked[i].push_back(i);
+    }
+    
+    priority_queue<node, vector<node>, compare> q;
+    q.push(node{ 0, (int)gps_log.size() - 1, gps_log.back() });
 
-        if (qNode.length > gpsIndex)
-        {
-            return -1;
-        }
+    while (!q.empty())
+    {
+        node now = q.top();
+        q.pop();
 
-        for (int i = 0; i < roads[qNode.next].size(); ++i)
+        if (now.nowIndex == 0)
         {
-            if (qNode.length > 0 && gps_log[gpsIndex - 1 - qNode.length] == roads[qNode.next][i])
+            if (now.nowPos == gps_log[0])
             {
-                return qNode.length;
+                return now.cost;
             }
-            if (roads[qNode.next][i] == qNode.before)
+            else
             {
                 continue;
             }
+        }
 
-            nodeQueue.push({ qNode.length + 1, roads[qNode.next][i], qNode.next });
+        for (int& n : linked[now.nowPos])
+        {
+            int cost = (int)(n != gps_log[now.nowIndex - 1]);
+            q.push(node{ now.cost + cost, now.nowIndex - 1, n });
         }
     }
 
     return -1;
-}
-
-int solution(int n, int m, vector<vector<int>> edge_list, int k, vector<int> gps_log) {
-    int answer = 0;
-    vector<vector<int>> roads(n + 1, vector<int>());
-
-    for (vector<int>& edge : edge_list)
-    {
-        roads[edge[0]].push_back(edge[1]);
-        roads[edge[1]].push_back(edge[0]);
-    }
-
-    for (int i = gps_log.size() - 1; i > 0; --i)
-    {
-        bool isAble = false;
-        for (int j = 0; j < roads[gps_log[i]].size(); ++j)
-        {
-            if (roads[gps_log[i]][j] == gps_log[i - 1])
-            {
-                isAble = true;
-                break;
-            }
-        }
-
-        if (!isAble)
-        {
-            bfs(gps_log[min(i + 1, (int)gps_log.size())], roads, i + 1, (int)gps_log.size()), gps_log);
-        }
-
-    }
-
-
-    return answer;
 }
 
 //int main()
