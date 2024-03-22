@@ -166,74 +166,149 @@
 //    return answer;
 //}
 
+//#include <vector>
+//#include <map>
+//#include <queue>
+//
+//using namespace std;
+//
+//struct node {
+//    int cost;
+//    int nowIndex;
+//    int nowPos;
+//};
+//
+//class compare {
+//public:
+//    const bool operator()(const node& a, const node& b)
+//    {
+//        return a.cost > b.cost;
+//    }
+//};
+//
+//vector<vector<int>> Warshall(int n, vector<vector<int>>& linked)
+//{
+//    vector<vector<int>> costs(n + 1, vector<int>(n + 1, 10000000));
+//
+//    for (int i = 1; i < linked.size(); ++i)
+//    {
+//        for (int j : linked[i])
+//        {
+//            costs[i][j] = 1;
+//            costs[j][i] = 1;
+//        }
+//    }
+//
+//    for (int k = 1; k <= n; ++k)
+//    {
+//        for (int i = 1; i <= n; ++i)
+//        {
+//            for (int j = 1; j <= n; ++j)
+//            {
+//                costs[i][j] = min(costs[i][j], costs[i][k] + costs[k][j]);
+//            }
+//        }
+//    }
+//
+//    return costs;
+//}
+//
+//int solution(int n, int m, vector<vector<int>> edge_list, int k, vector<int> gps_log) {
+//    vector<vector<int>> linked(n + 1, vector<int>());
+//
+//    for (vector<int>& edge : edge_list)
+//    {
+//        linked[edge[0]].push_back(edge[1]);
+//        linked[edge[1]].push_back(edge[0]);
+//    }
+//    
+//    for (int i = 1; i <= n; ++i)
+//    {
+//        linked[i].push_back(i);
+//    }
+//    vector<vector<int>> costs = Warshall(n, linked);
+//
+//    priority_queue<node, vector<node>, compare> q;
+//    q.push(node{ 0, (int)gps_log.size() - 1, gps_log.back() });
+//
+//    while (!q.empty())
+//    {
+//        node now = q.top();
+//        q.pop();
+//
+//        if (now.nowIndex == 0)
+//        {
+//            if (now.nowPos == gps_log[0])
+//            {
+//                return now.cost;
+//            }
+//            else
+//            {
+//                continue;
+//            }
+//        }
+//
+//        for (int& n : linked[now.nowPos])
+//        {
+//            if (costs[n][gps_log.front()] > now.nowIndex)
+//            {
+//                continue;
+//            }
+//
+//            int cost = (int)(n != gps_log[now.nowIndex - 1]);
+//            q.push(node{ now.cost + cost, now.nowIndex - 1, n });
+//        }
+//    }
+//
+//    return -1;
+//}
+
 #include <vector>
 #include <map>
-#include <queue>
 
 using namespace std;
 
-struct node {
-    int cost;
-    int nowIndex;
-    int nowPos;
-};
-
-class compare {
-public:
-    const bool operator()(const node& a, const node& b)
-    {
-        return a.cost > b.cost;
-    }
-};
-
-vector<map<int, int>> pathFinder(int n, vector<vector<int>>& linked, int k, vector<int>& gps_log)
-{
-
-}
+const int MAXIMUM = 10000000;
 
 int solution(int n, int m, vector<vector<int>> edge_list, int k, vector<int> gps_log) {
+    int answer = MAXIMUM;
+
     vector<vector<int>> linked(n + 1, vector<int>());
+    vector<map<int, int>> costs(k, map<int, int>());
 
     for (vector<int>& edge : edge_list)
     {
         linked[edge[0]].push_back(edge[1]);
         linked[edge[1]].push_back(edge[0]);
     }
-    
+
     for (int i = 1; i <= n; ++i)
     {
         linked[i].push_back(i);
     }
-    
-    priority_queue<node, vector<node>, compare> q;
-    q.push(node{ 0, (int)gps_log.size() - 1, gps_log.back() });
 
-    while (!q.empty())
+    costs[0][gps_log.front()] = 0;
+
+    for (int i = 0; i < k - 1; ++i)
     {
-        node now = q.top();
-        q.pop();
-
-        if (now.nowIndex == 0)
+        for (auto d : costs[i])
         {
-            if (now.nowPos == gps_log[0])
+            for (int j : linked[d.first])
             {
-                return now.cost;
-            }
-            else
-            {
-                continue;
-            }
-        }
+                if (costs[i + 1].find(j) == costs[i + 1].end())
+                {
+                    costs[i + 1][j] = MAXIMUM;
+                }
 
-        for (int& n : linked[now.nowPos])
-        {
-            int cost = (int)(n != gps_log[now.nowIndex - 1]);
-            q.push(node{ now.cost + cost, now.nowIndex - 1, n });
+                int addCost = (int)(j != gps_log[i + 1]);
+                costs[i + 1][j] = min(costs[i + 1][j], d.second + addCost);
+            }
         }
     }
 
-    return -1;
+    return costs[k - 1][gps_log.back()] == MAXIMUM ? -1 : costs[k - 1][gps_log.back()];
 }
+
 
 //int main()
 //{
