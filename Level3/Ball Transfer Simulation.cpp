@@ -185,190 +185,323 @@
 //    return answer;
 //}
 
+//#include <vector>
+//
+//using namespace std;
+//
+//struct Range {
+//    long long minX = 0, minY = 0;
+//    long long maxX = 0, maxY = 0;
+//    long long width, height;
+//
+//    Range(int boardwidth, int boardheight, int x, int y) 
+//    {
+//        width = static_cast<long long>(boardwidth - 1);
+//        height = static_cast<long long>(boardheight - 1);
+//        minX = static_cast<long long>(x);
+//        maxX = minX;
+//        minY = static_cast<long long>(y);
+//        maxY = minY;
+//    }
+//
+//    long long LMove(long long x)
+//    {
+//        if (maxX > 0 && maxX < width && x > maxX)
+//        {
+//            return -1;
+//        }
+//
+//        if (minX == width || maxX == width)
+//        {
+//            minX = max(static_cast<long long>(0), width - x);
+//        }
+//        else
+//        {
+//            minX = max(static_cast<long long>(0), minX - x);
+//            maxX = max(static_cast<long long>(0), maxX - x);
+//        }
+//
+//        return maxX;
+//    }
+//    
+//    long long RMove(long long x)
+//    {
+//        if (minX > 0 && minX < width && x > width - minX)
+//        {
+//            return -1;
+//        }
+//
+//        if (maxX == 0 || minX == 0)
+//        {
+//            maxX = min(width, x);
+//        }
+//        else
+//        {
+//            minX = min(width, minX + x);
+//            maxX = min(width, maxX + x);
+//        }
+//        return minX;
+//    }
+//
+//    long long UMove(long long y)
+//    {
+//        if (maxY < height && maxY > 0 && y > maxY)
+//        {
+//            return -1;
+//        }
+//
+//        if (minY == height || maxY == height)
+//        {
+//            minY = max(static_cast<long long>(0), height - y);
+//        }
+//        else
+//        {
+//            minY = max(static_cast<long long>(0), minY - y);
+//            maxY = max(static_cast<long long>(0), maxY - y);
+//        }
+//
+//        return maxY;
+//    }
+//    
+//    long long DMove(long long y)
+//    {
+//        if (minY > 0 && minY < height && y > height - minY)
+//        {
+//            return -1;
+//        }
+//
+//        if (maxY == 0 || minY == 0)
+//        {
+//            maxY = min(height, y);
+//        }
+//        else
+//        {
+//            minY = min(static_cast<long long>(height), minY + y);
+//            maxY = min(static_cast<long long>(height), maxY + y);
+//        }
+//        
+//        return minY;
+//    }
+//
+//    long long GetResult() const { return (maxX - minX + 1) * (maxY - minY + 1); };
+//};
+//
+//#include <iostream>
+//long long solution(int n, int m, int x, int y, vector<vector<int>> queries) {
+//    Range answerRange(m, n, y, x);
+//    
+//    vector<vector<long long>> newQueries;
+//
+//    for (int i = 0; i < queries.size(); ++i)
+//    {
+//        if (i > 0 && queries[i][0] == newQueries.back()[0])
+//        {
+//            newQueries[newQueries.size() - 1][1] += static_cast<long long>(queries[i][1]);
+//        }
+//        else
+//        {
+//            newQueries.push_back({ queries[i][0], static_cast<long long>(queries[i][1]) });
+//        }
+//    }
+//
+//    for (int i = newQueries.size() - 1; i >= 0; --i)
+//    {
+//        long long result = 0;
+//        switch (newQueries[i][0])
+//        {
+//        case 0:
+//            result = answerRange.RMove(newQueries[i][1]);
+//            break;
+//        case 1:
+//            result = answerRange.LMove(newQueries[i][1]);
+//            break;
+//        case 2:
+//            result = answerRange.DMove(newQueries[i][1]);
+//            break;
+//        case 3:
+//            result = answerRange.UMove(newQueries[i][1]);
+//            break;
+//        }
+//        cout << format("minX : {0}, maxX : {1}, minY : {2}, : maxY : {3}, result : {4}\n", answerRange.minX, answerRange.maxX, answerRange.minY, answerRange.maxY, result);
+//
+//        
+//        if (result == -1)
+//        {
+//            return 0;
+//        }
+//    }
+//
+//    for (int ny = 0; ny < n; ++ny)
+//    {
+//        for (int nx = 0; nx < m; ++nx)
+//        {
+//            int tmpx = nx;
+//            int tmpy = ny;
+//            for (vector<int>& a : queries)
+//            {
+//                switch (a[0])
+//                {
+//                case 0:
+//                    tmpx = max(0, tmpx - a[1]);
+//                    break;
+//                case 1:
+//                    tmpx = min(m - 1, tmpx + a[1]);
+//                    break;
+//                case 2:
+//                    tmpy = max(0, tmpy - a[1]);
+//                    break;
+//                case 3:
+//                    tmpy = min(n - 1, tmpy + a[1]);
+//                }
+//            }
+//
+//            if (tmpx == y && tmpy == x)
+//            {
+//                cout << nx << " " << ny << '\n';
+//            }
+//        }
+//    }
+//
+//
+//    return answerRange.GetResult();
+//}
+
+// 아1 위2 오1 위3 왼1 위1 아1 위2 오1 위3 왼1 위1
+
 #include <vector>
 
 using namespace std;
 
-struct Range {
-    long long minX = 0, minY = 0;
-    long long maxX = 0, maxY = 0;
-    long long width, height;
-
-    Range(int boardwidth, int boardheight, int x, int y) 
+long long afterProcess(pair<long long, long long>& lResult, pair<long long, long long>& rResult, long long& l, long long& r, long long maxRange, long long d)
+{
+    if (lResult.first == -1 && rResult.first == -1)
     {
-        width = static_cast<long long>(boardwidth - 1);
-        height = static_cast<long long>(boardheight - 1);
-        minX = static_cast<long long>(x);
-        maxX = minX;
-        minY = static_cast<long long>(y);
-        maxY = minY;
+        return -1;
+    }
+    else if (lResult.first != -1 && rResult.first != -1)
+    {
+        l = min(lResult.first, rResult.first);
+        r = max(lResult.second, rResult.second);
+
+        return l;
     }
 
-    long long LMove(long long x)
+    if (d > 0)
     {
-        if (maxX > 0 && maxX < width && x > maxX)
+        if (lResult.first == -1)
         {
-            return -1;
+            l = rResult.first;
+            r = maxRange;
         }
-
-        if (minX == width || maxX == width)
+        else if (rResult.first == -1)
         {
-            minX = max(static_cast<long long>(0), width - x);
+            l = lResult.first;
+            r = maxRange;
+        }
+    }
+    else
+    {
+        if (lResult.first == -1)
+        {
+            l = 0;
+            r = rResult.second;
+        }
+        else if (rResult.first == -1)
+        {
+            l = 0;
+            r = lResult.first;
+        }
+    }
+    return l;
+}
+
+pair<long long, long long> processQuery(long long& x, long long minRange, long long maxRange, long long d)
+{
+    pair<long long, long long> result;
+
+    if (d > 0)
+    {
+        if (x > 0)
+        {
+            if (d + x > maxRange)
+            {
+                return pair(-1, -1);
+            }
         }
         else
         {
-            minX = max(static_cast<long long>(0), minX - x);
-            maxX = max(static_cast<long long>(0), maxX - x);
+            return pair(0, min(maxRange, x + d));
         }
-
-        return maxX;
     }
-    
-    long long RMove(long long x)
+    else
     {
-        if (minX > 0 && minX < width && x > width - minX)
+        if (x < maxRange)
         {
-            return -1;
-        }
-
-        if (maxX == 0 || minX == 0)
-        {
-            maxX = min(width, x);
+            if (d + x < 0)
+            {
+                return pair(-1 ,- 1);
+            }
         }
         else
         {
-            minX = min(width, minX + x);
-            maxX = min(width, maxX + x);
+            return pair(max((long long)0, x + d), maxRange);
         }
-        return minX;
     }
 
-    long long UMove(long long y)
-    {
-        if (maxY < height && maxY > 0 && y > maxY)
-        {
-            return -1;
-        }
+    return pair(x + d, x + d);
+}
 
-        if (minY == height || maxY == height)
-        {
-            minY = max(static_cast<long long>(0), height - y);
-        }
-        else
-        {
-            minY = max(static_cast<long long>(0), minY - y);
-            maxY = max(static_cast<long long>(0), maxY - y);
-        }
-
-        return maxY;
-    }
-    
-    long long DMove(long long y)
-    {
-        if (minY > 0 && minY < height && y > height - minY)
-        {
-            return -1;
-        }
-
-        if (maxY == 0 || minY == 0)
-        {
-            maxY = min(height, y);
-        }
-        else
-        {
-            minY = min(static_cast<long long>(height), minY + y);
-            maxY = min(static_cast<long long>(height), maxY + y);
-        }
-        
-        return minY;
-    }
-
-    long long GetResult() const { return (maxX - minX + 1) * (maxY - minY + 1); };
-};
-
-#include <iostream>
 long long solution(int n, int m, int x, int y, vector<vector<int>> queries) {
-    Range answerRange(m, n, y, x);
-    
+    long long answer = -1;
+    long long l = y, r = y, b = x, t = x;
     vector<vector<long long>> newQueries;
 
-    for (int i = 0; i < queries.size(); ++i)
+    for (int i = queries.size() - 1; i >= 0; --i)
     {
-        if (i > 0 && queries[i][0] == newQueries.back()[0])
-        {
-            newQueries[newQueries.size() - 1][1] += static_cast<long long>(queries[i][1]);
-        }
-        else
+        if (newQueries.empty() || newQueries.back()[0] != queries[i][0])
         {
             newQueries.push_back({ queries[i][0], static_cast<long long>(queries[i][1]) });
         }
+        else
+        {
+            newQueries.back()[1] += static_cast<long long>(queries[i][1]);
+        }
     }
 
-    for (int i = newQueries.size() - 1; i >= 0; --i)
+    for (vector<long long>& query : newQueries)
     {
+        pair<long long, long long> lresult, rresult;
         long long result = 0;
-        switch (newQueries[i][0])
+        switch (query[0])
         {
-        case 0:
-            result = answerRange.RMove(newQueries[i][1]);
-            break;
         case 1:
-            result = answerRange.LMove(newQueries[i][1]);
-            break;
-        case 2:
-            result = answerRange.DMove(newQueries[i][1]);
+            query[1] = -query[1];
+        case 0:
+            lresult = processQuery(l, 0, m - 1, query[1]);
+            rresult = processQuery(r, 0, m - 1, query[1]);
+
+            result = afterProcess(lresult, rresult, l, r, m - 1, query[1]);
             break;
         case 3:
-            result = answerRange.UMove(newQueries[i][1]);
+            query[1] = -query[1];
+        case 2:
+            lresult = processQuery(t, 0, n - 1, query[1]);
+            rresult = processQuery(b, 0, n - 1, query[1]);
+
+            result = afterProcess(lresult, rresult, t, b, n - 1, query[1]);
             break;
         }
-        cout << format("minX : {0}, maxX : {1}, minY : {2}, : maxY : {3}, result : {4}\n", answerRange.minX, answerRange.maxX, answerRange.minY, answerRange.maxY, result);
 
-        
         if (result == -1)
         {
             return 0;
         }
     }
 
-    for (int ny = 0; ny < n; ++ny)
-    {
-        for (int nx = 0; nx < m; ++nx)
-        {
-            int tmpx = nx;
-            int tmpy = ny;
-            for (vector<int>& a : queries)
-            {
-                switch (a[0])
-                {
-                case 0:
-                    tmpx = max(0, tmpx - a[1]);
-                    break;
-                case 1:
-                    tmpx = min(m - 1, tmpx + a[1]);
-                    break;
-                case 2:
-                    tmpy = max(0, tmpy - a[1]);
-                    break;
-                case 3:
-                    tmpy = min(n - 1, tmpy + a[1]);
-                }
-            }
-
-            if (tmpx == y && tmpy == x)
-            {
-                cout << nx << " " << ny << '\n';
-            }
-        }
-    }
-
-
-    return answerRange.GetResult();
+    return (r - l + 1) * (b - t + 1);
 }
-
-// 아1 위2 오1 위3 왼1 위1 아1 위2 오1 위3 왼1 위1
 
 int main()
 {
-    solution(5, 5, 0, 0, { {3, 1},{2, 2},{1, 1},{2, 3},{0, 1},{2, 1}, {3, 1},{2, 2},{1, 1},{2, 3},{0, 1},{2, 1} });
+    solution(2, 5, 0, 1, { {3, 1},{2, 2},{1, 1}, {2,3},{0, 1},{2, 1}});
 }
