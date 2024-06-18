@@ -1,3 +1,7 @@
+/*
+ * https://school.programmers.co.kr/learn/courses/30/lessons/12947
+ */
+
 public class hashadNumber {
     public boolean solution(int x) {
         int hashad = 0, memX = x;
