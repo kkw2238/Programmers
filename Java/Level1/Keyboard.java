@@ -22,7 +22,7 @@ class Solution {
             for (int j = 0; j < targets[i].length(); ++j) {
                 int alphaIndex = targets[i].charAt(j) - 'A';
 
-                if(touchKeymap[alphaIndex] == 0) {
+                if(touchKeymap[alphaIndex] == Integer.MAX_VALUE) {
                     answer[i] = -1;
                     break;
                 } else {
