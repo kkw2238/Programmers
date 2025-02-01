@@ -500,8 +500,3 @@ long long solution(int n, int m, int x, int y, vector<vector<int>> queries) {
 
     return (r - l + 1) * (b - t + 1);
 }
-
-int main()
-{
-    solution(2, 5, 0, 1, { {3, 1},{2, 2},{1, 1}, {2,3},{0, 1},{2, 1}});
-}
