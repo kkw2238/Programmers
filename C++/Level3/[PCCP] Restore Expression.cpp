@@ -26,8 +26,18 @@ vector<string> distributeExpression(string expression, vector<bool>& ableDigit) 
         before = index + 1;
         index = expression.find(' ', index + 1);
     }
+
+
+    string value = expression.substr(before);
+    result.push_back(value);
     
-    for (int i = 0; i < maximumNum; ++i) {
+    if (isdigit(value[0])) {
+        for (char c : value) {
+            maximumNum = max(maximumNum, c - '0');
+        }
+    }
+
+    for (int i = 0; i <= maximumNum; ++i) {
         ableDigit[i] = false;
     }
 
@@ -38,8 +48,8 @@ int change10digit(string str, int nowDigit) {
     int result = 0;
     int digit = 1;
 
-    for (int i = str.length() - 1; i >= 0; ++i) {
-        result += str[i] * digit;
+    for (int i = str.length() - 1; i >= 0; --i) {
+        result += (str[i] - '0') * digit;
         digit *= nowDigit;
     }
 
@@ -61,7 +71,7 @@ int changeOtherDigit(int num, int convertDigit) {
 
 int calculate(vector<string>& expression, int digit) {
     int num1 = change10digit(expression[0], digit);
-    int num2 = change10digit(expression[1], digit);
+    int num2 = change10digit(expression[2], digit);
 
     if (expression[1][0] == '+') {
         return (num1 + num2);
@@ -73,7 +83,7 @@ int calculate(vector<string>& expression, int digit) {
 }
 
 bool checkAbleDigit(vector<string>& expression, int digit) {
-    return change10digit(expression[2], digit) == calculate(expression, digit);
+    return change10digit(expression[4], digit) == calculate(expression, digit);
 }
 
 void checkCorrectExpression(vector<string>& expression, vector<bool>& ableDigit) {
@@ -88,7 +98,7 @@ string getAnswer(vector<string>& question, vector<bool>& isAbledigit) {
     int result = -1;
     for (int i = 9; i >= 2; --i) {
         if (isAbledigit[i]) {
-            int num3 = change10digit(question[0], i);
+            int num3 = calculate(question, i);
             num3 = changeOtherDigit(num3, i);
 
             if (result == -1) {
@@ -119,7 +129,7 @@ vector<string> solution(vector<string> expressions) {
             distributedQuestion.push_back(distribute);
         }
         else {
-            distributedExpression.push_back(expressions);
+            distributedExpression.push_back(distribute);
         }
     }
 
@@ -138,5 +148,5 @@ vector<string> solution(vector<string> expressions) {
 }
 
 int main() {
-    solution({ "14 + 3 = 17", "13 - 6 = X", "51 - 5 = 44" });
+    solution({ "2 - 1 = 1", "2 + 2 = X", "7 + 4 = X", "8 + 4 = X" });
 }
